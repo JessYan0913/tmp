@@ -12,7 +12,7 @@ module.exports = {
     ecmaVersion: 12,
   },
   rules: {
-    'no-unused-vars': ['off'],
+    'no-unused-vars': 1,
     '@typescript-eslint/no-unused-vars': ['off'],
     'prettier/prettier': [
       'error',

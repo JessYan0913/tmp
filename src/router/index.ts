@@ -12,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: '首页' },
   },
   {
-    path: '/line',
+    path: '/about',
     component: () => import('@/components/AboutMe.vue'),
     meta: { title: '线条' },
   },
