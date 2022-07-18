@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { ElMessage } from 'element-plus'
 
 interface BaseResult {
   code: number
@@ -9,10 +10,8 @@ export interface Result<T> extends BaseResult {
   data?: T
 }
 
-const URL: string = 'https://mock.apifox.cn/m1/1305094-0-default'
-
 const config = {
-  baseURL: URL as string,
+  baseURL: 'https://mock.apifox.cn/m1/1305094-0-default',
   withCredentials: true,
   headers: {
     'content-type': 'application/json',
@@ -44,7 +43,7 @@ class Request {
       (response: AxiosResponse) => {
         const { data } = response
         if (data.code === 10001) {
-          console.log('登录失败')
+          ElMessage.error('登录失败!')
           return Promise.reject(data)
         }
         return data
@@ -52,7 +51,7 @@ class Request {
       (error: AxiosError) => {
         const { response } = error
         if (response?.status === 404) {
-          console.log('请求地址不存在')
+          ElMessage.error('请求地址不存在!')
         }
       }
     )

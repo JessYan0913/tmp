@@ -6,6 +6,7 @@ login({ usercode: '1', password: '1' }).then(console.log)
 
 <template>
   <h1>Hello App!</h1>
+  <el-button>element按钮</el-button>
   <router-view></router-view>
 </template>
 
