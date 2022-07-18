@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.ts,.jsx,.tsx --fix",
     "format": "prettier --write ./**/*.{vue,ts,tsx,js,jsx,scss,css,json,md}",
-    "prepare": "husk install"
+    "prepare": "husky install"
   },
   "dependencies": {
     "vue": "^3.2.37",
