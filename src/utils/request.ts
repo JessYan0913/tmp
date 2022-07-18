@@ -5,15 +5,18 @@ interface BaseResult {
   msg: string
 }
 
-interface Result<T> extends BaseResult {
+export interface Result<T> extends BaseResult {
   data?: T
 }
 
-const URL: string = ''
+const URL: string = 'https://mock.apifox.cn/m1/1305094-0-default'
 
 const config = {
   baseURL: URL as string,
   withCredentials: true,
+  headers: {
+    'content-type': 'application/json',
+  },
 }
 
 class Request {
@@ -47,7 +50,10 @@ class Request {
         return data
       },
       (error: AxiosError) => {
-        console.log('网络错误', error)
+        const { response } = error
+        if (response?.status === 404) {
+          console.log('请求地址不存在')
+        }
       }
     )
   }

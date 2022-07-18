@@ -2,6 +2,9 @@ const path = require('path')
 
 module.exports = {
   roots: [path.resolve(__dirname, 'src')],
+  moduleNameMapper: {
+    '@/(.*)$': '<rootDir>/src/$1',
+  },
   testEnvironment: 'jsdom',
   testEnvironmentOptions: {
     customExportConditions: ['node', 'node-addons'],

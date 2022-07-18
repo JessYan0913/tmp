@@ -1,4 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { login } from './api/account'
+
+login({ usercode: '1', password: '1' }).then(console.log)
+</script>
 
 <template>
   <h1>Hello App!</h1>
