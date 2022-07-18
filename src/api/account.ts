@@ -1,4 +1,4 @@
-import request from '@/utils/request'
+import request, { Result } from '@/utils/request'
 
 namespace Login {
   export interface Params {
@@ -25,10 +25,14 @@ export async function login(params: Login.Params): Promise<Login.Result> {
   }
 }
 
-export async function logout() {
+export async function logout(): Promise<Result<any>> {
   try {
-    await request.post('/logout')
+    const result = await request.post('/logout')
+    return result
   } catch (error) {
-    console.log(error)
+    return {
+      code: NaN,
+      msg: '',
+    }
   }
 }
