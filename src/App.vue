@@ -1,14 +1,36 @@
-<script setup lang="ts">
-import { login } from './api/account'
-
-login({ usercode: '1', password: '1' }).then(console.log)
-</script>
-
 <template>
   <h1>Hello App!</h1>
-  <el-button>element按钮</el-button>
+  <el-input :model-value="name" @input="onUsernameInput" />
   <router-view></router-view>
 </template>
+
+<script lang="ts">
+import { login } from '@/api/account'
+import useUserStore from '@/store/user'
+import { mapActions, mapState } from 'pinia'
+
+export default {
+  name: 'App',
+  setup() {
+    const userStore = useUserStore()
+    return {
+      userStore,
+    }
+  },
+  computed: {
+    ...mapState(useUserStore, ['name']),
+  },
+  mounted() {
+    login({ usercode: '1', password: '1' }).then(console.log)
+  },
+  methods: {
+    ...mapActions(useUserStore, ['updateName']),
+    onUsernameInput(value: string | number) {
+      this.updateName(`${value}`)
+    },
+  },
+}
+</script>
 
 <style scoped>
 .logo {
