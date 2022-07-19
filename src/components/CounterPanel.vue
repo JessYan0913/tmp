@@ -5,20 +5,12 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { ref } from 'vue'
 
-export default defineComponent({
-  name: 'CounterPanel',
-  data() {
-    return {
-      count: 0,
-    }
-  },
-  methods: {
-    increment() {
-      this.count++
-    },
-  },
-})
+const count = ref(0)
+
+const increment = () => {
+  count.value += 1
+}
 </script>

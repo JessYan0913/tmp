@@ -1,4 +1,4 @@
-import { describe, test, expect, it } from '@jest/globals'
+import { describe, test } from '@jest/globals'
 import { fireEvent, render } from '@testing-library/vue'
 import CounterPanel from '../CounterPanel.vue'
 
