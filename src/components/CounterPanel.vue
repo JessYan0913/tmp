@@ -6,11 +6,11 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, unref } from 'vue'
 
-const count = ref(0)
+let count = ref(0)
 
 const increment = () => {
-  count.value += 1
+  count.value = unref(count) + 1
 }
 </script>
