@@ -5,6 +5,17 @@ import eslintPlugin from 'vite-plugin-eslint'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // envPrefix: '', // 设置环境变量前缀
+  server: {
+    host: '0.0.0.0',
+    port: 8890,
+    open: true,
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 8891,
+    open: true,
+  },
   plugins: [
     vue(),
     eslintPlugin({
@@ -15,6 +26,13 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import '@/styles/index.scss';`,
+      },
     },
   },
 })
