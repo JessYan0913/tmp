@@ -1,0 +1,52 @@
+{
+  "name": "vue3-template",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "bootstrap": "pnpm i && pnpm build",
+    "build": "pnpm --filter \"@tmp/*\" build",
+    "lint": "eslint . --ext .js,.vue,.ts,.tsx",
+    "lint:fix": "eslint . --fix --ext .js,.vue,.ts,.tsx"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@commitlint/config-conventional": "^17.4.0",
+    "@commitlint/core": "^17.4.0",
+    "@types/node": "^18.11.18",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
+    "@typescript-eslint/typescript-estree": "^5.48.0",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitest/coverage-c8": "^0.26.3",
+    "c8": "^7.12.0",
+    "chalk": "^5.2.0",
+    "commitizen": "^4.2.6",
+    "conventional-changelog-cli": "^2.2.2",
+    "cz-conventional-changelog": "^3.3.0",
+    "enquirer": "^2.3.6",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-define-config": "^1.13.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-simple-import-sort": "^8.0.0",
+    "eslint-plugin-vue": "^9.8.0",
+    "execa": "^6.1.0",
+    "husky": "^8.0.3",
+    "jsdom": "^21.0.0",
+    "lint-staged": "^13.1.0",
+    "minimist": "^1.2.7",
+    "prettier": "^2.8.2",
+    "recast": "^0.22.0",
+    "rimraf": "^3.0.2",
+    "semver": "^7.3.8",
+    "shx": "^0.3.4",
+    "typescript": "^4.9.3",
+    "vite": "^4.0.0",
+    "vitest": "^0.26.3",
+    "vue": "^3.2.45"
+  }
+}
