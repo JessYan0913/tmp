@@ -7,6 +7,7 @@
     "build": "pnpm --filter \"@tmp/*\" build",
     "lint": "eslint . --ext .js,.vue,.ts,.tsx",
     "lint:fix": "eslint . --fix --ext .js,.vue,.ts,.tsx",
+    "commit": "git-cz",
     "prepare": "husky install"
   },
   "engines": {
@@ -49,6 +50,11 @@
     "vite": "^4.0.0",
     "vitest": "^0.26.3",
     "vue": "^3.2.45"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "lint-staged": {
     "*.{js, vue, ts, jsx, tsx}": "eslint --fix",
