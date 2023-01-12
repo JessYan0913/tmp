@@ -14,6 +14,10 @@ import { RouterLink, RouterView } from 'vue-router';
 
 <style scoped>
 .menu {
-  background-color: blueviolet;
+  background-color: rgba(137, 43, 226, 0.498);
+  height: 50px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 </style>
