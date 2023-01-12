@@ -1,0 +1,5 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husk.sh"
+
+npx lint-staged
+pnpm --filter "@tmp/*" build:type
