@@ -10,6 +10,7 @@ import { computed } from 'vue'
 import { login } from '@/api/account'
 import useUserStore from '@/store/user'
 import CounterPanel from './components/CounterPanel.vue'
+import UserService from '@/service/UserService'
 
 const userStore = useUserStore()
 
@@ -20,6 +21,30 @@ login({ usercode: '1', password: '1' }).then(console.log)
 const onUsernameInput = (value: string | number) => {
   userStore.updateName(`${value}`)
 }
+
+const userService = new UserService('Tome')
+
+userService.usePlugin({
+  beforeEat(...args: any[]) {
+    console.log('准备', args)
+    return [...args]
+  },
+})
+userService.use({
+  eat: (args: any, next?: Function) => {
+    console.log('1就知道吃', args)
+    next?.()
+  },
+})
+userService.use({
+  eat: (args: any, next?: Function) => {
+    console.log('2就知道吃', args)
+    next?.()
+  },
+})
+
+userService.eat('苹果')
+console.log(userService)
 
 // import { defineComponent } from 'vue'
 // import { mapState, mapActions } from 'pinia'
