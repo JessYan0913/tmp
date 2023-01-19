@@ -1,18 +1,29 @@
-export type MethodName = string | symbol
+export type MethodName = string
+
+// eslint-disable-next-line no-unused-vars
+export type Action<T = any> = (args: any[], next?: Function) => Promise<T>
 
 class BaseService {
-  public pluginOptionsMap: Map<MethodName, Function[]>
-  public middlewareMap: Map<MethodName, Function[]>
-  public taskList: (() => Promise<void>)[]
-  public taskDoing: boolean = false
+  public methods: string[]
+  public serialMethods: string[]
+
+  private pluginOptionsMap: Map<MethodName, Function[]>
+  private middlewareMap: Map<MethodName, Function[]>
+  private taskList: (() => Promise<void>)[]
+  private taskDoing: boolean = false
 
   constructor(methods: string[] = [], serialMethods: string[] = []) {
+    this.methods = methods
+    this.serialMethods = serialMethods
     this.pluginOptionsMap = new Map()
     this.middlewareMap = new Map()
     this.taskList = []
 
     methods.forEach((propertyName: string) => {
-      const sourceMethod = Reflect.get(this, propertyName) as Function
+      const originMethod = Reflect.get(this, propertyName)
+      if (typeof originMethod !== 'function') {
+        return
+      }
 
       this.middlewareMap.set(propertyName, [])
 
@@ -21,16 +32,16 @@ class BaseService {
       this.pluginOptionsMap.set(beforeMethodName, [])
       this.pluginOptionsMap.set(afterMethodName, [])
 
-      const fun = composeMethod(this.middlewareMap.get(propertyName) ?? [])
+      const fun = this.composeMethod(propertyName)
       Reflect.set(this, propertyName, async (...args: any[]) => {
-        if (!serialMethods.includes(propertyName)) {
-          return this.doAction(args, sourceMethod, beforeMethodName, afterMethodName, fun)
+        if (!this.serialMethods.includes(propertyName)) {
+          return this.doAction(args, originMethod, beforeMethodName, afterMethodName, fun)
         }
 
         const promise = new Promise<any>((resolve, reject) => {
           this.taskList.push(async () => {
             try {
-              const value = await this.doAction(args, sourceMethod, beforeMethodName, afterMethodName, fun)
+              const value = await this.doAction(args, originMethod, beforeMethodName, afterMethodName, fun)
               resolve(value)
             } catch (error) {
               reject(error)
@@ -45,7 +56,7 @@ class BaseService {
     })
   }
 
-  public use(options: Record<string, Function>) {
+  public use(options: Record<string, Function>): void {
     Object.entries(options).forEach(([methodName, method]: [string, Function]) => {
       if (typeof method === 'function') {
         this.middlewareMap.get(methodName)?.push(method)
@@ -53,7 +64,7 @@ class BaseService {
     })
   }
 
-  public usePlugin(options: Record<string, Function>) {
+  public usePlugin(options: Record<string, Function>): void {
     Object.entries(options).forEach(([methodName, method]: [string, Function]) => {
       if (typeof method === 'function') {
         this.pluginOptionsMap.get(methodName)?.push(method)
@@ -61,7 +72,7 @@ class BaseService {
     })
   }
 
-  private async doTask() {
+  private async doTask(): Promise<void> {
     this.taskDoing = true
     let task = this.taskList.shift()
     while (task) {
@@ -76,8 +87,8 @@ class BaseService {
     sourceMethod: Function,
     beforeMethodName: string,
     afterMethodName: string,
-    action: (args: any[], next?: Function) => void | Promise<void>
-  ) {
+    action: Action
+  ): Promise<any> {
     let beforeArgs = args
     for (const beforeMethod of this.pluginOptionsMap.get(beforeMethodName) ?? []) {
       beforeArgs = (await beforeMethod(...beforeArgs)) || []
@@ -88,7 +99,6 @@ class BaseService {
         beforeArgs = [beforeArgs]
       }
     }
-    console.log('参数', beforeArgs)
 
     let result = await action(beforeArgs, sourceMethod.bind(this))
 
@@ -100,6 +110,27 @@ class BaseService {
     }
     return result
   }
+
+  private composeMethod(propertyName: string): Action<any> {
+    const middleware = this.middlewareMap.get(propertyName) ?? []
+
+    return async (args: any[], next?: Function): Promise<any> => {
+      let index = -1
+
+      const dispatch = async (i: number): Promise<any> => {
+        if (i < index) {
+          throw new Error('next() 调用多次')
+        }
+        index = i
+        let fn = middleware[i]
+        if (i === middleware.length && next) fn = next
+        if (!fn) return
+        return await fn(...args, dispatch.bind(this, i + 1))
+      }
+
+      return await dispatch(0)
+    }
+  }
 }
 
 function isError(error: any): boolean {
@@ -108,39 +139,6 @@ function isError(error: any): boolean {
 
 function generateMethodName(prefix: string, name: string) {
   return `${prefix}${name[0].toUpperCase()}${name.substring(1)}`
-}
-
-function composeMethod(middleware: Function[]) {
-  if (!Array.isArray(middleware)) {
-    throw new TypeError('middleware 必须是一个数组')
-  }
-  for (const fun of middleware) {
-    if (typeof fun !== 'function') {
-      throw new TypeError('middleware 必须是一个函数数组')
-    }
-  }
-
-  return function (args: any[], next?: Function) {
-    let index = -1
-
-    return dispatch(0)
-
-    function dispatch(i: number): Promise<void> {
-      console.log('===', i, middleware, next)
-      if (i < index) {
-        return Promise.reject(new Error('next() 调用多次'))
-      }
-      index = i
-      let fn = middleware[i]
-      if (i === middleware.length && next) fn = next
-      if (!fn) return Promise.resolve()
-      try {
-        return Promise.resolve(fn(...args, dispatch.bind(null, i + 1)))
-      } catch (error) {
-        return Promise.reject(error)
-      }
-    }
-  }
 }
 
 export default BaseService

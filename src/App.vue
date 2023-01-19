@@ -26,7 +26,7 @@ const userService = new UserService('Tome')
 
 userService.usePlugin({
   beforeEat(...args: any[]) {
-    console.log('准备', args)
+    console.log('准备1', args)
     return [...args]
   },
 })
