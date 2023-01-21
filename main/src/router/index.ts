@@ -20,7 +20,7 @@ const routes: RouteRecordRaw[] = [
         name: 'Application',
         component: () => import('../view/application/index.vue'),
         meta: {
-          leaveCaches: ['/'],
+          leaveCaches: ['/application/setting'],
         },
       },
       {
