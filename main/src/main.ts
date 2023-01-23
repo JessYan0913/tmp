@@ -12,6 +12,7 @@ import 'element-plus/theme-chalk/index.css';
 
 const pinia = createPinia();
 pinia.use(piniaPresistedState);
+console.log(pinia);
 
 const app = createApp(App);
 app.use(ElementPlus, { locale: zhCn });
