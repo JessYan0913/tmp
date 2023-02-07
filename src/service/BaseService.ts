@@ -19,22 +19,23 @@ class BaseService {
     this.middlewareMap = new Map()
     this.taskList = []
 
-    methods.forEach((propertyName: string) => {
-      const originMethod = Reflect.get(this, propertyName)
+    methods.forEach((methodName: string) => {
+      const originMethod = Reflect.get(this, methodName)
       if (typeof originMethod !== 'function') {
         return
       }
 
-      this.middlewareMap.set(propertyName, [])
+      this.middlewareMap.set(methodName, [])
 
-      const beforeMethodName = generateMethodName('before', propertyName)
-      const afterMethodName = generateMethodName('after', propertyName)
+      const beforeMethodName = generateMethodName('before', methodName)
+      const afterMethodName = generateMethodName('after', methodName)
+
       this.pluginOptionsMap.set(beforeMethodName, [])
       this.pluginOptionsMap.set(afterMethodName, [])
 
-      const fun = this.composeMethod(propertyName)
-      Reflect.set(this, propertyName, async (...args: any[]) => {
-        if (!this.serialMethods.includes(propertyName)) {
+      const fun = this.composeMethod(methodName)
+      Reflect.set(this, methodName, async (...args: any[]) => {
+        if (!this.serialMethods.includes(methodName)) {
           return this.doAction(args, originMethod, beforeMethodName, afterMethodName, fun)
         }
 
@@ -111,8 +112,8 @@ class BaseService {
     return result
   }
 
-  private composeMethod(propertyName: string): Action<any> {
-    const middleware = this.middlewareMap.get(propertyName) ?? []
+  private composeMethod(methodName: string): Action<any> {
+    const middleware = this.middlewareMap.get(methodName) ?? []
 
     return async (args: any[], next?: Function): Promise<any> => {
       let index = -1
