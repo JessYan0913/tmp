@@ -103,6 +103,18 @@ importers:
       vite-plugin-vue-setup-extend: 0.4.0_vite@4.0.4
       vue-tsc: 1.0.24_typescript@4.9.4
 
+  packages/basic:
+    specifiers:
+      '@types/node': ^18.11.18
+      typescript: ^4.9.3
+      vite: ^4.1.0
+      vite-plugin-dts: ^1.7.1
+    devDependencies:
+      '@types/node': 18.11.18
+      typescript: 4.9.4
+      vite: 4.1.1_@types+node@18.11.18
+      vite-plugin-dts: 1.7.1_vite@4.1.1
+
   packages/util:
     specifiers:
       '@types/node': ^18.11.18
@@ -4744,6 +4756,14 @@ packages:
       glob: 7.2.3
     dev: true
 
+  /rollup/3.14.0:
+    resolution: {integrity: sha512-o23sdgCLcLSe3zIplT9nQ1+r97okuaiR+vmAPZPTDYB7/f3tgWIYNyiQveMsZwshBT0is4eGax/HH83Q7CG+/Q==}
+    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
   /rollup/3.9.1:
     resolution: {integrity: sha512-GswCYHXftN8ZKGVgQhTFUJB/NBXxrRGgO2NCy6E8s1rwEJ4Q9/VttNqcYfEvx4dTo4j58YqdC3OVztPzlKSX8w==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
@@ -5412,7 +5432,7 @@ packages:
       pathe: 0.2.0
       source-map: 0.6.1
       source-map-support: 0.5.21
-      vite: 4.0.4_@types+node@18.11.18
+      vite: 4.1.1_@types+node@18.11.18
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -5438,6 +5458,26 @@ packages:
       kolorist: 1.6.0
       ts-morph: 16.0.0
       vite: 4.0.4_@types+node@18.11.18
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+    dev: true
+
+  /vite-plugin-dts/1.7.1_vite@4.1.1:
+    resolution: {integrity: sha512-2oGMnAjcrZN7jM1TloiS1b1mCn42s3El04ix2RFhId5P1WfMigF8WAwsqT6a6jk0Yso8t7AeZsBkkxYShR0hBQ==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    peerDependencies:
+      vite: '>=2.9.0'
+    dependencies:
+      '@microsoft/api-extractor': 7.33.8
+      '@rollup/pluginutils': 5.0.2
+      '@rushstack/node-core-library': 3.53.3
+      debug: 4.3.4
+      fast-glob: 3.2.12
+      fs-extra: 10.1.0
+      kolorist: 1.6.0
+      ts-morph: 16.0.0
+      vite: 4.1.1_@types+node@18.11.18
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -5516,6 +5556,40 @@ packages:
       postcss: 8.4.21
       resolve: 1.22.1
       rollup: 3.9.1
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
+  /vite/4.1.1_@types+node@18.11.18:
+    resolution: {integrity: sha512-LM9WWea8vsxhr782r9ntg+bhSFS06FJgCvvB0+8hf8UWtvaiDagKYWXndjfX6kGl74keHJUcpzrQliDXZlF5yg==}
+    engines: {node: ^14.18.0 || >=16.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': '>= 14'
+      less: '*'
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+    dependencies:
+      '@types/node': 18.11.18
+      esbuild: 0.16.15
+      postcss: 8.4.21
+      resolve: 1.22.1
+      rollup: 3.14.0
     optionalDependencies:
       fsevents: 2.3.2
     dev: true

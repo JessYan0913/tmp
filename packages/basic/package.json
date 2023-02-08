@@ -3,12 +3,21 @@
   "private": true,
   "version": "0.0.1",
   "main": "dist/basic.umd.js",
-  "module": "dist/",
+  "module": "dist/basic.mjs",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/basic.mjs",
+      "require": "./dist/basic.umd.js"
+    }
+  },
   "scripts": {
     "build": "vite build"
   },
   "devDependencies": {
+    "@types/node": "^18.11.18",
     "typescript": "^4.9.3",
-    "vite": "^4.1.0"
+    "vite": "^4.1.0",
+    "vite-plugin-dts": "^1.7.1"
   }
 }
