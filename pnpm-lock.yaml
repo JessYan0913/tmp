@@ -105,6 +105,7 @@ importers:
 
   packages/util:
     specifiers:
+      '@types/node': ^18.11.18
       moment: ^2.29.4
       typescript: ^4.9.3
       vite: ^4.0.0
@@ -112,8 +113,9 @@ importers:
     dependencies:
       moment: 2.29.4
     devDependencies:
+      '@types/node': 18.11.18
       typescript: 4.9.4
-      vite: 4.0.4
+      vite: 4.0.4_@types+node@18.11.18
       vite-plugin-dts: 1.7.1_vite@4.0.4
 
 packages:
@@ -5435,7 +5437,7 @@ packages:
       fs-extra: 10.1.0
       kolorist: 1.6.0
       ts-morph: 16.0.0
-      vite: 4.0.4
+      vite: 4.0.4_@types+node@18.11.18
     transitivePeerDependencies:
       - rollup
       - supports-color

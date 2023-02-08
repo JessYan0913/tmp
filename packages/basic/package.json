@@ -1,0 +1,14 @@
+{
+  "name": "@tmp/basic",
+  "private": true,
+  "version": "0.0.1",
+  "main": "dist/basic.umd.js",
+  "module": "dist/",
+  "scripts": {
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0"
+  }
+}
