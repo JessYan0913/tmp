@@ -142,3 +142,4 @@ function generateMethodName(prefix: string, name: string) {
 }
 
 export default BaseService;
+
