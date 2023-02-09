@@ -1,4 +1,6 @@
 export class BaseError extends Error {
+  cause?: Error;
+
   constructor(message: string, options?: ErrorOptions) {
     super(message, options);
     this.name = this.constructor.name;
