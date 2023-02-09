@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tmp/utils": "workspace:^0.0.1",
     "element-plus": "^2.2.28",
     "pinia": "^2.0.28",
     "pinia-plugin-persistedstate": "^3.0.2",
