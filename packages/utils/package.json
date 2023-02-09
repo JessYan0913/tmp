@@ -1,14 +1,14 @@
 {
-  "name": "@tmp/util",
+  "name": "@tmp/utils",
   "private": true,
   "version": "0.0.1",
-  "main": "dist/utils.umd.js",
-  "module": "dist/utils.mjs",
+  "main": "dist/tmp-utils.umd.js",
+  "module": "dist/tmp-utils.mjs",
   "types": "dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/utils.mjs",
-      "require": "./dist/utils.umd.js"
+      "import": "./dist/tmp-utils.mjs",
+      "require": "./dist/tmp-utils.umd.js"
     }
   },
   "scripts": {

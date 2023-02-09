@@ -20,13 +20,12 @@ export default defineConfig({
     sourcemap: true,
     minify: false,
     target: 'esnext',
-
     lib: {
       entry: 'src/index.ts',
-      name: 'Utils',
-      fileName: 'utils',
+      name: 'TmpUtils',
+      fileName: 'tmp-utils',
+      formats: ['es'],
     },
-
     rollupOptions: {
       external(id: string) {
         return deps.some((k) => new RegExp(`^${k}`).test(id));
