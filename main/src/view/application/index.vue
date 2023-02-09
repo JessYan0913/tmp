@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { getFileExtension, selectFile } from '@tmp/utils';
+import { FileSelectCancelError, getFileExtension, IllegalFileError, selectFile } from '@tmp/utils';
 
 console.log(getFileExtension('ddsdsd.txt'));
 const handleSelectFile = async () => {
@@ -7,7 +7,11 @@ const handleSelectFile = async () => {
     const files = await selectFile(['.png']);
     console.log('====', files);
   } catch (error) {
-    console.log(error);
+    if (error instanceof FileSelectCancelError) {
+      console.log('取消选择');
+    } else if (error instanceof IllegalFileError) {
+      console.log('文件格式不匹配', error.accepts);
+    }
   }
 };
 </script>

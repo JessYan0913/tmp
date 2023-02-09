@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: [
         { find: '@', replacement: r('./src') },
+        { find: /^@tmp\/utils/, replacement: join(__dirname, '../packages/utils/src/index.ts') },
         { find: 'vue', replacement: join(__dirname, './node_modules/vue/dist/vue.esm-bundler.js') },
       ],
     },

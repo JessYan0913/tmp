@@ -1,5 +1,11 @@
 import { EnvironmentError, FileSelectCancelError, IllegalFileError } from './error';
 
+/**
+ * 获取文件后缀
+ *
+ * @param file 文件或文件名
+ * @returns
+ */
 export const getFileExtension = (file: File | string): string => {
   let fileName: string;
   if (file instanceof File) {
@@ -10,6 +16,13 @@ export const getFileExtension = (file: File | string): string => {
   return fileName.match(/\.([0-9a-z]+)(?:[\\?#]|$)/i)![1] ?? '';
 };
 
+/**
+ * 选择系统文件
+ *
+ * @param accepts 可选文件后缀
+ * @param multiple 是否多选
+ * @returns
+ */
 export const selectFile = (accepts: string[] = ['*'], multiple?: boolean): Promise<File[]> => {
   if (!globalThis.document || !(globalThis.document instanceof Document)) {
     throw new EnvironmentError();
@@ -51,6 +64,6 @@ export const selectFile = (accepts: string[] = ['*'], multiple?: boolean): Promi
   });
 
   function illegalFiles(files: File[]): boolean {
-    return !accepts.includes('*') && files.some(({ name }) => !accepts.includes(`.${getFileExtension(name)}`));
+    return !accepts.includes('*') && files.some((file) => !accepts.includes(`.${getFileExtension(file)}`));
   }
 };
