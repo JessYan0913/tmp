@@ -105,3 +105,81 @@ export class Request {
     });
   }
 }
+
+export class RequestCancel<T extends InternalAxiosRequestConfig> {
+  pendingRequestMap: Map<string, AbortController>;
+
+  constructor() {
+    this.pendingRequestMap = new Map();
+  }
+
+  async pendingRequest(config: T): Promise<void> {
+    const requestId = await this.getRequestId(config);
+    if (this.pendingRequestMap.has(requestId)) {
+      config.signal = this.pendingRequestMap.get(requestId)?.signal;
+    } else {
+      const abortController = new AbortController();
+      config.signal = abortController.signal;
+      this.pendingRequestMap.set(requestId, abortController);
+    }
+  }
+
+  async confirmRequest(config: T): Promise<void> {
+    if (this.pendingRequestMap.size === 0) {
+      return;
+    }
+    const requestId = await this.getRequestId(config);
+    if (!this.pendingRequestMap.has(requestId)) {
+      return;
+    }
+    this.pendingRequestMap.delete(requestId);
+  }
+
+  async cancelRequest(config: T): Promise<void> {
+    if (this.pendingRequestMap.size === 0) {
+      return;
+    }
+    const requestId = await this.getRequestId(config);
+    if (!this.pendingRequestMap.has(requestId)) {
+      return;
+    }
+    this.pendingRequestMap.get(requestId)?.abort();
+    this.pendingRequestMap.delete(requestId);
+  }
+
+  async cancelAllRequest(): Promise<void> {
+    for (const abortController of this.pendingRequestMap.values()) {
+      abortController.abort();
+    }
+    this.pendingRequestMap.clear();
+  }
+
+  private async getRequestId(config: T): Promise<string> {
+    let { url, method, params, data } = config;
+    if (typeof data === 'string') {
+      data = JSON.parse(data);
+    }
+    if (typeof params === 'string') {
+      params = JSON.parse(params);
+    }
+    return await objectHash({ url, method, params, data });
+
+    async function objectHash(obj: Record<string, any>): Promise<string> {
+      const result = await crypto.subtle.digest('SHA-256', string2ArrayBuffer(JSON.stringify(obj)));
+      return arrayBuffer2String(result);
+    }
+
+    function string2ArrayBuffer(str: string): ArrayBuffer {
+      const result = new ArrayBuffer(str.length * 2);
+      const bufferView = new Uint16Array(result);
+      for (let index = 0; index < str.length; index++) {
+        bufferView[index] = str.charCodeAt(index);
+      }
+      return result;
+    }
+
+    function arrayBuffer2String(arrayBuffer: ArrayBuffer): string {
+      return String.fromCharCode.apply(null, Array.from(new Uint16Array(arrayBuffer)));
+    }
+  }
+}
