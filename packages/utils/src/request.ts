@@ -17,11 +17,18 @@ export interface HttpInterceptors {
 }
 
 export interface RequestConfig extends AxiosRequestConfig, InternalAxiosRequestConfig {
+  /** 请求头 */
   headers: AxiosHeaders;
+  /** 自定义拦截器 */
   interceptors?: HttpInterceptors;
+  /** 重试次数 */
   retry?: number;
+  /** 重试间隔 */
   retryDelay?: number;
+  /** 已重试次数 */
   retryCounted?: number;
+  /** 重试状态 */
+  retryStatus?: string[];
 }
 
 export interface RequestError extends AxiosError<any, any>, BaseError {
@@ -58,7 +65,7 @@ export class Request {
       },
       async (err: RequestError) => {
         const { code = '', config } = err;
-        if (!config || !config.retry || !['ECONNABORTED'].includes(code)) {
+        if (!config || !config.retry || !config.retryStatus?.includes(code)) {
           return Promise.reject(err);
         }
         config.retryCounted = config.retryCounted ?? 0;
