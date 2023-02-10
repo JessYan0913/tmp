@@ -37,12 +37,28 @@ export interface RequestError extends AxiosError<any, any>, BaseError {
 
 export class Request {
   instance: AxiosInstance;
+  requestCanceler: RequestCancel;
   interceptors?: HttpInterceptors;
 
   constructor(config: RequestConfig) {
     this.instance = axios.create(config);
     this.interceptors = config.interceptors;
+    this.requestCanceler = new RequestCancel();
 
+    this.instance.interceptors.request.use(
+      (config: InternalAxiosRequestConfig) => {
+        // 所有请求在这个状态都是待处理请求
+        this.requestCanceler.pendingRequest(config);
+        return config;
+      },
+      (error: RequestError) => {
+        // 请求阶段出错则取消请求
+        this.requestCanceler.cancelRequest(error.config);
+        return error;
+      }
+    );
+
+    // 用户自定义拦截器
     this.instance.interceptors.request.use(
       this.interceptors?.requestInterceptor,
       this.interceptors?.requestInterceptorCatch
@@ -56,6 +72,8 @@ export class Request {
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => {
         return new Promise((resolve, reject) => {
+          // 请求此时已完成
+          this.requestCanceler.confirmRequest(res.config);
           if (res.status === 200) {
             resolve(res.data);
           } else {
@@ -65,6 +83,7 @@ export class Request {
       },
       async (err: RequestError) => {
         const { code = '', config } = err;
+        // 配置中未开启重试，或异常状态不在重试状态中则无需重试
         if (!config || !config.retry || !config.retryStatus?.includes(code)) {
           return Promise.reject(err);
         }
@@ -113,7 +132,7 @@ export class Request {
   }
 }
 
-export class RequestCancel<T extends InternalAxiosRequestConfig> {
+export class RequestCancel<T extends InternalAxiosRequestConfig = RequestConfig> {
   pendingRequestMap: Map<string, AbortController>;
 
   constructor() {
