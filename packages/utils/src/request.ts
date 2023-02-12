@@ -10,9 +10,13 @@ import axios, {
 import { BaseError } from './error';
 
 export interface HttpInterceptors {
+  /** 请求拦截器 */
   requestInterceptor?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig;
+  /** 请求失败拦截器 */
   requestInterceptorCatch?: (error: any) => any;
+  /** 响应拦截器 */
   responseInterceptor?: <T = AxiosResponse>(response: T) => T;
+  /** 响应失败拦截器 */
   responseInterceptorCatch?: (error: any) => any;
 }
 
@@ -103,6 +107,7 @@ export class Request {
     );
   }
 
+  /** 发出请求 */
   public request<T>(config: RequestConfig): Promise<T> {
     return new Promise((resolve, reject) => {
       try {
