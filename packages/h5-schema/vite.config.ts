@@ -1,10 +1,6 @@
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
-import pkg from './package.json';
-
-const deps = Object.keys(pkg.dependencies);
-
 export default defineConfig({
   plugins: [
     dts({
@@ -12,23 +8,17 @@ export default defineConfig({
       include: ['src/**/*'],
       staticImport: true,
       insertTypesEntry: true,
+      logDiagnostics: true,
     }),
   ],
 
   build: {
-    cssCodeSplit: false,
     sourcemap: true,
-    minify: false,
-    target: 'esnext',
+
     lib: {
       entry: 'src/index.ts',
-      name: 'TmpUtils',
-      fileName: 'tmp-utils',
-    },
-    rollupOptions: {
-      external(id: string) {
-        return deps.some((k) => new RegExp(`^${k}`).test(id));
-      },
+      name: 'TmpH5Schema',
+      fileName: 'tmp-h5-schema',
     },
   },
 });
