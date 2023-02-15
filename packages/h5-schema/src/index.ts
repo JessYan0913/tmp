@@ -1,36 +1,78 @@
 export type TmpActionType = 'route-setting' | 'element-linkage';
 
+export type Id = string;
+
+export const enum SourceScope {
+  /**
+   * 值来自事件参数
+   *
+   * name
+   */
+  EVENT = 'event',
+  /**
+   * 值来自表达式
+   *
+   * new Date()
+   */
+  EXPRESSION = 'expression',
+  /**
+   * 值来自模版
+   *
+   * ${event.name} 参数
+   */
+  TEMPLATE = 'template',
+  /**
+   * 值来自常量
+   */
+  CONST = 'const',
+}
+
 export interface TmpPropMapping {
   /** 参数类型 */
   name: string;
+  /** 是否忽略该参数 */
+  ignore: boolean;
   /** 默认值 */
   defaultValue?: string;
+  /** 来源 */
+  source?: string;
+  /** 取值空间 */
+  sourceScope?: string;
+  /** 表达式 */
+  expression?: string;
+  /** 模版 */
+  template?: string;
 }
 
 export interface TmpEvent {
   /** 事件 */
   event: string;
-  /** 作用目标元素 */
-  targetId: string;
   /** 动作类型 */
   actionType: TmpActionType;
+  /** 作用目标元素 */
+  target?: string;
   /** 触发方法 */
   method?: string;
   /** 路由页面 */
   page?: string;
   /** 参数映射 */
-  propMapping?: Record<string, any>;
+  propMappings?: TmpPropMapping[];
 }
 
 export interface TmpElement {
-  /** 元素ID，应该是一个唯一值 */
-  id: string;
   /** 元素类型 */
   type: string;
+  /** 元素ID，应该是一个唯一值 */
+  id?: Id;
   /** 元素名称 */
-  name: string;
+  name?: string;
   /** 观察目标元素 */
   events?: TmpEvent[];
+  /** 样式 */
+  style?: {
+    [key: string]: any;
+  };
+  [key: string]: any;
 }
 
 export interface TmpFormItemElement extends TmpElement {
