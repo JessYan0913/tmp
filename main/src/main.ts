@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import H5Element from '@tmp/components';
 import ElementPlus from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import { createPinia } from 'pinia';
@@ -17,4 +18,5 @@ const app = createApp(App);
 app.use(ElementPlus, { locale: zhCn });
 app.use(pinia);
 app.use(router);
+app.use(H5Element);
 app.mount('#app');
