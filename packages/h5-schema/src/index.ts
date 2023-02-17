@@ -1,5 +1,6 @@
 export type TmpActionType = 'route-setting' | 'element-linkage';
 
+/** ElementId */
 export type Id = string;
 
 export const enum SourceScope {
@@ -75,6 +76,13 @@ export interface TmpElement {
   [key: string]: any;
 }
 
+export interface TmpContainer extends TmpElement {
+  /** 布局 */
+  layout: string;
+  /** 自元素 */
+  children: TmpElement[];
+}
+
 export interface TmpFormItemElement extends TmpElement {
   /** 表单label */
   label: string;
@@ -82,7 +90,7 @@ export interface TmpFormItemElement extends TmpElement {
   rules: any[];
 }
 
-export interface TmpFormElement extends TmpElement {
+export interface TmpFormElement extends TmpContainer {
   /** 表单提交地址 */
   action: string;
   /** 提交方法 */
