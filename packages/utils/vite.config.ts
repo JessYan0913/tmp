@@ -29,6 +29,11 @@ export default defineConfig({
       external(id: string) {
         return deps.some((k) => new RegExp(`^${k}`).test(id));
       },
+      output: {
+        globals: {
+          axios: 'axios',
+        },
+      },
     },
   },
 });

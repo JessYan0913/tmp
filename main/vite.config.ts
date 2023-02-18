@@ -2,6 +2,7 @@ import { join, resolve } from 'path';
 
 import { defineConfig, loadEnv } from 'vite';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
+import typescript from '@rollup/plugin-typescript';
 import vue from '@vitejs/plugin-vue';
 
 // https://vitejs.dev/config/
@@ -10,7 +11,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     base: env.VITE_BASE_URL,
-    plugins: [vue(), vueSetupExtend()],
+    plugins: [vue(), typescript(), vueSetupExtend()],
     build: {
       emptyOutDir: true,
     },

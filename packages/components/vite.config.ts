@@ -1,7 +1,7 @@
 import path from 'path';
 
 import { defineConfig } from 'vite';
-import dts from 'vite-plugin-dts';
+import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import vue from '@vitejs/plugin-vue';
 
 import pkg from './package.json';
@@ -9,15 +9,7 @@ import pkg from './package.json';
 const deps = Object.keys(pkg.dependencies);
 
 export default defineConfig({
-  plugins: [
-    vue(),
-    dts({
-      outputDir: 'dist/types',
-      include: ['src/**/*'],
-      staticImport: true,
-      insertTypesEntry: true,
-    }),
-  ],
+  plugins: [vue(), vueSetupExtend()],
 
   resolve: {
     alias:
@@ -49,6 +41,7 @@ export default defineConfig({
         );
       },
       output: {
+        // 在 UMD 构建模式下为这些外部化的依赖提供一个全局变量
         globals: {
           vue: 'Vue',
           'element-plus': 'ElementPlus',
