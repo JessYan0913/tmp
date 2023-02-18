@@ -83,6 +83,10 @@ export interface TmpContainer extends TmpElement {
   children: TmpElement[];
 }
 
+export interface TmpPage extends TmpContainer {
+  type: 'page';
+}
+
 export interface TmpFormItemElement extends TmpElement {
   /** 表单label */
   label: string;
