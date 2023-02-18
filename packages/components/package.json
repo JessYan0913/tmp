@@ -4,7 +4,7 @@
   "main": "dist/tmp-components.umd.js",
   "module": "dist/tmp-components.mjs",
   "style": "dist/style.css",
-  "types": "dist/types/index.d.ts",
+  "types": "types/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/tmp-components.mjs",

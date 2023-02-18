@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "main": "dist/tmp-utils.umd.js",
   "module": "dist/tmp-utils.mjs",
-  "types": "dist/types/index.d.ts",
+  "types": "types/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/tmp-utils.mjs",

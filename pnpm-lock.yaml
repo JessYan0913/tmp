@@ -165,14 +165,14 @@ importers:
   packages/h5-schema:
     specifiers:
       '@types/node': ^18.11.18
+      rimraf: ^3.0.2
       typescript: ^4.9.3
       vite: ^4.0.0
-      vite-plugin-dts: ^1.7.1
     devDependencies:
       '@types/node': 18.11.18
+      rimraf: 3.0.2
       typescript: 4.9.4
       vite: 4.1.1_@types+node@18.11.18
-      vite-plugin-dts: 1.7.1_vite@4.1.1
 
   packages/utils:
     specifiers:
@@ -5593,7 +5593,7 @@ packages:
       fs-extra: 10.1.0
       kolorist: 1.6.0
       ts-morph: 16.0.0
-      vite: 4.1.1_ehqldyb6pj366nnhivpazvpfr4
+      vite: 4.1.1_@types+node@18.11.18
     transitivePeerDependencies:
       - rollup
       - supports-color
