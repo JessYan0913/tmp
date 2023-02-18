@@ -46,7 +46,7 @@ export const selectFile = (accepts: string[] = ['*'], multiple?: boolean): Promi
           if (!inputElement.files || inputElement.files?.length === 0) {
             reject(new FileSelectCancelError());
           }
-        }, 0);
+        }, 1000);
       },
       { once: true }
     );
