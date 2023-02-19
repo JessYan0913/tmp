@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { TmpPage } from '@tmp/h5-schema';
 
-import TmpComponent from '../Component.vue';
+import TmpUiComponent from '../Component.vue';
 
 defineProps<{
   config: TmpPage;
@@ -11,6 +11,6 @@ defineProps<{
 <template>
   <div>
     <slot></slot>
-    <TmpComponent v-for="itemElement in config.children" :key="itemElement.id" :config="itemElement"></TmpComponent>
+    <TmpUiComponent v-for="itemElement in config.children" :key="itemElement.id" :config="itemElement"></TmpUiComponent>
   </div>
 </template>
