@@ -84,7 +84,7 @@ export interface TmpContainer extends TmpElement {
 }
 
 export interface TmpPage extends TmpContainer {
-  type: 'page';
+  type: 'TPage';
 }
 
 export interface TmpFormItemElement extends TmpElement {

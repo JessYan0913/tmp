@@ -10,5 +10,4 @@ defineProps<{
 
 <template>
   <ElInput />
-  <input />
 </template>
