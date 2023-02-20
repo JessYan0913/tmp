@@ -1,3 +1,5 @@
+import path from 'path';
+
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
@@ -10,6 +12,13 @@ export default defineConfig({
       insertTypesEntry: true,
     }),
   ],
+
+  resolve: {
+    alias:
+      process.env.NODE_ENV === 'production'
+        ? []
+        : [{ find: /^@tmp\/utils/, replacement: path.join(__dirname, '../utils/src/index.ts') }],
+  },
 
   build: {
     cssCodeSplit: false,

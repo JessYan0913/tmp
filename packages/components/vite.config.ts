@@ -16,6 +16,7 @@ export default defineConfig({
       process.env.NODE_ENV === 'production'
         ? []
         : [
+            { find: /^@tmp\/basic/, replacement: path.join(__dirname, '../basic/src/index.ts') },
             { find: /^@tmp\/utils/, replacement: path.join(__dirname, '../utils/src/index.ts') },
             { find: /^tmp\/h5-schema/, replacement: path.join(__dirname, '../h5-schema/src/index.ts') },
           ],

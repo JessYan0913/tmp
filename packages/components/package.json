@@ -22,6 +22,7 @@
     "clear:type": "rimraf ./types"
   },
   "dependencies": {
+    "@tmp/basic": "workspace:^0.0.1",
     "@tmp/h5-schema": "workspace:^0.0.1",
     "@tmp/utils": "workspace:^0.0.1",
     "element-plus": "^2.2.28",

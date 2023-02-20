@@ -1,3 +1,2 @@
-class BasicService {}
-
-export default BasicService;
+export * from './useSelectFile';
+export * from './useSelectFileUpload';
