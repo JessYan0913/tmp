@@ -38,6 +38,12 @@ const config: TmpPage = {
       placeholder: '请输入密码',
       isPassword: true,
     },
+    {
+      id: 'upload',
+      name: 'upload4',
+      type: 'upload',
+      label: '附件',
+    },
   ],
 };
 </script>

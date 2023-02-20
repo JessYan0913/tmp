@@ -5,8 +5,6 @@ export interface TmpInput extends TmpFormItemElement {
   value?: string;
   /** 文本提示 */
   placeholder?: string;
-  /** 禁用 */
-  disabled?: boolean;
   /** 允许清除 */
   clearable?: boolean;
   /** 前缀 */

@@ -92,6 +92,8 @@ export interface TmpFormItemElement extends TmpElement {
   label: string;
   /** 表单校验规则 */
   rules: any[];
+  /** 禁用 */
+  disabled?: boolean;
 }
 
 export interface TmpFormElement extends TmpContainer {
