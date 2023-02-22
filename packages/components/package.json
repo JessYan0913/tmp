@@ -22,6 +22,7 @@
     "clear:type": "rimraf ./types"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.0.10",
     "@tmp/basic": "workspace:^0.0.1",
     "@tmp/h5-schema": "workspace:^0.0.1",
     "@tmp/utils": "workspace:^0.0.1",

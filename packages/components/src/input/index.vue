@@ -8,7 +8,7 @@ const props = defineProps<{
   config: TmpInput;
 }>();
 
-const value = ref<string>();
+const value = ref<string>(props.config.defaultValue ?? '');
 
 const showWordLimit = computed<boolean>(() => Boolean(props.config.maxLength || props.config.minLength));
 

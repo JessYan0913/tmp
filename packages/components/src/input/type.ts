@@ -2,7 +2,7 @@ import { TmpFormItemElement } from '@tmp/h5-schema';
 
 export interface TmpInput extends TmpFormItemElement {
   /** 文本内容 */
-  value?: string;
+  defaultValue?: string;
   /** 文本提示 */
   placeholder?: string;
   /** 允许清除 */

@@ -130,6 +130,7 @@ importers:
 
   packages/components:
     specifiers:
+      '@element-plus/icons-vue': ^2.0.10
       '@tmp/basic': workspace:^0.0.1
       '@tmp/h5-schema': workspace:^0.0.1
       '@tmp/utils': workspace:^0.0.1
@@ -145,6 +146,7 @@ importers:
       vue: ^3.2.45
       vue-tsc: ^1.0.24
     dependencies:
+      '@element-plus/icons-vue': 2.0.10_vue@3.2.45
       '@tmp/basic': link:../basic
       '@tmp/h5-schema': link:../h5-schema
       '@tmp/utils': link:../utils
