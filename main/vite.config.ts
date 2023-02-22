@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
       strictPort: true,
       proxy: {
         '/api': {
-          target: 'http://192.168.100.12:8080',
+          target: 'https://imgtg.com/json',
           changeOrigin: true,
           rewrite(path: string): string {
             return path.replace(/\/api/, '');

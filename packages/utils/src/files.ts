@@ -67,3 +67,41 @@ export const selectFile = (accepts: string[] = ['*'], multiple?: boolean): Promi
     return !accepts.includes('*') && files.some((file) => !accepts.includes(`.${getFileExtension(file)}`));
   }
 };
+
+export function isImage(file: File): boolean {
+  return /^image\//.test(file.type);
+}
+
+export function isVideo(file: File): boolean {
+  return /^video\//.test(file.type);
+}
+
+export function isAudio(file: File): boolean {
+  return /^audio\//.test(file.type);
+}
+
+export function isWordDocument(file: File): boolean {
+  return /^application\/(?:vnd\.openxmlformats-officedocument\.wordprocessingml\.document|msword|vnd\.ms-word\.document\.macroenabled\.12|vnd\.openxmlformats-officedocument\.wordprocessingml\.template|vnd\.ms-word\.template\.macroenabled\.12)$/.test(
+    file.type
+  );
+}
+
+export function isExcelDocument(file: File): boolean {
+  return /^application\/(?:vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet|vnd\.ms-excel|vnd\.ms-excel\.sheet\.macroenabled\.12|vnd\.openxmlformats-officedocument\.spreadsheetml\.template|vnd\.ms-excel\.template\.macroenabled\.12)$/.test(
+    file.type
+  );
+}
+
+export function isPowerPointDocument(file: File): boolean {
+  return /^application\/(?:vnd\.ms-powerpoint|vnd\.openxmlformats-officedocument\.presentationml\.presentation|vnd\.ms-powerpoint\.presentation\.macroenabled\.12|vnd\.openxmlformats-officedocument\.presentationml\.template|vnd\.ms-powerpoint\.template\.macroenabled\.12)$/.test(
+    file.type
+  );
+}
+
+export function isJsonDocument(file: File): boolean {
+  return /^application\/json$/.test(file.type);
+}
+
+export function isXmlDocument(file: File): boolean {
+  return /^(?:application|text)\/(?:xml|xhtml\+xml)$/.test(file.type);
+}

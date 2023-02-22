@@ -1,7 +1,18 @@
 import { TmpFormItemElement } from '@tmp/h5-schema';
+import { Method } from '@tmp/utils';
 
-export interface TmpFile extends File {
+export interface TmpFile {
+  name: string;
+  type: string;
+  size: number;
+  lastModified: number;
+  webkitRelativePath?: string;
   resourceId?: string;
+  loading?: boolean;
+}
+
+export interface TmpPicture extends TmpFile {
+  previewSrc: string;
 }
 
 export interface TmpUpload extends TmpFormItemElement {
@@ -15,4 +26,14 @@ export interface TmpUpload extends TmpFormItemElement {
   accept?: string;
   /** 是否允许多选 */
   multiple?: boolean;
+  /** 上传地址 */
+  action?: string;
+  /** 上传方法 */
+  method?: Method;
+  /** 上传方法的请求头 */
+  headers?: Record<string, any>;
+  /** 参数 */
+  parameters?: Record<string, any>;
+  /** 预览地址 */
+  previewUrl?: string;
 }

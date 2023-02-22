@@ -43,6 +43,20 @@ const config: TmpPage = {
       name: 'upload4',
       type: 'upload',
       label: '附件',
+      action: 'http://localhost:8890/api',
+      method: 'POST',
+      headers: {
+        accept: 'application/json, text/javascript, */*; q=0.01',
+        'content-type': 'multipart/form-data; boundary=----WebKitFormBoundary3AdMUsXSUNn5QX9B',
+      },
+      parameters: {
+        source: '${file}',
+        type: 'file',
+        action: 'upload',
+        timestamp: 1677076472519,
+        auth_token: 'ea45d54acd62aeac1df67d7a9923530f3b42e94c',
+        nsfw: 0,
+      },
     },
   ],
 };
