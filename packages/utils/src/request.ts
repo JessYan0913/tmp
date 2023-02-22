@@ -1,17 +1,10 @@
-import axios, {
-  AxiosError,
-  AxiosHeaders,
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 import { BaseError } from './error';
 
 export interface HttpInterceptors {
   /** 请求拦截器 */
-  requestInterceptor?: (config: InternalAxiosRequestConfig) => InternalAxiosRequestConfig;
+  requestInterceptor?: (config: InternalAxiosRequestConfig | AxiosRequestConfig) => InternalAxiosRequestConfig;
   /** 请求失败拦截器 */
   requestInterceptorCatch?: (error: any) => any;
   /** 响应拦截器 */
@@ -20,9 +13,7 @@ export interface HttpInterceptors {
   responseInterceptorCatch?: (error: any) => any;
 }
 
-export interface RequestConfig extends AxiosRequestConfig, InternalAxiosRequestConfig {
-  /** 请求头 */
-  headers: AxiosHeaders;
+export interface RequestConfig extends AxiosRequestConfig {
   /** 自定义拦截器 */
   interceptors?: HttpInterceptors;
   /** 重试次数 */
@@ -36,7 +27,7 @@ export interface RequestConfig extends AxiosRequestConfig, InternalAxiosRequestC
 }
 
 export interface RequestError extends AxiosError<any, any>, BaseError {
-  config: RequestConfig;
+  config: RequestConfig & InternalAxiosRequestConfig;
 }
 
 export class Request {
@@ -137,7 +128,7 @@ export class Request {
   }
 }
 
-export class RequestCancel<T extends InternalAxiosRequestConfig = RequestConfig> {
+export class RequestCancel<T extends AxiosRequestConfig = RequestConfig> {
   pendingRequestMap: Map<string, AbortController>;
 
   constructor() {
