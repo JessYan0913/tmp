@@ -3,6 +3,21 @@ export type TmpActionType = 'route-setting' | 'element-linkage';
 /** ElementId */
 export type Id = string;
 
+export interface TmpRequestConfig {
+  /** 请求ID */
+  id: string;
+  /** 请求名称 */
+  name: string;
+  /** 请求路径 */
+  path: string;
+  /** 请求方法 */
+  method: string;
+  /** 请求头 */
+  headers: Record<string, any>;
+  /** 请求参数 */
+  data: Record<string, any>;
+}
+
 export const enum SourceScope {
   /**
    * 值来自事件参数
@@ -75,6 +90,15 @@ export interface TmpElement {
   };
   [key: string]: any;
 }
+
+export interface TmpOption {
+  /** 字段 */
+  label: string;
+  /** 字段值 */
+  value: string;
+}
+
+export type TmpOptions = TmpOption[];
 
 export interface TmpContainer extends TmpElement {
   /** 布局 */

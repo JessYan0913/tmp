@@ -1,4 +1,4 @@
-import { TmpFormItemElement } from '@tmp/h5-schema';
+import { TmpFormItemElement, TmpOptions } from '@tmp/h5-schema';
 
 export interface TmpSelect extends TmpFormItemElement {
   /** 文本提示 */
@@ -9,4 +9,6 @@ export interface TmpSelect extends TmpFormItemElement {
   multiple?: boolean;
   /** 最多选几个 */
   multipleLimit?: number;
+  /** 备选项 */
+  options: TmpOptions;
 }

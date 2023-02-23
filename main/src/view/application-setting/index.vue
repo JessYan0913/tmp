@@ -39,6 +39,13 @@ const config: TmpPage = {
       isPassword: true,
     },
     {
+      id: 'select-1',
+      name: 'select4',
+      type: 'select',
+      label: '性别',
+      placeholder: '1111',
+    },
+    {
       id: 'upload',
       name: 'upload4',
       type: 'upload',

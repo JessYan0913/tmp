@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import { CircleCloseFilled, Upload } from '@element-plus/icons-vue';
 import { useSelectFileUpload } from '@tmp/basic';
 import { Request } from '@tmp/utils';
-import { ElButton, ElFormItem, ElIcon } from 'element-plus';
+import { ElButton, ElIcon } from 'element-plus';
 
 import { TmpFile, TmpPicture, TmpUpload } from './type';
 
@@ -66,24 +66,24 @@ async function fetchUploadFile(file: File): Promise<any> {
 </script>
 
 <template>
-  <ElFormItem :label="config.label" :prop="config.name">
-    <div class="upload-wrapper">
-      <ElButton class="upload-btn" type="primary" @click="handleClickUpload">
-        文件上传<ElIcon class="el-icon--right"><Upload /></ElIcon>
-      </ElButton>
-      <div v-if="listType === 'list'">
-        <div v-for="(file, index) in files" :key="index" class="file-list__item">
-          <span class="name">{{ file.name }}</span>
-          <ElIcon @click="handleClickDeleteFile(index)"><CircleCloseFilled /></ElIcon>
-        </div>
-      </div>
-      <div v-if="listType === 'picture'">
-        <div v-for="(picture, index) in pictures" :key="index" class="file-picture__item">
-          <img />
-        </div>
+  <!-- <ElFormItem :label="config.label" :prop="config.name"> -->
+  <div class="upload-wrapper">
+    <ElButton class="upload-btn" type="primary" @click="handleClickUpload">
+      文件上传<ElIcon class="el-icon--right"><Upload /></ElIcon>
+    </ElButton>
+    <div v-if="listType === 'list'">
+      <div v-for="(file, index) in files" :key="index" class="file-list__item">
+        <span class="name">{{ file.name }}</span>
+        <ElIcon @click="handleClickDeleteFile(index)"><CircleCloseFilled /></ElIcon>
       </div>
     </div>
-  </ElFormItem>
+    <div v-if="listType === 'picture'">
+      <div v-for="(picture, index) in pictures" :key="index" class="file-picture__item">
+        <img />
+      </div>
+    </div>
+  </div>
+  <!-- </ElFormItem> -->
 </template>
 
 <style lang="scss" scoped>
