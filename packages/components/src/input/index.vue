@@ -1,14 +1,19 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
+import { TmpFormModel } from '@tmp/h5-schema';
 import { ElInput } from 'element-plus';
 
-import { TmpInput } from './type';
+import { TmpInput } from './types';
 
 const props = defineProps<{
   config: TmpInput;
+  model: TmpFormModel;
+  prop?: string;
 }>();
 
-const value = ref<string>(props.config.defaultValue ?? '');
+// const value = ref<string>(props.config.defaultValue ?? '');
+
+const name = computed<string>(() => props.config.name ?? '');
 
 const showWordLimit = computed<boolean>(() => Boolean(props.config.maxLength || props.config.minLength));
 
@@ -17,7 +22,7 @@ const inputType = computed<string>(() => (props.config.isPassword ? 'password' :
 
 <template>
   <ElInput
-    v-model="value"
+    v-model="model[name]"
     :placeholder="config.placeholder"
     :clearable="config.clearable"
     :maxlength="config.maxLength"

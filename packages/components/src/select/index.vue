@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { ElOption, ElSelect } from 'element-plus';
 
-import { TmpSelect } from './type';
+import { TmpSelect } from './types';
 
 defineProps<{
   config: TmpSelect;

@@ -122,9 +122,11 @@ export interface TmpFormItemElement extends TmpElement {
 
 export interface TmpFormElement extends TmpContainer {
   /** 表单提交地址 */
-  action: string;
+  action?: string;
   /** 提交方法 */
-  method: string;
+  method?: string;
   /** 表单的元素ID */
-  elementIds: string[];
+  items: TmpFormItemElement[];
 }
+
+export type TmpFormModel = Record<string, any>;

@@ -5,7 +5,7 @@ import { useSelectFileUpload } from '@tmp/basic';
 import { Request } from '@tmp/utils';
 import { ElButton, ElIcon } from 'element-plus';
 
-import { TmpFile, TmpPicture, TmpUpload } from './type';
+import { TmpFile, TmpPicture, TmpUpload } from './types';
 
 const props = defineProps<{
   config: TmpUpload;
