@@ -7,13 +7,23 @@ import { TmpInput } from './types';
 
 const props = defineProps<{
   config: TmpInput;
-  model: TmpFormModel;
+  model?: TmpFormModel;
   prop?: string;
+  modelValue?: string;
 }>();
 
-// const value = ref<string>(props.config.defaultValue ?? '');
+const emits = defineEmits<{
+  (event: 'update:modelValue', value: string): void;
+}>();
 
-const name = computed<string>(() => props.config.name ?? '');
+const value = computed<string>({
+  set(value: string) {
+    emits('update:modelValue', value);
+  },
+  get(): string {
+    return props.modelValue ?? props.config.defaultValue ?? '';
+  },
+});
 
 const showWordLimit = computed<boolean>(() => Boolean(props.config.maxLength || props.config.minLength));
 
@@ -22,7 +32,7 @@ const inputType = computed<string>(() => (props.config.isPassword ? 'password' :
 
 <template>
   <ElInput
-    v-model="model[name]"
+    v-model="value"
     :placeholder="config.placeholder"
     :clearable="config.clearable"
     :maxlength="config.maxLength"

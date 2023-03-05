@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { TmpFormElement, TmpFormModel } from '@tmp/h5-schema';
 import { ElForm } from 'element-plus';
 
-import TmpUiComponent from '../Component.vue';
+import TmpUiFormItem from './components/FormItem.vue';
 
 defineProps<{
   config: TmpFormElement;
@@ -18,12 +18,12 @@ const handleSubmit = () => {
 
 <template>
   <ElForm :model="value">
-    <TmpUiComponent
+    <TmpUiFormItem
       v-for="itemElement in config.items"
       :key="itemElement.id"
       :config="itemElement"
       :model="value"
-    ></TmpUiComponent>
+    ></TmpUiFormItem>
     <button @click="handleSubmit">提交</button>
   </ElForm>
 </template>
