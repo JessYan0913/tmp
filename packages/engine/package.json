@@ -1,12 +1,24 @@
 {
-  "name": "engine",
+  "name": "@tmp/engine",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "version": "0.0.1",
+  "main": "dist/tmp-engine.umd.js",
+  "module": "dist/tmp-engine.mjs",
+  "types": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/tmp-engine.mjs",
+      "require": "./dist/tmp-engine.umd.js"
+    }
+  },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "npm run build:type && vite build",
+    "build:type": "npm run clear:type && tsc --declaration --emitDeclarationOnly --project tsconfig.build.json",
+    "clear:type": "rimraf ./types"
+  },
+  "dependencies": {
+    "@tmp/utils": "workspace:^0.0.1",
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "typescript": "^4.9.3",

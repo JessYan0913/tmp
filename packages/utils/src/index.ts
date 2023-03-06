@@ -1,5 +1,7 @@
 export * from 'axios';
 
+export * from './base-service';
+
 export * from './error';
 
 export * from './files';
