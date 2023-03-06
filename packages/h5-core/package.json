@@ -1,0 +1,27 @@
+{
+  "name": "@tmp/h5-core",
+  "private": true,
+  "version": "0.0.1",
+  "main": "dist/tmp-h5-core.umd.js",
+  "module": "dist/tmp-h5-core.mjs",
+  "types": "types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/tmp-h5-core.mjs",
+      "require": "./dist/tmp-h5-core.umd.js"
+    }
+  },
+  "scripts": {
+    "build": "npm run build:type && vite build",
+    "build:type": "npm run clear:type && tsc --declaration --emitDeclarationOnly --project tsconfig.build.json",
+    "clear:type": "rimraf ./types"
+  },
+  "dependencies": {
+    "@tmp/utils": "workspace:^0.0.1",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0"
+  }
+}

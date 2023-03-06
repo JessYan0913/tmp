@@ -17,12 +17,17 @@ export default defineConfig({
     target: 'esnext',
     lib: {
       entry: 'src/index.ts',
-      name: 'TmpEditor',
-      fileName: 'tmp-editor',
+      name: 'TmpH5Core',
+      fileName: 'tmp-h5-core',
     },
     rollupOptions: {
       external(id: string) {
         return deps.some((k) => new RegExp(`^${k}`).test(id));
+      },
+      output: {
+        globals: {
+          axios: 'axios',
+        },
       },
     },
   },
