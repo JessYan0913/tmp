@@ -1,14 +1,14 @@
 {
-  "name": "@tmp/engine",
+  "name": "@tmp/editor",
   "private": true,
   "version": "0.0.1",
-  "main": "dist/tmp-engine.umd.js",
-  "module": "dist/tmp-engine.mjs",
+  "main": "dist/tmp-editor.umd.js",
+  "module": "dist/tmp-editor.mjs",
   "types": "types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/tmp-engine.mjs",
-      "require": "./dist/tmp-engine.umd.js"
+      "import": "./dist/tmp-editor.mjs",
+      "require": "./dist/tmp-editor.umd.js"
     }
   },
   "scripts": {
