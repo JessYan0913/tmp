@@ -19,3 +19,14 @@ export function replacePropertyWithValue(obj: Record<string | number | symbol, a
     }
   }
 }
+
+export const isSubclass = (childClass: any, parentClass: any): boolean => {
+  let currentClass = childClass;
+  while (currentClass) {
+    if (currentClass === parentClass) {
+      return true;
+    }
+    currentClass = Object.getPrototypeOf(currentClass);
+  }
+  return false;
+};

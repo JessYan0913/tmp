@@ -1,4 +1,4 @@
-import { BaseService } from '@tmp/utils';
+import { BaseService, isSubclass } from '@tmp/utils';
 
 import Context from '../context';
 import { CmdNotOptionsError, CmdNotRegisterError } from '../errors';
@@ -24,7 +24,9 @@ export class CommandService extends BaseService {
       commandClasses = [commandClasses];
     }
     commandClasses.forEach((commandClass) => {
-      this.commands[commandClass.name] = commandClass;
+      if (isSubclass(commandClass, BaseCommand)) {
+        this.commands[commandClass.name] = commandClass;
+      }
     });
   }
 
@@ -43,14 +45,14 @@ export class CommandService extends BaseService {
 
   public execute(command: BaseCommand | string, options?: CommandOptions): void {
     let executeCommand: BaseCommand;
-    const Cmd = this.getCommandClass(command);
+    const Command = this.getCommandClass(command);
     if (command instanceof BaseCommand) {
       executeCommand = command;
     } else {
       if (!options) {
         throw new CmdNotOptionsError(command);
       }
-      executeCommand = new Cmd(options);
+      executeCommand = new Command(this.context, options);
     }
     this.undoStack.push(executeCommand);
     executeCommand.id = ++this.idCounter;
@@ -168,7 +170,7 @@ export class CommandService extends BaseService {
     for (const commandJson of json.undoStack) {
       const Command = this.commands[commandJson.name];
       if (Command) {
-        const command = new Command(commandJson.options);
+        const command = new Command(this.context, commandJson.options);
         command.fromJSON(commandJson);
         this.undoStack.push(command);
         this.idCounter = Math.max(command.id, this.idCounter);
@@ -178,7 +180,7 @@ export class CommandService extends BaseService {
     for (const commandJson of json.redoStack) {
       const Command = this.commands[commandJson.name];
       if (Command) {
-        const command = new Command(commandJson.options);
+        const command = new Command(this.context, commandJson.options);
         command.fromJSON(commandJson);
         this.redoStack.push(command);
         this.idCounter = Math.max(command.id, this.idCounter);

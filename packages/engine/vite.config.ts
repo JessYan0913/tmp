@@ -1,3 +1,5 @@
+import { join } from 'path';
+
 import { defineConfig } from 'vite';
 
 import pkg from './package.json';
@@ -5,6 +7,9 @@ import pkg from './package.json';
 const deps = Object.keys(pkg.dependencies);
 
 export default defineConfig({
+  resolve: {
+    alias: [{ find: /^@tmp\/utils/, replacement: join(__dirname, '../packages/utils/src/index.ts') }],
+  },
   build: {
     cssCodeSplit: false,
     sourcemap: true,

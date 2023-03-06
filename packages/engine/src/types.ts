@@ -1,7 +1,6 @@
 import Context from './context';
 
 export interface CommandOptions {
-  context: Context;
   [key: string]: any;
 }
 
@@ -14,13 +13,15 @@ export interface Command {
 }
 
 export abstract class BaseCommand implements Command {
+  public context: Context;
   public name: string;
   public id: number = 0;
   public executed: boolean = false;
   public options: CommandOptions;
   public executeTime: number = new Date().getTime();
 
-  constructor(options: CommandOptions) {
+  constructor(context: Context, options: CommandOptions) {
+    this.context = context;
     this.name = this.constructor.name;
     this.options = options;
   }
@@ -48,7 +49,7 @@ export abstract class BaseCommand implements Command {
   }
 }
 
-export type CommandClass<T extends BaseCommand = BaseCommand> = new (options: CommandOptions) => T;
+export type CommandClass<T extends BaseCommand = BaseCommand> = new (context: Context, options: CommandOptions) => T;
 
 export interface History {
   undoStack: Command[];
