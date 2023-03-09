@@ -78,7 +78,7 @@ watch(
       // 点2
       0, 0.5,
       // 点3
-      0.7, 0,
+      0.5, 0,
     ];
     /**
      * 将 positions 数据存入`gl.ARRAY_BUFFER`中
@@ -97,7 +97,9 @@ watch(
     /** gl.viewport 应该在每一帧都被调用一次 */
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
+    /** 设置清空颜色为黑色，透明度为0 */
     gl.clearColor(0, 0, 0, 0);
+    /** 将画布填充为 COLOR_BUFFER_BIT 内容，即将整个画布填充为清空颜色，上面的颜色 */
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     gl.useProgram(program);
