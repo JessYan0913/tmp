@@ -1,6 +1,6 @@
-import { EventEmitter } from 'events';
+import { EventBus } from './event';
 
-export class BaseService extends EventEmitter {
+export class BaseService extends EventBus {
   constructor() {
     super();
   }
