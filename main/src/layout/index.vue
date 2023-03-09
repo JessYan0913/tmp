@@ -7,6 +7,7 @@ import { RouterLink, RouterView } from 'vue-router';
     <div class="menu">
       <RouterLink to="/application">应用列表 </RouterLink>
       <RouterLink to="/application/setting">应用设置 </RouterLink>
+      <RouterLink to="/webgl/01">webgl-01 </RouterLink>
     </div>
     <RouterView />
   </div>

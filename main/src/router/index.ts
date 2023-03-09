@@ -28,6 +28,11 @@ const routes: RouteRecordRaw[] = [
         name: 'ApplicationSetting',
         component: () => import('../view/application-setting/index.vue'),
       },
+      {
+        path: '/webgl/01',
+        name: 'Webgl01',
+        component: () => import('../view/webgl-01/index.vue'),
+      },
     ],
   },
   {
