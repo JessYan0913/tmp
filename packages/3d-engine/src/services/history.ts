@@ -2,10 +2,11 @@ import { BaseService, isSubclass } from '@tmp/utils';
 
 import Context from '../context';
 import { CmdNotOptionsError, CmdNotRegisterError } from '../errors';
-import { BaseCmd, CommandClass, CommandOptions, Event, History } from '../types';
+import { BaseCmd, Cmd, CmdStack, CommandClass, Event } from '../types';
 
-export class CommandService extends BaseService<Event.Command> {
+export class History extends BaseService<Event.History> {
   public disabled?: boolean = false;
+  public maxStackSize: number = 500;
 
   private context: Context;
   private commands: Record<string, CommandClass> = {};
@@ -17,6 +18,15 @@ export class CommandService extends BaseService<Event.Command> {
     super();
     this.context = context;
     this.disabled = disabled;
+  }
+
+  /**
+   * 设置最大命令栈长度
+   *
+   * @param size
+   */
+  public setMaxStackSize(size: number): void {
+    this.maxStackSize = size;
   }
 
   public registerCommands<T extends BaseCmd>(commandClasses: CommandClass<T> | Array<CommandClass<T>>): void {
@@ -43,7 +53,7 @@ export class CommandService extends BaseService<Event.Command> {
     return result;
   }
 
-  public execute(command: BaseCmd | string, options?: CommandOptions): void {
+  public execute<T extends Cmd.Options>(command: BaseCmd | string, options?: T): void {
     let executeCommand: BaseCmd;
     const Command = this.getCommandClass(command);
     if (command instanceof BaseCmd) {
@@ -54,6 +64,12 @@ export class CommandService extends BaseService<Event.Command> {
       }
       executeCommand = new Command(this.context, options);
     }
+
+    // 如果命令栈中的命令长度已经超出了最大栈长，则将最早的命令清除
+    if (this.undoStack.length > this.maxStackSize) {
+      this.undoStack.shift();
+    }
+
     this.undoStack.push(executeCommand);
     executeCommand.id = ++this.idCounter;
 
@@ -88,6 +104,10 @@ export class CommandService extends BaseService<Event.Command> {
       }
       --step;
     }
+    this.emit('history:undo', {
+      step,
+      command: command?.toJSON(),
+    });
     return command;
   }
 
@@ -110,6 +130,10 @@ export class CommandService extends BaseService<Event.Command> {
       }
       --step;
     }
+    this.emit('history:redo', {
+      command: command?.toJSON(),
+      step,
+    });
     return command;
   }
 
@@ -160,29 +184,29 @@ export class CommandService extends BaseService<Event.Command> {
       undoStack: this.undoStack,
       redoStack: this.redoStack,
     });
-    this.emit('command:destroy', undefined);
+    this.emit('history:destroy', undefined);
   }
 
-  public toJSON(): History {
-    const history: History = {
+  public toJSON(): CmdStack {
+    const cmdStack: CmdStack = {
       undoStack: [],
       redoStack: [],
     };
 
     for (const command of this.undoStack) {
-      history.undoStack.push(command.toJSON());
+      cmdStack.undoStack.push(command.toJSON());
     }
     for (const command of this.redoStack) {
-      history.redoStack.push(command.toJSON());
+      cmdStack.redoStack.push(command.toJSON());
     }
 
-    return history;
+    return cmdStack;
   }
 
-  public fromJSON(json: History): void {
+  public fromJSON(cmdStack: CmdStack): void {
     this.undoStack = [];
     this.redoStack = [];
-    for (const commandJson of json.undoStack) {
+    for (const commandJson of cmdStack.undoStack) {
       const Command = this.commands[commandJson.name];
       if (Command) {
         const command = new Command(this.context, commandJson.options);
@@ -192,7 +216,7 @@ export class CommandService extends BaseService<Event.Command> {
       }
     }
 
-    for (const commandJson of json.redoStack) {
+    for (const commandJson of cmdStack.redoStack) {
       const Command = this.commands[commandJson.name];
       if (Command) {
         const command = new Command(this.context, commandJson.options);
@@ -202,11 +226,8 @@ export class CommandService extends BaseService<Event.Command> {
       }
     }
 
-    this.emit('stack:changed', {
-      undoStack: this.undoStack,
-      redoStack: this.redoStack,
-    });
+    this.emit('stack:changed', cmdStack);
   }
 }
 
-export default CommandService;
+export default History;

@@ -1,9 +1,5 @@
 import Context from './context';
 
-export interface CommandOptions {
-  [key: string]: any;
-}
-
 export namespace Cmd {
   export interface Options {
     [key: string]: any;
@@ -60,18 +56,23 @@ export type CommandClass<T extends BaseCmd = BaseCmd, O extends Cmd.Options = Cm
   options: O
 ) => T;
 
-export interface History {
+export interface CmdStack {
   undoStack: Command[];
   redoStack: Command[];
 }
 
 export namespace Event {
-  export interface Command {
-    'stack:changed': {
-      undoStack: BaseCmd[];
-      redoStack: BaseCmd[];
-    };
+  export interface History {
+    'stack:changed': CmdStack;
     'stack:cleared': undefined;
-    'command:destroy': undefined;
+    'history:destroy': undefined;
+    'history:undo': {
+      command: Command | undefined;
+      step: number;
+    };
+    'history:redo': {
+      command: Command | undefined;
+      step: number;
+    };
   }
 }
