@@ -1,7 +1,7 @@
 import Context from '../context';
-import { BaseCommand, CommandOptions } from '../types';
+import { BaseCmd, CommandOptions } from '../types';
 
-export default class AddNodeCmd extends BaseCommand {
+export default class AddNodeCmd extends BaseCmd {
   constructor(context: Context, options: CommandOptions) {
     super(context, options);
   }

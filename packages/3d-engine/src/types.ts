@@ -4,23 +4,29 @@ export interface CommandOptions {
   [key: string]: any;
 }
 
-export interface Command {
+export namespace Cmd {
+  export interface Options {
+    [key: string]: any;
+  }
+}
+
+export interface Command<T extends Cmd.Options = Cmd.Options> {
   id: number;
   name: string;
-  options: CommandOptions;
+  options: T;
   executed: boolean;
   executeTime: number;
 }
 
-export abstract class BaseCommand implements Command {
+export abstract class BaseCmd<T extends Cmd.Options = Cmd.Options> implements Command<T> {
   public context: Context;
   public name: string;
   public id: number = 0;
   public executed: boolean = false;
-  public options: CommandOptions;
+  public options: T;
   public executeTime: number = new Date().getTime();
 
-  constructor(context: Context, options: CommandOptions) {
+  constructor(context: Context, options: T) {
     this.context = context;
     this.name = this.constructor.name;
     this.options = options;
@@ -30,7 +36,7 @@ export abstract class BaseCommand implements Command {
 
   public abstract undo(): void;
 
-  public toJSON(): Command {
+  public toJSON(): Command<T> {
     return {
       id: this.id,
       name: this.name,
@@ -40,7 +46,7 @@ export abstract class BaseCommand implements Command {
     };
   }
 
-  public fromJSON(json: Command): void {
+  public fromJSON(json: Command<T>): void {
     this.id = json.id;
     this.name = json.name;
     this.options = json.options;
@@ -49,9 +55,23 @@ export abstract class BaseCommand implements Command {
   }
 }
 
-export type CommandClass<T extends BaseCommand = BaseCommand> = new (context: Context, options: CommandOptions) => T;
+export type CommandClass<T extends BaseCmd = BaseCmd, O extends Cmd.Options = Cmd.Options> = new (
+  context: Context,
+  options: O
+) => T;
 
 export interface History {
   undoStack: Command[];
   redoStack: Command[];
+}
+
+export namespace Event {
+  export interface Command {
+    'stack:changed': {
+      undoStack: BaseCmd[];
+      redoStack: BaseCmd[];
+    };
+    'stack:cleared': undefined;
+    'command:destroy': undefined;
+  }
 }
