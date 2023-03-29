@@ -14,6 +14,14 @@
   "engines": {
     "node": ">=16"
   },
+  "workspaces": [
+    "@tmp/utils",
+    "@tmp/h5-core",
+    "@tmp/h5-schema",
+    "@tmp/components",
+    "@tmp/basic",
+    "@tmp/3d-engine"
+  ],
   "devDependencies": {
     "@babel/core": "^7.20.12",
     "@commitlint/cli": "^17.4.2",

@@ -1,14 +1,13 @@
 {
-  "name": "@tmp/editor",
-  "private": true,
+  "name": "@tmp/3d-engine",
   "version": "0.0.1",
-  "main": "dist/tmp-editor.umd.js",
-  "module": "dist/tmp-editor.mjs",
+  "main": "dist/tmp-3d-engine.umd.js",
+  "module": "dist/tmp-3d-engine.mjs",
   "types": "types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/tmp-editor.mjs",
-      "require": "./dist/tmp-editor.umd.js"
+      "import": "./dist/tmp-3d-engine.mjs",
+      "require": "./dist/tmp-3d-engine.umd.js"
     }
   },
   "scripts": {

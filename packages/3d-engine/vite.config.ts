@@ -17,8 +17,8 @@ export default defineConfig({
     target: 'esnext',
     lib: {
       entry: 'src/index.ts',
-      name: 'TmpEditor',
-      fileName: 'tmp-editor',
+      name: 'Tmp3dEngine',
+      fileName: 'tmp-3d-engine',
     },
     rollupOptions: {
       external(id: string) {
