@@ -156,6 +156,13 @@ export class Context extends BaseService<Event.Context> {
     });
   }
 
+  public setObjectName(object: Object3D, name: string): void {
+    object.name = name;
+    this.emit('scene:changed', {
+      scene: this.scene,
+    });
+  }
+
   public removeObject(object: Object3D): void {
     if (!object.parent) {
       return;
