@@ -5,7 +5,7 @@ import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import { Context } from '../context';
 import { Event } from '../types';
 
-export class Renderer extends BaseService<Event.Renderer> {
+export class Renderer extends BaseService<Event.RendererArgs> {
   private context: Context;
   private domElement: HTMLDivElement;
   private camera: Camera;

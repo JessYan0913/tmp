@@ -1,6 +1,7 @@
 import { Camera, Object3D, Scene, Vector2, WebGLRenderer } from 'three';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 
+import History from './services/history';
 import Context from './context';
 
 export namespace Cmd {
@@ -65,7 +66,7 @@ export interface CmdStack {
 }
 
 export namespace Event {
-  export interface Context {
+  export interface ContextArgs {
     'webgl:renderer:created': {
       renderer: WebGLRenderer;
     };
@@ -84,9 +85,15 @@ export namespace Event {
     'viewport:camera:changed': {
       viewportCamera: Camera;
     };
+    'camera:reset': {
+      camera: Camera;
+    };
+    'engine:destroy': {
+      context: Context;
+    };
   }
 
-  export interface Mouse {
+  export interface MouseArgs {
     'mouse:down': {
       point: Vector2;
     };
@@ -101,10 +108,11 @@ export namespace Event {
     };
   }
 
-  export interface History {
+  export interface HistoryArgs {
     'stack:changed': CmdStack;
-    'stack:cleared': undefined;
-    'history:destroy': undefined;
+    'history:destroy': {
+      history: History;
+    };
     'history:undo': {
       command: Command | undefined;
       step: number;
@@ -115,7 +123,7 @@ export namespace Event {
     };
   }
 
-  export interface Renderer {
+  export interface RendererArgs {
     'scene:rendered': {
       time: number;
     };

@@ -5,7 +5,7 @@ import Context from '../context';
 import { Event } from '../types';
 import { normalizeScreenCoords } from '../utils';
 
-export class Mouse extends BaseService<Event.Mouse> {
+export class Mouse extends BaseService<Event.MouseArgs> {
   private context: Context;
   private domElement: HTMLDivElement;
   private downPoint: Vector2 = new Vector2();

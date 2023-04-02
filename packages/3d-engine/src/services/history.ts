@@ -4,7 +4,7 @@ import Context from '../context';
 import { CmdNotOptionsError, CmdNotRegisterError } from '../errors';
 import { BaseCmd, Cmd, CmdStack, CommandClass, Event } from '../types';
 
-export class History extends BaseService<Event.History> {
+export class History extends BaseService<Event.HistoryArgs> {
   public disabled?: boolean = false;
   public maxStackSize: number = 500;
 
@@ -184,7 +184,9 @@ export class History extends BaseService<Event.History> {
       undoStack: this.undoStack,
       redoStack: this.redoStack,
     });
-    this.emit('history:destroy', undefined);
+    this.emit('history:destroy', {
+      history: this,
+    });
   }
 
   public toJSON(): CmdStack {

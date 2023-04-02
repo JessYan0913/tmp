@@ -5,7 +5,7 @@ import commands from './commands/index';
 import { History } from './services/history';
 import { Mouse } from './services/mouse';
 import { Renderer } from './services/renderer';
-import { Event } from './types';
+import { BaseCmd, Cmd, Event } from './types';
 import { getFilteredObjectByPoint } from './utils';
 
 /**
@@ -13,7 +13,7 @@ import { getFilteredObjectByPoint } from './utils';
  */
 const DEFAULT_CAMERA = new PerspectiveCamera(50, 1, 0.01, 1000);
 
-export class Context extends BaseService<Event.Context> {
+export class Context extends BaseService<Event.ContextArgs> {
   public domElement: HTMLDivElement;
   public camera: Camera;
   public viewportCamera: Camera;
@@ -378,6 +378,13 @@ export class Context extends BaseService<Event.Context> {
   }
 
   /**
+   * 取消选择
+   */
+  public deselect() {
+    this.selected = null;
+  }
+
+  /**
    * 聚焦实例
    *
    * @param object
@@ -415,6 +422,50 @@ export class Context extends BaseService<Event.Context> {
    */
   public findObjectByUUID(uuid: string): Object3D | undefined {
     return this.objects.find((object) => object.uuid === uuid);
+  }
+
+  /**
+   * 执行命令
+   *
+   * @param command
+   * @param options
+   */
+  public execute<T extends Cmd.Options>(command: BaseCmd | string, options: T): void {
+    this.history.execute(command, options);
+  }
+
+  public destroy(): void {
+    this.history.destroy();
+
+    this.camera.copy(DEFAULT_CAMERA);
+    this.emit('camera:reset', {
+      camera: this.camera,
+    });
+
+    this.scene.name = 'MainScene';
+    this.scene.userData = {};
+    this.scene.background = null;
+    this.scene.environment = null;
+    this.scene.fog = null;
+
+    const objects = this.scene.children;
+    while (objects.length > 0) {
+      this.removeObject(objects[0]);
+    }
+
+    this.objectMap.clear();
+    this.materialMap.clear();
+    this.cameraMap.clear();
+    this.materialRefCounter = new WeakMap();
+    this.textureMap.clear();
+
+    this.deselect();
+
+    this.removeAllListeners();
+
+    this.emit('engine:destroy', {
+      context: this,
+    });
   }
 }
 
