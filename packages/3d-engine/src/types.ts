@@ -1,3 +1,6 @@
+import { Object3D, Scene, Vector2, WebGLRenderer } from 'three';
+import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
+
 import Context from './context';
 
 export namespace Cmd {
@@ -62,6 +65,39 @@ export interface CmdStack {
 }
 
 export namespace Event {
+  export interface Context {
+    'webgl:renderer:created': {
+      renderer: WebGLRenderer;
+    };
+    'css2:renderer:created': {
+      renderer: CSS2DRenderer;
+    };
+    'object:selected': {
+      selected: Object3D;
+    };
+    'object:focused': {
+      focused: Object3D;
+    };
+    'scene:changed': {
+      scene: Scene;
+    };
+  }
+
+  export interface Mouse {
+    'mouse:down': {
+      point: Vector2;
+    };
+    'mouse:up': {
+      point: Vector2;
+    };
+    'mouse:click': {
+      point: Vector2;
+    };
+    'mouse:dbclick': {
+      point: Vector2;
+    };
+  }
+
   export interface History {
     'stack:changed': CmdStack;
     'stack:cleared': undefined;
@@ -73,6 +109,12 @@ export namespace Event {
     'history:redo': {
       command: Command | undefined;
       step: number;
+    };
+  }
+
+  export interface Renderer {
+    'scene:rendered': {
+      time: number;
     };
   }
 }
