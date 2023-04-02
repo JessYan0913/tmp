@@ -130,8 +130,40 @@ export class Context extends BaseService<Event.Context> {
       object.parent = parent;
     } else {
       this.scene.add(object);
+      object.parent = this.scene;
       this.objectMap.set(object.uuid, object);
     }
+    this.emit('scene:changed', {
+      scene: this.scene,
+    });
+  }
+
+  public moveObjectTree(object: Object3D, parent?: Object3D, beforeObject?: Object3D): void {
+    if (!parent) {
+      parent = this.scene;
+    }
+    if (!parent.getObjectById(object.id)) {
+      parent.add(object);
+      object.parent = parent;
+    }
+    if (beforeObject) {
+      const index = parent.children.indexOf(beforeObject);
+      parent.children.splice(index, 0, object);
+      parent.children.pop();
+    }
+    this.emit('scene:changed', {
+      scene: this.scene,
+    });
+  }
+
+  public removeObject(object: Object3D): void {
+    if (!object.parent) {
+      return;
+    }
+    object.traverse((child) => {
+      this.removeObject(child);
+    });
+    this.objectMap.delete(object.uuid);
     this.emit('scene:changed', {
       scene: this.scene,
     });
