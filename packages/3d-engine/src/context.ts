@@ -21,7 +21,7 @@ export class Context extends BaseService<Event.Context> {
   public history: History;
   public mouse: Mouse;
   public renderer: Renderer;
-  public objects: Object3D[];
+  public objectMap: Map<string, Object3D>;
   public mixer: AnimationMixer;
   public selected: Object3D | null;
   public cameraMap: Map<string, Camera>;
@@ -39,7 +39,7 @@ export class Context extends BaseService<Event.Context> {
     this.scene = new Scene();
     this.scene.name = 'MainScene';
 
-    this.objects = [];
+    this.objectMap = new Map();
 
     this.mixer = new AnimationMixer(this.scene);
 
@@ -78,6 +78,10 @@ export class Context extends BaseService<Event.Context> {
     this.addCamera(this.camera);
   }
 
+  public get objects(): Object3D[] {
+    return [...this.objectMap.values()];
+  }
+
   public setScene(scene: Scene): void {
     this.scene.uuid = scene.uuid;
     this.scene.name = scene.name;
@@ -89,7 +93,7 @@ export class Context extends BaseService<Event.Context> {
     this.scene.userData = JSON.parse(JSON.stringify(scene.userData));
 
     while (scene.children.length > 0) {
-      this.objects.push(scene.children[0]);
+      this.addObject(scene.children[0]);
     }
 
     this.emit('scene:changed', {
@@ -126,7 +130,7 @@ export class Context extends BaseService<Event.Context> {
       object.parent = parent;
     } else {
       this.scene.add(object);
-      this.objects.push(object);
+      this.objectMap.set(object.uuid, object);
     }
     this.emit('scene:changed', {
       scene: this.scene,
