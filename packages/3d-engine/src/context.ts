@@ -1,5 +1,5 @@
 import { BaseService } from '@tmp/utils';
-import { AnimationMixer, Camera, Material, Mesh, Object3D, PerspectiveCamera, Scene } from 'three';
+import { AnimationMixer, Camera, Material, Mesh, Object3D, PerspectiveCamera, Scene, Texture } from 'three';
 
 import commands from './commands/index';
 import { History } from './services/history';
@@ -23,10 +23,12 @@ export class Context extends BaseService<Event.Context> {
   public renderer: Renderer;
   public mixer: AnimationMixer;
   public selected: Object3D | null;
+  public focused: Object3D | null;
   public objectMap: Map<string, Object3D>;
   public cameraMap: Map<string, Camera>;
   public materialMap: Map<string, Material>;
   public materialRefCounter: WeakMap<Material, number>;
+  public textureMap: Map<string, Texture>;
 
   constructor() {
     super();
@@ -44,11 +46,13 @@ export class Context extends BaseService<Event.Context> {
     this.mixer = new AnimationMixer(this.scene);
 
     this.selected = null;
+    this.focused = null;
 
     this.objectMap = new Map();
     this.cameraMap = new Map();
     this.materialMap = new Map();
     this.materialRefCounter = new WeakMap();
+    this.textureMap = new Map();
 
     this.history = new History(this);
     this.history.registerCommands(commands);
@@ -85,6 +89,11 @@ export class Context extends BaseService<Event.Context> {
     return [...this.objectMap.values()];
   }
 
+  /**
+   * 设置场景
+   *
+   * @param scene
+   */
   public setScene(scene: Scene): void {
     this.scene.uuid = scene.uuid;
     this.scene.name = scene.name;
@@ -104,6 +113,12 @@ export class Context extends BaseService<Event.Context> {
     });
   }
 
+  /**
+   * 添加相机
+   *
+   * @param camera
+   * @returns
+   */
   public addCamera(camera: Camera): void {
     if (!camera.isCamera) {
       return;
@@ -111,6 +126,11 @@ export class Context extends BaseService<Event.Context> {
     this.cameraMap.set(camera.uuid, camera);
   }
 
+  /**
+   * 删除相机
+   *
+   * @param camera
+   */
   public removeCamera(camera: Camera | string): void {
     let cameraUUID: string;
     if (typeof camera === 'string') {
@@ -121,6 +141,12 @@ export class Context extends BaseService<Event.Context> {
     this.cameraMap.delete(cameraUUID);
   }
 
+  /**
+   * 设置视口相机
+   *
+   * @param camera
+   * @returns
+   */
   public setViewportCamera(camera: Camera | string): void {
     let viewportCamera: Camera | undefined;
     if (typeof camera === 'string') {
@@ -135,6 +161,13 @@ export class Context extends BaseService<Event.Context> {
     });
   }
 
+  /**
+   * 添加实体
+   *
+   * @param object
+   * @param parent
+   * @param index
+   */
   public addObject(object: Object3D, parent?: Object3D, index: number = 0): void {
     object.traverse((child) => {
       if (child instanceof Mesh) {
@@ -156,6 +189,12 @@ export class Context extends BaseService<Event.Context> {
     });
   }
 
+  /**
+   * 删除实体
+   *
+   * @param object
+   * @returns
+   */
   public removeObject(object: Object3D): void {
     if (!object.parent) {
       return;
@@ -169,6 +208,13 @@ export class Context extends BaseService<Event.Context> {
     });
   }
 
+  /**
+   * 移动实体树
+   *
+   * @param object
+   * @param parent
+   * @param beforeObject
+   */
   public moveObjectTree(object: Object3D, parent?: Object3D, beforeObject?: Object3D): void {
     if (!parent) {
       parent = this.scene;
@@ -187,6 +233,12 @@ export class Context extends BaseService<Event.Context> {
     });
   }
 
+  /**
+   * 重命名实体
+   *
+   * @param object
+   * @param name
+   */
   public setObjectName(object: Object3D, name: string): void {
     object.name = name;
     this.emit('scene:changed', {
@@ -194,6 +246,11 @@ export class Context extends BaseService<Event.Context> {
     });
   }
 
+  /**
+   * 添加材质
+   *
+   * @param materials
+   */
   public addMaterial(materials: Material | Material[]): void {
     if (!Array.isArray(materials)) {
       materials = [materials];
@@ -211,6 +268,11 @@ export class Context extends BaseService<Event.Context> {
     });
   }
 
+  /**
+   * 删除材质
+   *
+   * @param materials
+   */
   public removeMaterial(materials: Material | Material[]): void {
     if (!Array.isArray(materials)) {
       materials = [materials];
@@ -225,6 +287,134 @@ export class Context extends BaseService<Event.Context> {
         this.materialMap.delete(material.uuid);
       }
     });
+  }
+
+  /**
+   * 根据uui获取材质
+   *
+   * @param uuid
+   * @returns
+   */
+  public getMaterialByUUID(uuid: string): Material | undefined {
+    return this.materialMap.get(uuid);
+  }
+
+  /**
+   * 设置材质名称
+   *
+   * @param material
+   * @param name
+   */
+  public setMaterialName(material: Material, name: string): void {
+    material.name = name;
+    this.emit('scene:changed', {
+      scene: this.scene,
+    });
+  }
+
+  /**
+   * 添加纹理
+   *
+   * @param texture
+   */
+  public addTexture(texture: Texture): void {
+    this.textureMap.set(texture.uuid, texture);
+  }
+
+  /**
+   * 设置网格材质
+   *
+   * @param mesh
+   * @param material
+   * @param slot
+   */
+  public setMeshMaterial(mesh: Mesh, material: Material, slot: number = 0): void {
+    if (Array.isArray(mesh.material)) {
+      mesh.material[slot] = material;
+    } else {
+      mesh.material = [material];
+    }
+  }
+
+  /**
+   * 获取网格材质
+   *
+   * @param mesh
+   * @param slot
+   * @returns
+   */
+  public getMeshMaterial(mesh: Mesh): Material | Material[] {
+    return mesh.material;
+  }
+
+  /**
+   * 选中实体
+   *
+   * @param object
+   * @returns
+   */
+  public select(object: Object3D): void {
+    if (this.selected === object) {
+      return;
+    }
+
+    this.selected = object;
+    this.emit('object:selected', {
+      selected: this.selected,
+    });
+  }
+
+  /**
+   * 根据实例uuid选择
+   *
+   * @param uuid
+   */
+  public selectByUUID(uuid: string): void {
+    this.scene.traverse((child) => {
+      if (child.uuid === uuid) {
+        this.select(child);
+      }
+    });
+  }
+
+  /**
+   * 聚焦实例
+   *
+   * @param object
+   * @returns
+   */
+  public focus(object: Object3D): void {
+    if (this.focused === object) {
+      return;
+    }
+    this.focused = object;
+    this.emit('object:focused', {
+      focused: object,
+    });
+  }
+
+  /**
+   * 根据实例uuid聚焦
+   *
+   * @param uuid
+   * @returns
+   */
+  public focusByUUID(uuid: string): void {
+    const object = this.objectMap.get(uuid);
+    if (!object) {
+      return;
+    }
+    this.focus(object);
+  }
+
+  /**
+   * 根据uuid查询实例
+   *
+   * @param uuid
+   * @returns
+   */
+  public findObjectByUUID(uuid: string): Object3D | undefined {
+    return this.objects.find((object) => object.uuid === uuid);
   }
 }
 
