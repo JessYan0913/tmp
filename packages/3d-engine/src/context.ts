@@ -1,5 +1,5 @@
 import { BaseService } from '@tmp/utils';
-import { AnimationMixer, Camera, Mesh, Object3D, PerspectiveCamera, Scene } from 'three';
+import { AnimationMixer, Camera, Material, Mesh, Object3D, PerspectiveCamera, Scene } from 'three';
 
 import commands from './commands/index';
 import { History } from './services/history';
@@ -21,10 +21,12 @@ export class Context extends BaseService<Event.Context> {
   public history: History;
   public mouse: Mouse;
   public renderer: Renderer;
-  public objectMap: Map<string, Object3D>;
   public mixer: AnimationMixer;
   public selected: Object3D | null;
+  public objectMap: Map<string, Object3D>;
   public cameraMap: Map<string, Camera>;
+  public materialMap: Map<string, Material>;
+  public materialRefCounter: WeakMap<Material, number>;
 
   constructor() {
     super();
@@ -39,13 +41,14 @@ export class Context extends BaseService<Event.Context> {
     this.scene = new Scene();
     this.scene.name = 'MainScene';
 
-    this.objectMap = new Map();
-
     this.mixer = new AnimationMixer(this.scene);
 
     this.selected = null;
 
+    this.objectMap = new Map();
     this.cameraMap = new Map();
+    this.materialMap = new Map();
+    this.materialRefCounter = new WeakMap();
 
     this.history = new History(this);
     this.history.registerCommands(commands);
@@ -118,10 +121,25 @@ export class Context extends BaseService<Event.Context> {
     this.cameraMap.delete(cameraUUID);
   }
 
+  public setViewportCamera(camera: Camera | string): void {
+    let viewportCamera: Camera | undefined;
+    if (typeof camera === 'string') {
+      viewportCamera = this.cameraMap.get(camera);
+    }
+    if (!viewportCamera) {
+      return;
+    }
+    this.viewportCamera = viewportCamera;
+    this.emit('viewport:camera:changed', {
+      viewportCamera: this.viewportCamera,
+    });
+  }
+
   public addObject(object: Object3D, parent?: Object3D, index: number = 0): void {
     object.traverse((child) => {
       if (child instanceof Mesh) {
         // TODO: 添加几何和材质
+        child.material && this.addMaterial(child.material);
       }
       this.addObject(child);
     });
@@ -133,6 +151,19 @@ export class Context extends BaseService<Event.Context> {
       object.parent = this.scene;
       this.objectMap.set(object.uuid, object);
     }
+    this.emit('scene:changed', {
+      scene: this.scene,
+    });
+  }
+
+  public removeObject(object: Object3D): void {
+    if (!object.parent) {
+      return;
+    }
+    object.traverse((child) => {
+      this.removeObject(child);
+    });
+    this.objectMap.delete(object.uuid);
     this.emit('scene:changed', {
       scene: this.scene,
     });
@@ -163,16 +194,36 @@ export class Context extends BaseService<Event.Context> {
     });
   }
 
-  public removeObject(object: Object3D): void {
-    if (!object.parent) {
-      return;
+  public addMaterial(materials: Material | Material[]): void {
+    if (!Array.isArray(materials)) {
+      materials = [materials];
     }
-    object.traverse((child) => {
-      this.removeObject(child);
+    materials.forEach((material) => {
+      let counter = this.materialRefCounter.get(material);
+      if (counter) {
+        counter++;
+        this.materialRefCounter.set(material, counter);
+      } else {
+        counter = 1;
+        this.materialRefCounter.set(material, counter);
+        this.materialMap.set(material.uuid, material);
+      }
     });
-    this.objectMap.delete(object.uuid);
-    this.emit('scene:changed', {
-      scene: this.scene,
+  }
+
+  public removeMaterial(materials: Material | Material[]): void {
+    if (!Array.isArray(materials)) {
+      materials = [materials];
+    }
+    materials.forEach((material) => {
+      let num = this.materialRefCounter.get(material) ?? 0;
+      num--;
+      if (num > 0) {
+        this.materialRefCounter.set(material, num);
+      } else {
+        this.materialRefCounter.delete(material);
+        this.materialMap.delete(material.uuid);
+      }
     });
   }
 }

@@ -1,4 +1,4 @@
-import { Object3D, Scene, Vector2, WebGLRenderer } from 'three';
+import { Camera, Object3D, Scene, Vector2, WebGLRenderer } from 'three';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 
 import Context from './context';
@@ -80,6 +80,9 @@ export namespace Event {
     };
     'scene:changed': {
       scene: Scene;
+    };
+    'viewport:camera:changed': {
+      viewportCamera: Camera;
     };
   }
 
