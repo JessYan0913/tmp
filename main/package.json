@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tmp/3d-engine": "workspace:^0.0.1",
     "@tmp/components": "workspace:^0.0.1",
     "@tmp/h5-schema": "workspace:^0.0.1",
     "@tmp/utils": "workspace:^0.0.1",

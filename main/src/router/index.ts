@@ -33,6 +33,11 @@ const routes: RouteRecordRaw[] = [
         name: 'Webgl01',
         component: () => import('../view/webgl-01/index.vue'),
       },
+      {
+        path: '/three',
+        name: 'Three',
+        component: () => import('../view/three/index.vue'),
+      },
     ],
   },
   {

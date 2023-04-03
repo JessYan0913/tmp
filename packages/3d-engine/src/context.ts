@@ -29,11 +29,10 @@ export class Context extends BaseService<Event.ContextArgs> {
   public materialRefCounter: WeakMap<Material, number>;
   public textureMap: Map<string, Texture>;
 
-  constructor() {
+  constructor(container: HTMLDivElement) {
     super();
 
-    this.domElement = document.createElement('div');
-    this.domElement.setAttribute('style', 'width: 100%; height: 100%; position: relative');
+    this.domElement = container;
 
     this.viewportCamera = DEFAULT_CAMERA.clone();
 
