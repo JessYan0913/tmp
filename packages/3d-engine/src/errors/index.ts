@@ -13,3 +13,9 @@ export class CmdNotOptionsError extends BaseError {
     super(`The options of the ${command instanceof BaseCmd ? command.name : command} command cannot be undefine`);
   }
 }
+
+export class RendererNotReadyError extends BaseError {
+  constructor() {
+    super(`The renderer is not ready`);
+  }
+}

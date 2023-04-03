@@ -1,4 +1,4 @@
-import { Camera, Object3D, Raycaster, Vector2 } from 'three';
+import { Camera, Object3D, PerspectiveCamera, Raycaster, Vector2 } from 'three';
 
 export const getFilteredObjectByPoint = (
   objects: Object3D[],
@@ -20,4 +20,9 @@ export const getFilteredObjectByPoint = (
 export const normalizeScreenCoords = (divElement: HTMLDivElement, coords: Vector2): Vector2 => {
   const rect = divElement.getBoundingClientRect();
   return new Vector2().fromArray([(coords.x - rect.left) / rect.width, (coords.y - rect.top) / rect.height]);
+};
+
+export const updatePerspectiveCameraAspectRatio = (camera: PerspectiveCamera, domElement: HTMLDivElement): void => {
+  camera.aspect = domElement.offsetWidth / domElement.offsetHeight;
+  camera.updateProjectionMatrix();
 };

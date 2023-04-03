@@ -15,7 +15,6 @@ const DEFAULT_CAMERA = new PerspectiveCamera(50, 1, 0.01, 1000);
 
 export class Context extends BaseService<Event.ContextArgs> {
   public domElement: HTMLDivElement;
-  public camera: Camera;
   public viewportCamera: Camera;
   public scene: Scene;
   public history: History;
@@ -36,9 +35,7 @@ export class Context extends BaseService<Event.ContextArgs> {
     this.domElement = document.createElement('div');
     this.domElement.setAttribute('style', 'width: 100%; height: 100%; position: relative');
 
-    this.camera = DEFAULT_CAMERA.clone();
-
-    this.viewportCamera = this.camera;
+    this.viewportCamera = DEFAULT_CAMERA.clone();
 
     this.scene = new Scene();
     this.scene.name = 'MainScene';
@@ -62,7 +59,7 @@ export class Context extends BaseService<Event.ContextArgs> {
     this.renderer = new Renderer(this);
 
     this.mouse.on('mouse:click', ({ point }) => {
-      const objects = getFilteredObjectByPoint(this.objects, this.camera, point);
+      const objects = getFilteredObjectByPoint(this.objects, this.viewportCamera, point);
       if (objects.length > 0) {
         const object = objects[0];
         this.selected = object;
@@ -73,7 +70,7 @@ export class Context extends BaseService<Event.ContextArgs> {
     });
 
     this.mouse.on('mouse:dbclick', ({ point }) => {
-      const objects = getFilteredObjectByPoint(this.objects, this.camera, point);
+      const objects = getFilteredObjectByPoint(this.objects, this.viewportCamera, point);
       if (objects.length > 0) {
         const object = objects[0];
         this.emit('object:focused', {
@@ -82,7 +79,7 @@ export class Context extends BaseService<Event.ContextArgs> {
       }
     });
 
-    this.addCamera(this.camera);
+    this.addCamera(this.viewportCamera);
   }
 
   public get objects(): Object3D[] {
@@ -151,11 +148,19 @@ export class Context extends BaseService<Event.ContextArgs> {
     let viewportCamera: Camera | undefined;
     if (typeof camera === 'string') {
       viewportCamera = this.cameraMap.get(camera);
-    }
-    if (!viewportCamera) {
-      return;
+      if (!viewportCamera) {
+        return;
+      }
+    } else {
+      if (!this.cameraMap.has(camera.uuid)) {
+        this.cameraMap.set(camera.uuid, camera);
+      }
+      viewportCamera = camera;
     }
     this.viewportCamera = viewportCamera;
+    // if (this.viewportCamera instanceof PerspectiveCamera) {
+
+    // }
     this.emit('viewport:camera:changed', {
       viewportCamera: this.viewportCamera,
     });
@@ -437,9 +442,9 @@ export class Context extends BaseService<Event.ContextArgs> {
   public destroy(): void {
     this.history.destroy();
 
-    this.camera.copy(DEFAULT_CAMERA);
+    this.viewportCamera.copy(DEFAULT_CAMERA);
     this.emit('camera:reset', {
-      camera: this.camera,
+      camera: this.viewportCamera,
     });
 
     this.scene.name = 'MainScene';
