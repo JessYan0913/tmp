@@ -1,4 +1,4 @@
-import { Camera, DirectionalLight, Object3D, PerspectiveCamera, Raycaster, Vector2 } from 'three';
+import { Camera, DirectionalLight, Object3D, PerspectiveCamera, Raycaster, Vector2, Vector3 } from 'three';
 
 export const getFilteredObjectByPoint = (
   objects: Object3D[],
@@ -35,7 +35,10 @@ export const directionalLight2 = new DirectionalLight(0xffffff);
 directionalLight2.position.set(-5, -10, -7.5);
 directionalLight2.name = 'DirectionalLight';
 
-/**
- * 默认相机是透视相机
- */
-export const DEFAULT_CAMERA = new PerspectiveCamera(50, 1, 0.01, 1000);
+export const defaultCamera = (): PerspectiveCamera => {
+  const DEFAULT_CAMERA = new PerspectiveCamera(50, 1, 0.01, 1000);
+  DEFAULT_CAMERA.name = 'DefaultCamera';
+  DEFAULT_CAMERA.position.set(0, 5, 10);
+  DEFAULT_CAMERA.lookAt(new Vector3());
+  return DEFAULT_CAMERA;
+};

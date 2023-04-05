@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Context } from '../context';
 import { RendererNotReadyError } from '../errors';
 import { Event } from '../types';
-import { DEFAULT_CAMERA } from '../utils';
+import { defaultCamera } from '../utils';
 
 export class Renderer extends BaseService<Event.RendererArgs> {
   private context: Context;
@@ -24,7 +24,7 @@ export class Renderer extends BaseService<Event.RendererArgs> {
     this.domElement = context.domElement;
 
     this.scene = new Scene();
-    this.camera = DEFAULT_CAMERA.clone();
+    this.camera = defaultCamera();
 
     this.controls = new OrbitControls(this.camera, this.domElement);
     this.controls.enableDamping = true;
@@ -72,11 +72,9 @@ export class Renderer extends BaseService<Event.RendererArgs> {
     const cube = new THREE.Mesh(geometry, material);
     this.scene.add(cube);
 
-    this.camera.position.z = 5;
-
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
+    this.renderer.setViewport(0, 0, this.domElement.offsetWidth, this.domElement.offsetHeight);
     this.renderer.render(this.scene, this.camera);
+    this.renderer.autoClear = true;
   }
 
   static createRenderer(context: Context): void {
