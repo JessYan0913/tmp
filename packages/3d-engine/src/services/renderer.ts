@@ -1,5 +1,5 @@
 import { BaseService } from '@tmp/utils';
-import { Camera, Scene, WebGLRenderer } from 'three';
+import { Camera, GridHelper, Scene, WebGLRenderer } from 'three';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -15,6 +15,7 @@ export class Renderer extends BaseService<Event.RendererArgs> {
   private camera: Camera;
   private renderer?: WebGLRenderer;
   private controls: OrbitControls;
+  private grid: GridHelper;
 
   constructor(context: Context) {
     super();
@@ -34,6 +35,8 @@ export class Renderer extends BaseService<Event.RendererArgs> {
         camera: this.camera,
       });
     });
+
+    this.grid = new GridHelper(400, 10);
 
     this.context.on('webgl:renderer:created', ({ renderer }) => {
       if (this.renderer) {
@@ -60,6 +63,9 @@ export class Renderer extends BaseService<Event.RendererArgs> {
     if (!this.renderer) {
       throw new RendererNotReadyError();
     }
+
+    this.scene.add(this.grid);
+
     // 创建一个立方体
     const geometry = new THREE.BoxGeometry();
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
