@@ -1,6 +1,7 @@
 import { BaseService } from '@tmp/utils';
 import { Camera, Scene, WebGLRenderer } from 'three';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 import { Context } from '../context';
 import { RendererNotReadyError } from '../errors';
@@ -13,6 +14,7 @@ export class Renderer extends BaseService<Event.RendererArgs> {
   private scene: Scene;
   private camera: Camera;
   private renderer?: WebGLRenderer;
+  private controls: OrbitControls;
 
   constructor(context: Context) {
     super();
@@ -22,6 +24,16 @@ export class Renderer extends BaseService<Event.RendererArgs> {
 
     this.scene = new Scene();
     this.camera = DEFAULT_CAMERA.clone();
+
+    this.controls = new OrbitControls(this.camera, this.domElement);
+    this.controls.enableDamping = true;
+    this.controls.dampingFactor = 0.05;
+
+    this.controls.addEventListener('change', () => {
+      this.emit('camera:changed', {
+        camera: this.camera,
+      });
+    });
 
     this.context.on('webgl:renderer:created', ({ renderer }) => {
       if (this.renderer) {
@@ -36,6 +48,10 @@ export class Renderer extends BaseService<Event.RendererArgs> {
       this.renderer.setSize(this.domElement.offsetWidth, this.domElement.offsetHeight);
       this.domElement.appendChild(this.renderer.domElement);
 
+      this.render();
+    });
+
+    this.on('camera:changed', () => {
       this.render();
     });
   }
