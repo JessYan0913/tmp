@@ -1,4 +1,4 @@
-import { Camera, Object3D, PerspectiveCamera, Raycaster, Vector2 } from 'three';
+import { Camera, DirectionalLight, Object3D, PerspectiveCamera, Raycaster, Vector2 } from 'three';
 
 export const getFilteredObjectByPoint = (
   objects: Object3D[],
@@ -26,3 +26,16 @@ export const updatePerspectiveCameraAspectRatio = (camera: PerspectiveCamera, do
   camera.aspect = domElement.offsetWidth / domElement.offsetHeight;
   camera.updateProjectionMatrix();
 };
+
+export const directionalLight1 = new DirectionalLight(0xffffff);
+directionalLight1.position.set(5, 10, 7.5);
+directionalLight1.name = 'DirectionalLight';
+
+export const directionalLight2 = new DirectionalLight(0xffffff);
+directionalLight2.position.set(-5, -10, -7.5);
+directionalLight2.name = 'DirectionalLight';
+
+/**
+ * 默认相机是透视相机
+ */
+export const DEFAULT_CAMERA = new PerspectiveCamera(50, 1, 0.01, 1000);
