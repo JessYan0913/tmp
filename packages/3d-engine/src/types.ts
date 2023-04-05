@@ -127,5 +127,8 @@ export namespace Event {
     'scene:rendered': {
       time: number;
     };
+    'camera:changed': {
+      camera: Camera;
+    };
   }
 }
