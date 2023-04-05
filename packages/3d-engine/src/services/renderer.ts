@@ -1,10 +1,10 @@
 import { BaseService } from '@tmp/utils';
-import { Camera, GridHelper, Mesh, Scene, sRGBEncoding, WebGLRenderer } from 'three';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { Camera, Mesh, Scene, sRGBEncoding, WebGLRenderer } from 'three';
 
 import { Context } from '../context';
 import { RendererNotReadyError } from '../errors';
+import { DoubleGrid } from '../helpers/DoubleGrid';
+import { SceneControls } from '../helpers/SceneControls';
 import { Event } from '../types';
 import { defaultCamera } from '../utils';
 
@@ -14,8 +14,8 @@ export class Renderer extends BaseService<Event.RendererArgs> {
   private scene: Scene;
   private camera: Camera;
   private renderer?: WebGLRenderer;
-  private controls: OrbitControls;
-  private grid: GridHelper;
+  private controls: SceneControls;
+  private grid: DoubleGrid;
 
   constructor(context: Context) {
     super();
@@ -26,17 +26,18 @@ export class Renderer extends BaseService<Event.RendererArgs> {
     this.scene = new Scene();
     this.camera = defaultCamera();
 
-    this.controls = new OrbitControls(this.camera, this.domElement);
-    this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.05;
-
+    this.controls = new SceneControls(this.camera, this.domElement);
     this.controls.addEventListener('change', () => {
       this.emit('camera:changed', {
         camera: this.camera,
       });
     });
 
-    this.grid = new GridHelper(400, 10);
+    this.grid = new DoubleGrid({
+      size: 400,
+      divisions: 50,
+      ticks: 10,
+    });
 
     this.context.on('webgl:renderer:created', ({ renderer }) => {
       if (this.renderer) {
@@ -71,12 +72,6 @@ export class Renderer extends BaseService<Event.RendererArgs> {
     }
 
     this.scene.add(this.grid);
-
-    // 创建一个立方体
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    this.scene.add(cube);
 
     this.renderer.setViewport(0, 0, this.domElement.offsetWidth, this.domElement.offsetHeight);
     this.renderer.render(this.scene, this.camera);
