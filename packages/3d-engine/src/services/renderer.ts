@@ -1,5 +1,5 @@
 import { BaseService } from '@tmp/utils';
-import { Camera, GridHelper, Scene, WebGLRenderer } from 'three';
+import { Camera, GridHelper, Mesh, Scene, sRGBEncoding, WebGLRenderer } from 'three';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -51,6 +51,12 @@ export class Renderer extends BaseService<Event.RendererArgs> {
       this.renderer.setSize(this.domElement.offsetWidth, this.domElement.offsetHeight);
       this.domElement.appendChild(this.renderer.domElement);
 
+      this.scene.traverse((child) => {
+        if (child instanceof Mesh) {
+          child.material.needsUpdate = true;
+        }
+      });
+
       this.render();
     });
 
@@ -78,7 +84,11 @@ export class Renderer extends BaseService<Event.RendererArgs> {
   }
 
   static createRenderer(context: Context): void {
-    const webglRenderer = new WebGLRenderer();
+    const webglRenderer = new WebGLRenderer({
+      antialias: true,
+      preserveDrawingBuffer: true,
+    });
+    webglRenderer.outputEncoding = sRGBEncoding;
 
     context.emit('webgl:renderer:created', {
       renderer: webglRenderer,
