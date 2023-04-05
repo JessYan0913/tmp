@@ -5,6 +5,7 @@
   "packageManager": "pnpm@7.13.6",
   "scripts": {
     "bootstrap": "pnpm i && pnpm build",
+    "main": "pnpm --filter \"main\" dev",
     "build": "pnpm --filter \"@tmp/*\" build",
     "lint": "eslint . --ext .js,.vue,.ts,.tsx",
     "lint:fix": "eslint . --fix --ext .js,.vue,.ts,.tsx",
