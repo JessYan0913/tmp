@@ -6,7 +6,6 @@ import { RendererNotReadyError } from '../errors';
 import { DoubleGrid } from '../helpers/DoubleGrid';
 import { SceneControls } from '../helpers/SceneControls';
 import { Event } from '../types';
-import { defaultCamera } from '../utils';
 
 export class Renderer extends BaseService<Event.RendererArgs> {
   private context: Context;
@@ -23,14 +22,12 @@ export class Renderer extends BaseService<Event.RendererArgs> {
     this.context = context;
     this.domElement = context.domElement;
 
-    this.scene = new Scene();
-    this.camera = defaultCamera();
+    this.scene = context.mainScene;
+    this.camera = context.mainCamera;
 
     this.controls = new SceneControls(this.camera, this.domElement);
     this.controls.addEventListener('change', () => {
-      this.emit('camera:changed', {
-        camera: this.camera,
-      });
+      this.render();
     });
 
     this.grid = new DoubleGrid({
@@ -58,10 +55,6 @@ export class Renderer extends BaseService<Event.RendererArgs> {
         }
       });
 
-      this.render();
-    });
-
-    this.on('camera:changed', () => {
       this.render();
     });
   }
