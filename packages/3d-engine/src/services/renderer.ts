@@ -1,11 +1,11 @@
 import { BaseService } from '@tmp/utils';
-import { Camera, Mesh, Scene, sRGBEncoding, WebGLRenderer } from 'three';
+import { Camera, ColorRepresentation, Mesh, Object3D, Scene, sRGBEncoding, WebGLRenderer } from 'three';
 
 import { Context } from '../context';
 import { RendererNotReadyError } from '../errors';
 import { DoubleGrid } from '../helpers/DoubleGrid';
 import { SceneControls } from '../helpers/SceneControls';
-import { Event } from '../types';
+import { Event, SceneControlsEnabled } from '../types';
 
 export class Renderer extends BaseService<Event.RendererArgs> {
   private context: Context;
@@ -57,6 +57,30 @@ export class Renderer extends BaseService<Event.RendererArgs> {
 
       this.render();
     });
+  }
+
+  public triggerControlsEnable(enable: boolean | SceneControlsEnabled): void {
+    if (typeof enable === 'boolean') {
+      this.controls.enabled = enable;
+    } else {
+      Reflect.has(enable, 'enabledPan') && (this.controls.enablePan = Boolean(enable.enablePan));
+      Reflect.has(enable, 'enableRotate') && (this.controls.enableRotate = Boolean(enable.enableRotate));
+      Reflect.has(enable, 'enableZoom') && (this.controls.enableZoom = Boolean(enable.enableZoom));
+      Reflect.has(enable, 'enableDamping') && (this.controls.enableDamping = Boolean(enable.enableDamping));
+    }
+    this.render();
+  }
+
+  public focus(object: Object3D): void {
+    this.controls.focus(object);
+  }
+
+  public triggerGridVisible(visible: boolean): void {
+    this.grid.visible = visible;
+  }
+
+  public updateGridColor(color: ColorRepresentation, subColor: ColorRepresentation): void {
+    this.grid.updateColors(color, subColor);
   }
 
   public render(): void {

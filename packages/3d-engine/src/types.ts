@@ -4,6 +4,13 @@ import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import History from './services/history';
 import Context from './context';
 
+export interface SceneControlsEnabled {
+  enablePan?: boolean;
+  enableRotate?: boolean;
+  enableZoom?: boolean;
+  enableDamping?: boolean;
+}
+
 export namespace Cmd {
   export interface Options {
     [key: string]: any;

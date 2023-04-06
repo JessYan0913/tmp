@@ -9,8 +9,8 @@ interface DoubleGridOptions {
   subColor?: ColorRepresentation;
 }
 
-const defaultColor = new Color(0x888888);
-const defaultSubColor = new Color(0x222222);
+const defaultColor = new Color(0x222222);
+const defaultSubColor = new Color(0x888888);
 
 export class DoubleGrid extends Group {
   public visible: boolean = true;
