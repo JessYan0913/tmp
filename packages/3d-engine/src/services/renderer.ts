@@ -121,13 +121,25 @@ export class Renderer extends BaseService<Event.RendererArgs> {
       throw new RendererNotReadyError();
     }
 
+    const start = performance.now();
+
     this.scene.add(this.grid);
 
     this.renderer.setViewport(0, 0, this.domElement.offsetWidth, this.domElement.offsetHeight);
     this.renderer.render(this.scene, this.camera);
-    this.renderer.autoClear = false;
-    this.viewHelper.render(this.renderer);
-    this.renderer.autoClear = true;
+
+    this.scene.remove(this.grid);
+
+    if (this.camera === this.context.viewportCamera) {
+      this.renderer.autoClear = false;
+      this.viewHelper.render(this.renderer);
+      this.renderer.autoClear = true;
+    }
+
+    const end = performance.now();
+    this.emit('scene:rendered', {
+      time: end - start,
+    });
   }
 
   static createRenderer(context: Context): void {
