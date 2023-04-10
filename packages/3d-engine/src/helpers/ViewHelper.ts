@@ -51,10 +51,10 @@ const getSpriteMaterial = (color: Color, text: string = ''): SpriteMaterial => {
 };
 
 export const enum Direction {
-  LEFT_TOP,
-  RIGHT_TOP,
-  RIGHT_BOTTOM,
-  LEFT_BOTTOM,
+  LEFT_TOP = 'left_top',
+  RIGHT_TOP = 'right_top',
+  RIGHT_BOTTOM = 'right_bottom',
+  LEFT_BOTTOM = 'left_bottom',
 }
 
 const getDirectionStyle = (direction: Direction, size: number): string => {
@@ -72,7 +72,7 @@ const getDirectionStyle = (direction: Direction, size: number): string => {
   }
 };
 
-const getPosition = (direction: Direction, domELement: HTMLDivElement, size: number): Vector2 => {
+const getPosition = (direction: Direction, size: number, domELement: HTMLDivElement): Vector2 => {
   const result = new Vector2();
   switch (direction) {
     case Direction.LEFT_TOP:
@@ -234,7 +234,7 @@ export class ViewHelper extends Object3D {
     this.posZAxisHelper.material.opacity = this.point.z >= 0 ? 1 : 0.5;
     this.negZAxisHelper.material.opacity = this.point.z >= 0 ? 0.5 : 1;
 
-    const { x, y } = getPosition(this.direction, this.domELement, this.dim);
+    const { x, y } = getPosition(this.direction, this.dim, this.domELement);
 
     renderer.clearDepth();
     renderer.setViewport(x, y, this.dim, this.dim);
