@@ -5,7 +5,7 @@ import { Context } from '../context';
 import { RendererNotReadyError } from '../errors';
 import { DoubleGrid } from '../helpers/DoubleGrid';
 import { SceneControls } from '../helpers/SceneControls';
-import { ViewHelper } from '../helpers/ViewHelper';
+import { Direction, ViewHelper } from '../helpers/ViewHelper';
 import { Event, SceneControlsEnabled } from '../types';
 
 export class Renderer extends BaseService<Event.RendererArgs> {
@@ -33,8 +33,8 @@ export class Renderer extends BaseService<Event.RendererArgs> {
     });
 
     this.grid = new DoubleGrid({
-      size: 400,
-      divisions: 50,
+      size: 100,
+      divisions: 100,
       ticks: 10,
     });
 
@@ -108,6 +108,11 @@ export class Renderer extends BaseService<Event.RendererArgs> {
 
   public triggerViewHelperVisible(visible: boolean): void {
     this.viewHelper.setVisible(visible);
+    this.render();
+  }
+
+  public setViewHelperDirection(direction: Direction): void {
+    this.viewHelper.setDirection(direction);
     this.render();
   }
 

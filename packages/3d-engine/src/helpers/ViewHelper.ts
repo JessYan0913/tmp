@@ -50,14 +50,59 @@ const getSpriteMaterial = (color: Color, text: string = ''): SpriteMaterial => {
   });
 };
 
+export const enum Direction {
+  LEFT_TOP,
+  RIGHT_TOP,
+  RIGHT_BOTTOM,
+  LEFT_BOTTOM,
+}
+
+const getDirectionStyle = (direction: Direction, size: number): string => {
+  switch (direction) {
+    case Direction.LEFT_TOP:
+      return `position:absolute; left: 0px; top: 0px; height: ${size}px; width: ${size}px`;
+    case Direction.RIGHT_TOP:
+      return `position:absolute; right: 0px; top: 0px; height: ${size}px; width: ${size}px`;
+    case Direction.RIGHT_BOTTOM:
+      return `position:absolute; right: 0px; bottom: 0px; height: ${size}px; width: ${size}px`;
+    case Direction.LEFT_BOTTOM:
+      return `position:absolute; left: 0px; bottom: 0px; height: ${size}px; width: ${size}px`;
+    default:
+      return 'display: none';
+  }
+};
+
+const getPosition = (direction: Direction, domELement: HTMLDivElement, size: number): Vector2 => {
+  const result = new Vector2();
+  switch (direction) {
+    case Direction.LEFT_TOP:
+      result.x = 0;
+      result.y = domELement.offsetHeight - size;
+      return result;
+    case Direction.RIGHT_TOP:
+      result.x = domELement.offsetWidth - size;
+      result.y = domELement.offsetHeight - size;
+      return result;
+    case Direction.RIGHT_BOTTOM:
+      result.x = domELement.offsetWidth - size;
+      result.y = 0;
+      return result;
+    case Direction.LEFT_BOTTOM:
+      result.x = 0;
+      result.y = 0;
+      return result;
+    default:
+      result.x = domELement.offsetWidth - size;
+      result.y = 0;
+      return result;
+  }
+};
+
 export class ViewHelper extends Object3D {
   private renderCamera: Camera;
   private domELement: HTMLDivElement;
   private controls: SceneControls;
   private paneElement: HTMLDivElement;
-  private point: Vector3;
-  private dim: number;
-  private turnRate: number;
   private camera: Camera;
   private posXAxisHelper: Sprite;
   private posYAxisHelper: Sprite;
@@ -67,23 +112,33 @@ export class ViewHelper extends Object3D {
   private negZAxisHelper: Sprite;
   private dummy: Object3D;
   private interactiveObjects: Object3D[] = [];
+  private dim: number = 128;
+  private point: Vector3 = new Vector3();
+  private turnRate: number = 2 * Math.PI;
   private radius: number = 0;
   private q1: Quaternion = new Quaternion();
   private q2: Quaternion = new Quaternion();
   private targetQuaternion: Quaternion = new Quaternion();
 
+  public direction: Direction;
   public animating: boolean;
   public visible: boolean;
   public xColor: Color;
   public yColor: Color;
   public zColor: Color;
 
-  constructor(renderCamera: Camera, domElement: HTMLDivElement, controls: SceneControls) {
+  constructor(
+    renderCamera: Camera,
+    domElement: HTMLDivElement,
+    controls: SceneControls,
+    direction: Direction = Direction.RIGHT_BOTTOM
+  ) {
     super();
     this.renderCamera = renderCamera;
     this.domELement = domElement;
     this.controls = controls;
     this.animating = false;
+    this.direction = direction;
 
     this.paneElement = document.createElement('div');
     this.domELement.appendChild(this.paneElement);
@@ -158,10 +213,10 @@ export class ViewHelper extends Object3D {
     this.interactiveObjects.push(this.negXAxisHelper);
     this.interactiveObjects.push(this.negYAxisHelper);
     this.interactiveObjects.push(this.negZAxisHelper);
+  }
 
-    this.point = new Vector3();
-    this.dim = 128;
-    this.turnRate = 2 * Math.PI;
+  public setDirection(direction: Direction): void {
+    this.direction = direction;
   }
 
   public render(renderer: WebGLRenderer): void {
@@ -179,9 +234,10 @@ export class ViewHelper extends Object3D {
     this.posZAxisHelper.material.opacity = this.point.z >= 0 ? 1 : 0.5;
     this.negZAxisHelper.material.opacity = this.point.z >= 0 ? 0.5 : 1;
 
-    const x = this.domELement.offsetWidth - this.dim;
+    const { x, y } = getPosition(this.direction, this.domELement, this.dim);
+
     renderer.clearDepth();
-    renderer.setViewport(x, 0, this.dim, this.dim);
+    renderer.setViewport(x, y, this.dim, this.dim);
     renderer.render(this, this.camera);
   }
 
@@ -282,7 +338,7 @@ export class ViewHelper extends Object3D {
   public setVisible(visible: boolean): void {
     this.visible = visible;
     if (visible) {
-      this.paneElement.setAttribute('style', 'position:absolute; right: 0px; bottom: 0px; height: 128px; width: 128px');
+      this.paneElement.setAttribute('style', getDirectionStyle(this.direction, this.dim));
     } else {
       this.paneElement.setAttribute('style', 'display: none');
     }
