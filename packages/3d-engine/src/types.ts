@@ -4,6 +4,11 @@ import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import History from './services/history';
 import Context from './context';
 
+export interface PluginInterface {
+  install(context: Context): void;
+  uninstall(): void;
+}
+
 export interface SceneControlsEnabled {
   enablePan?: boolean;
   enableRotate?: boolean;
@@ -73,7 +78,7 @@ export interface CmdStack {
 }
 
 export namespace Event {
-  export interface ContextArgs {
+  export interface ContextArgs extends MouseArgs {
     'webgl:renderer:created': {
       renderer: WebGLRenderer;
     };
@@ -136,6 +141,15 @@ export namespace Event {
     };
     'camera:changed': {
       camera: Camera;
+    };
+  }
+
+  export interface PluginMangerArgs {
+    'plugin:install': {
+      plugin: PluginInterface;
+    };
+    'plugin:uninstall': {
+      plugin: PluginInterface;
     };
   }
 }
