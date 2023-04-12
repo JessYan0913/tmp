@@ -1,5 +1,5 @@
 import { BaseService } from '@tmp/utils';
-import { Camera, Object3D, Scene } from 'three';
+import { Camera, Mesh, Object3D, Scene, Vector3 } from 'three';
 
 import { History } from './services/history';
 import { Mouse } from './services/mouse';
@@ -14,10 +14,9 @@ export class Context extends BaseService<Event.ContextArgs> {
   public history: History;
   public sceneMap: Map<string, Scene>;
   public mainScene: Scene;
-  public cameraMap: Map<string, Camera>;
   public mainCamera: Camera;
   public viewportCamera: Camera;
-  public objects: Object3D[];
+  public objectMap: Map<string, Object3D>;
   public selected: Object3D | null;
 
   constructor(container: HTMLDivElement) {
@@ -33,11 +32,9 @@ export class Context extends BaseService<Event.ContextArgs> {
     this.mainCamera = defaultCamera();
     this.mainCamera.name = 'main:camera';
 
-    this.cameraMap = new Map();
-
     this.viewportCamera = this.mainCamera;
 
-    this.objects = [];
+    this.objectMap = new Map();
 
     this.selected = null;
 
@@ -47,7 +44,7 @@ export class Context extends BaseService<Event.ContextArgs> {
 
     this.history = new History(this);
 
-    this.addCamera(this.mainCamera);
+    this.addObject(this.mainCamera);
 
     this.mouse.on('mouse:dbclick', ({ point }) => {
       this.emit('mouse:dbclick', { point });
@@ -74,6 +71,10 @@ export class Context extends BaseService<Event.ContextArgs> {
     });
   }
 
+  public get objects(): Object3D[] {
+    return [...this.objectMap.values()];
+  }
+
   public select(object: Object3D): void {
     if (this.selected === object) {
       return;
@@ -91,25 +92,76 @@ export class Context extends BaseService<Event.ContextArgs> {
     });
   }
 
-  public addCamera(camera: Camera): void {
-    if (!camera.isCamera) {
+  public setViewportCamera(camera: Camera | string): void {
+    let viewCamera: Camera | undefined;
+    if (typeof camera === 'string') {
+      const object = this.objectMap.get(camera);
+      if (object instanceof Camera) {
+        viewCamera = object;
+      }
+    } else {
+      viewCamera = camera;
+    }
+    if (!viewCamera) {
       return;
     }
-    this.cameraMap.set(camera.uuid, camera);
+    this.viewportCamera = viewCamera;
+    this.emit('viewport:camera:changed', {
+      viewportCamera: this.viewportCamera,
+    });
   }
 
-  public removeCamera(camera: Camera | string): void {
-    let cameraId: string;
-    if (typeof camera === 'string') {
-      cameraId = camera;
+  public addObject(object: Object3D, parent?: Object3D, index?: number): void {
+    object.children.forEach((child) => {
+      this.addObject(child);
+    });
+
+    if (parent) {
+      index = index === undefined ? parent.children.length : index;
+      parent.children.splice(index, 0, object);
+      object.parent = parent;
     } else {
-      cameraId = camera.uuid;
+      this.mainScene.add(object);
+      this.objectMap.set(object.uuid, object);
     }
-    this.cameraMap.delete(cameraId);
+
+    if (object instanceof Mesh && !object.userData.initSize) {
+      object.geometry.computeBoundingBox();
+      object.userData.initSize = object.geometry.boundingBox.getSize(new Vector3()).toArray();
+    }
+
+    this.emit('object:added', {
+      object: object,
+    });
+  }
+
+  public removeObject(object: Object3D | string): void {
+    let curObject: Object3D | undefined;
+    if (typeof object === 'string') {
+      curObject = this.objectMap.get(object);
+    } else {
+      curObject = object;
+    }
+    if (!curObject || !curObject.parent) {
+      return;
+    }
+    curObject.parent?.remove(curObject);
+    this.objectMap.delete(curObject.uuid);
+
+    this.emit('object:removed', {
+      object: curObject,
+    });
   }
 
   public execute<T extends Cmd.Options>(command: BaseCmd | string, options?: T): void {
     this.history.execute(command, options);
+  }
+
+  public destroy(): void {
+    this.renderer.destroy();
+    this.history.destroy();
+    this.mouse.destroy();
+    this.removeAllListeners();
   }
 }
 

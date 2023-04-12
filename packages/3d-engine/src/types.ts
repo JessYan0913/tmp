@@ -91,6 +91,12 @@ export namespace Event {
     'object:focused': {
       focused: Object3D;
     };
+    'object:added': {
+      object: Object3D;
+    };
+    'object:removed': {
+      object: Object3D;
+    };
     'scene:changed': {
       scene: Scene;
     };

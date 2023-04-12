@@ -142,6 +142,11 @@ export class Renderer extends BaseService<Event.RendererArgs> {
     });
   }
 
+  public destroy(): void {
+    this.renderer = undefined;
+    this.removeAllListeners();
+  }
+
   static createRenderer(context: Context): void {
     const webglRenderer = new WebGLRenderer({
       antialias: true,
