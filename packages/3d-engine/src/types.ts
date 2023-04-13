@@ -85,9 +85,7 @@ export namespace Event {
     'css2:renderer:created': {
       renderer: CSS2DRenderer;
     };
-    'container:resize': {
-      event: Event;
-    };
+    'container:resize': undefined;
     'object:selected': {
       selected: Object3D;
     };

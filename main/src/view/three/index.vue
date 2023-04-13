@@ -1,36 +1,33 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Context, Renderer } from '@tmp/3d-engine';
 import { BoxGeometry, Mesh, MeshBasicMaterial } from 'three';
 
 const containerRef = ref<HTMLDivElement>();
 
+const context = new Context();
 const box = new BoxGeometry(5, 5, 5);
 const material = new MeshBasicMaterial({
   color: 'aqua',
 });
 const mesh = new Mesh(box, material);
+context.addObject(mesh);
 
-watch(
-  () => containerRef.value,
-  (containerRef) => {
-    if (!containerRef) {
-      return;
-    }
-    const context = new Context(containerRef);
-    context.addObject(mesh);
+onMounted(() => {
+  if (containerRef.value) {
+    containerRef.value.appendChild(context.domElement);
     Renderer.createRenderer(context);
   }
-);
+});
 </script>
 
 <template>
   <div ref="containerRef" class="content"></div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .content {
-  position: absolute;
+  position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;

@@ -1,11 +1,22 @@
 import { BaseService } from '@tmp/utils';
-import { Camera, Clock, ColorRepresentation, Mesh, Object3D, Scene, sRGBEncoding, WebGLRenderer } from 'three';
+import {
+  Camera,
+  Clock,
+  ColorRepresentation,
+  Mesh,
+  Object3D,
+  PerspectiveCamera,
+  Scene,
+  sRGBEncoding,
+  WebGLRenderer,
+} from 'three';
 
 import { Context } from '../context';
 import { DoubleGrid } from '../helpers/DoubleGrid';
 import { SceneControls } from '../helpers/SceneControls';
 import { Direction, ViewHelper } from '../helpers/ViewHelper';
 import { Event, SceneControlsEnabled } from '../types';
+import { updatePerspectiveCameraAspectRatio } from '../utils';
 
 export class Renderer extends BaseService<Event.RendererArgs> {
   private context: Context;
@@ -73,6 +84,18 @@ export class Renderer extends BaseService<Event.RendererArgs> {
           child.material.needsUpdate = true;
         }
       });
+
+      this.render();
+
+      this.context.emit('container:resize', undefined);
+    });
+
+    this.context.on('container:resize', () => {
+      if (this.camera instanceof PerspectiveCamera) {
+        updatePerspectiveCameraAspectRatio(this.camera, this.domElement);
+      }
+
+      this.renderer?.setSize(this.domElement.offsetWidth, this.domElement.offsetHeight);
 
       this.render();
     });

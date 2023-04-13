@@ -8,6 +8,8 @@ import { BaseCmd, Cmd, Event } from './types';
 import { defaultCamera, getFilteredObjectByPoint } from './utils';
 
 export class Context extends BaseService<Event.ContextArgs> {
+  private onWindowResize = () => this.emit('container:resize', undefined);
+
   public domElement: HTMLDivElement;
   public renderer: Renderer;
   public mouse: Mouse;
@@ -19,10 +21,11 @@ export class Context extends BaseService<Event.ContextArgs> {
   public objectMap: Map<string, Object3D>;
   public selected: Object3D | null;
 
-  constructor(container: HTMLDivElement) {
+  constructor() {
     super();
 
-    this.domElement = container;
+    this.domElement = document.createElement('div');
+    this.domElement.setAttribute('style', 'width: 100%; height: 100%; position: relative;');
 
     this.mainScene = new Scene();
     this.mainScene.name = 'main:scene';
@@ -69,6 +72,8 @@ export class Context extends BaseService<Event.ContextArgs> {
     this.mouse.on('mouse:up', ({ point }) => {
       this.emit('mouse:up', { point });
     });
+
+    globalThis.window.addEventListener('resize', this.onWindowResize, false);
   }
 
   public get objects(): Object3D[] {
@@ -158,6 +163,7 @@ export class Context extends BaseService<Event.ContextArgs> {
   }
 
   public destroy(): void {
+    globalThis.window.removeEventListener('resize', this.onWindowResize, false);
     this.renderer.destroy();
     this.history.destroy();
     this.mouse.destroy();
