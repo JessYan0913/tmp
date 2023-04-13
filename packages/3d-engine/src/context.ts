@@ -112,10 +112,6 @@ export class Context extends BaseService<Event.ContextArgs> {
   }
 
   public addObject(object: Object3D, parent?: Object3D, index?: number): void {
-    object.children.forEach((child) => {
-      this.addObject(child);
-    });
-
     if (parent) {
       index = index === undefined ? parent.children.length : index;
       parent.children.splice(index, 0, object);
@@ -155,6 +151,10 @@ export class Context extends BaseService<Event.ContextArgs> {
 
   public execute<T extends Cmd.Options>(command: BaseCmd | string, options?: T): void {
     this.history.execute(command, options);
+  }
+
+  public render(): void {
+    this.renderer.render();
   }
 
   public destroy(): void {

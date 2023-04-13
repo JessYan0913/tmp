@@ -2,7 +2,6 @@ import { BaseService } from '@tmp/utils';
 import { Camera, Clock, ColorRepresentation, Mesh, Object3D, Scene, sRGBEncoding, WebGLRenderer } from 'three';
 
 import { Context } from '../context';
-import { RendererNotReadyError } from '../errors';
 import { DoubleGrid } from '../helpers/DoubleGrid';
 import { SceneControls } from '../helpers/SceneControls';
 import { Direction, ViewHelper } from '../helpers/ViewHelper';
@@ -118,7 +117,7 @@ export class Renderer extends BaseService<Event.RendererArgs> {
 
   public render(): void {
     if (!this.renderer) {
-      throw new RendererNotReadyError();
+      return;
     }
 
     const start = performance.now();
