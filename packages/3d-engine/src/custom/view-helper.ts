@@ -17,7 +17,7 @@ import {
   WebGLRenderer,
 } from 'three';
 
-import { SceneControls } from './SceneControls';
+import { SceneControls } from './scene-controls';
 
 const getAxisMaterial = (color: Color): MeshBasicMaterial => new MeshBasicMaterial({ color, toneMapped: false });
 
