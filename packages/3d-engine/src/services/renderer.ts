@@ -12,9 +12,9 @@ import {
 } from 'three';
 
 import { Context } from '../context';
-import { DoubleGrid } from '../helpers/DoubleGrid';
-import { SceneControls } from '../helpers/SceneControls';
-import { Direction, ViewHelper } from '../helpers/ViewHelper';
+import { DoubleGrid } from '../custom/DoubleGrid';
+import { SceneControls } from '../custom/SceneControls';
+import { Direction, ViewHelper } from '../custom/ViewHelper';
 import { Event, SceneControlsEnabled } from '../types';
 import { updatePerspectiveCameraAspectRatio } from '../utils';
 
