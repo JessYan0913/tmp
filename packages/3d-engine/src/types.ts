@@ -4,13 +4,6 @@ import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import History from './services/history';
 import Context from './context';
 
-export interface PluginInterface {
-  new (context: Context): PluginInterface;
-  scene?: Scene;
-  render?(): void;
-  uninstall?(): void;
-}
-
 export interface SceneControlsEnabled {
   enablePan?: boolean;
   enableRotate?: boolean;
@@ -150,15 +143,6 @@ export namespace Event {
     };
     'camera:changed': {
       camera: Camera;
-    };
-  }
-
-  export interface PluginMangerArgs {
-    'plugin:install': {
-      plugin: PluginInterface;
-    };
-    'plugin:uninstall': {
-      plugin: PluginInterface;
     };
   }
 }

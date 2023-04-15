@@ -4,12 +4,11 @@ import { Camera, Mesh, Object3D, Scene, Vector3 } from 'three';
 import { History } from './services/history';
 import { Mouse } from './services/mouse';
 import { Renderer } from './services/renderer';
-import { BaseCmd, Cmd, Event, PluginInterface } from './types';
+import { BaseCmd, Cmd, Event } from './types';
 import { defaultCamera, getFilteredObjectByPoint } from './utils';
 
 export class Context extends BaseService<Event.ContextArgs> {
   private onWindowResize = () => this.emit('container:resize', undefined);
-  private plugins: PluginInterface[] = [];
 
   public domElement: HTMLDivElement;
   public renderer: Renderer;
@@ -79,10 +78,6 @@ export class Context extends BaseService<Event.ContextArgs> {
 
   public get objects(): Object3D[] {
     return [...this.objectMap.values()];
-  }
-
-  public use<T extends PluginInterface>(Plugin: T): void {
-    this.plugins.push(new Plugin(this));
   }
 
   public select(object: Object3D): void {
