@@ -1,31 +1,32 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
-import { Context, Renderer } from '@tmp/3d-engine';
-import { BoxGeometry, Matrix4, Mesh, MeshBasicMaterial } from 'three';
+import { Context, LoaderPlugin } from '@tmp/3d-engine';
 
-const containerRef = ref<HTMLDivElement>();
+import useSelectFile from '@/hooks/useSelectFile';
+
+import ThreeScene from './components/ThreeScene.vue';
 
 const context = new Context();
-const box = new BoxGeometry(5, 5, 5);
-const material = new MeshBasicMaterial({
-  color: 'aquamarine',
-});
-const mesh = new Mesh(box, material);
-const translationMatrix = new Matrix4().setPosition(5, 5, 5);
-mesh.applyMatrix4(new Matrix4().multiply(translationMatrix));
 
-context.addObject(mesh);
+const loader = new LoaderPlugin();
+loader.install(context);
 
-onMounted(() => {
-  if (containerRef.value) {
-    containerRef.value.appendChild(context.domElement);
-    Renderer.createRenderer(context);
-  }
-});
+const { execute: selectFileExecute } = useSelectFile();
+
+const handleUpload = async () => {
+  const files = await selectFileExecute(['.obj']);
+  loader.loadFile(files[0]);
+};
 </script>
 
 <template>
-  <div ref="containerRef" class="content"></div>
+  <div class="content">
+    <div class="menu">
+      <el-button @click="handleUpload">上传</el-button>
+    </div>
+    <div class="scene">
+      <ThreeScene :context="context" />
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -34,5 +35,17 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.menu {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.scene {
+  flex: 1;
 }
 </style>

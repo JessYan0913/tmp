@@ -68,40 +68,66 @@ export const selectFile = (accepts: string[] = ['*'], multiple?: boolean): Promi
   }
 };
 
-export function isImage(file: File): boolean {
+export const isImage = (file: File): boolean => {
   return /^image\//.test(file.type);
-}
+};
 
-export function isVideo(file: File): boolean {
+export const isVideo = (file: File): boolean => {
   return /^video\//.test(file.type);
-}
+};
 
-export function isAudio(file: File): boolean {
+export const isAudio = (file: File): boolean => {
   return /^audio\//.test(file.type);
-}
+};
 
-export function isWordDocument(file: File): boolean {
+export const isWordDocument = (file: File): boolean => {
   return /^application\/(?:vnd\.openxmlformats-officedocument\.wordprocessingml\.document|msword|vnd\.ms-word\.document\.macroenabled\.12|vnd\.openxmlformats-officedocument\.wordprocessingml\.template|vnd\.ms-word\.template\.macroenabled\.12)$/.test(
     file.type
   );
-}
+};
 
-export function isExcelDocument(file: File): boolean {
+export const isExcelDocument = (file: File): boolean => {
   return /^application\/(?:vnd\.openxmlformats-officedocument\.spreadsheetml\.sheet|vnd\.ms-excel|vnd\.ms-excel\.sheet\.macroenabled\.12|vnd\.openxmlformats-officedocument\.spreadsheetml\.template|vnd\.ms-excel\.template\.macroenabled\.12)$/.test(
     file.type
   );
-}
+};
 
-export function isPowerPointDocument(file: File): boolean {
+export const isPowerPointDocument = (file: File): boolean => {
   return /^application\/(?:vnd\.ms-powerpoint|vnd\.openxmlformats-officedocument\.presentationml\.presentation|vnd\.ms-powerpoint\.presentation\.macroenabled\.12|vnd\.openxmlformats-officedocument\.presentationml\.template|vnd\.ms-powerpoint\.template\.macroenabled\.12)$/.test(
     file.type
   );
-}
+};
 
-export function isJsonDocument(file: File): boolean {
+export const isJsonDocument = (file: File): boolean => {
   return /^application\/json$/.test(file.type);
+};
+
+export const isXmlDocument = (file: File): boolean => {
+  return /^(?:application|text)\/(?:xml|xhtml\+xml)$/.test(file.type);
+};
+
+export interface FileHandler {
+  (fileRender: FileReader): void;
 }
 
-export function isXmlDocument(file: File): boolean {
-  return /^(?:application|text)\/(?:xml|xhtml\+xml)$/.test(file.type);
-}
+export const readeFile = <T extends string | ArrayBuffer | null>(fileHandler: FileHandler): Promise<T> => {
+  const reader = new FileReader();
+  return new Promise((resolve, reject) => {
+    reader.addEventListener('progress', (event: FileReaderEventMap['progress']) => {
+      const size = '(' + Math.floor(event.total / 1000) + ' KB)';
+      const progress = Math.floor((event.loaded / event.total) * 100) + '%';
+
+      console.log(`Loading size: ${size} progress: ${progress}`);
+    });
+
+    reader.addEventListener('load', (event: FileReaderEventMap['load']) => {
+      resolve(event.target?.result as T);
+    });
+
+    reader.addEventListener('error', (event: FileReaderEventMap['error']) => {
+      reject(event);
+    });
+
+    fileHandler(reader);
+  });
+};
