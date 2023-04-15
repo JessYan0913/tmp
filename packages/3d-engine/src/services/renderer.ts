@@ -16,7 +16,7 @@ import { DoubleGrid } from '../custom/double-grid';
 import { SceneControls } from '../custom/scene-controls';
 import { Direction, ViewHelper } from '../custom/view-helper';
 import { Event, SceneControlsEnabled } from '../types';
-import { updatePerspectiveCameraAspectRatio } from '../utils';
+import { directionalLight1, directionalLight2, updatePerspectiveCameraAspectRatio } from '../utils';
 
 export class Renderer extends BaseService<Event.RendererArgs> {
   private context: Context;
@@ -147,10 +147,18 @@ export class Renderer extends BaseService<Event.RendererArgs> {
 
     this.scene.add(this.grid);
 
+    this.scene.add(directionalLight1);
+
+    this.scene.add(directionalLight2);
+
     this.renderer.setViewport(0, 0, this.domElement.offsetWidth, this.domElement.offsetHeight);
     this.renderer.render(this.scene, this.camera);
 
     this.scene.remove(this.grid);
+
+    this.scene.remove(directionalLight1);
+
+    this.scene.remove(directionalLight2);
 
     if (this.camera === this.context.viewportCamera) {
       this.renderer.autoClear = false;
