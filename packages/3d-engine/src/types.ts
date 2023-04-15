@@ -6,6 +6,8 @@ import Context from './context';
 
 export interface PluginInterface {
   new (context: Context): PluginInterface;
+  render(): void;
+  uninstall(): void;
 }
 
 export interface SceneControlsEnabled {
