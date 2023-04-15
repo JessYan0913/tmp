@@ -6,6 +6,7 @@ import Context from './context';
 
 export interface PluginInterface {
   new (context: Context): PluginInterface;
+  scene?: Scene;
   render?(): void;
   uninstall?(): void;
 }
