@@ -1,124 +1,89 @@
 import { EventArgs, EventBus } from './event';
 
-export const isError = (error: any): boolean => {
-  return Object.prototype.toString.call(error) === '[object Error]';
-};
+type Method = (...args: any[]) => any;
 
-export type Action<T = any> = (args: any[], next?: Function) => Promise<T>;
+export interface Middleware {
+  (args: any[], next: Method): any;
+}
 
-function generateMethodName(prefix: string, name: string) {
-  return `${prefix}${name[0].toUpperCase()}${name.substring(1)}`;
+export interface Plugin {
+  before: Middleware[];
+  after: Middleware[];
 }
 
 export class BaseService<T extends EventArgs = EventArgs> extends EventBus<T> {
-  public methods: string[];
-  public serialMethods: string[];
+  private pluginMap: Map<string, Plugin> = new Map();
+  private middlewareMap: Map<string, Middleware[]> = new Map();
 
-  private pluginOptionsMap: Map<string, Function[]>;
-  private middlewareMap: Map<string, Function[]>;
-  private taskList: (() => Promise<void>)[];
-  private taskDoing: boolean;
-
-  constructor(methods: string[] = [], serialMethods: string[] = []) {
+  constructor() {
     super();
-
-    this.methods = methods;
-    this.serialMethods = serialMethods;
-    this.pluginOptionsMap = new Map();
-    this.middlewareMap = new Map();
-    this.taskList = [];
-    this.taskDoing = false;
-  }
-
-  private init() {
-    this.methods.forEach((methodName) => {
-      const originMethod = Reflect.get(this, methodName);
-      if (typeof originMethod !== 'function') {
-        return;
-      }
-
-      this.middlewareMap.set(methodName, []);
-
-      const beforeMethodName = generateMethodName('before', methodName);
-      const afterMethodName = generateMethodName('after', methodName);
-
-      this.pluginOptionsMap.set(beforeMethodName, []);
-      this.pluginOptionsMap.set(afterMethodName, []);
-
-      const action = this.composeMethod(methodName);
-
-      Reflect.set(this, methodName, async (...args: any[]) => {
-        if (!this.serialMethods.includes(methodName)) {
-          return this.doAction(args, originMethod, beforeMethodName, afterMethodName, action);
+    return new Proxy(this, {
+      get: (target: BaseService<T>, prop: string) => {
+        const originMethod = Reflect.get(target, prop);
+        if (typeof originMethod !== 'function' || ['usePlugin', 'useMiddleware'].includes(prop)) {
+          return originMethod;
         }
+        const middlewareList = this.middlewareMap.get(prop) ?? [];
+        const plugin = this.pluginMap.get(prop);
 
-        const promise = new Promise<any>((resolve, reject) => {
-          this.taskList.push(async () => {
-            try {
-              const value = await this.doAction(args, originMethod, beforeMethodName, afterMethodName, action);
-              resolve(value);
-            } catch (error) {
-              reject(error);
+        return (...args: any[]) => {
+          return this.applyMiddleware(middlewareList, args, async () => {
+            let result: any;
+
+            if (plugin) {
+              result = await this.applyPlugins(originMethod, plugin, args, result);
+            } else {
+              result = await originMethod.call(this, ...args);
             }
+
+            return result;
           });
-        });
-        if (!this.taskDoing) {
-          this.doTask();
-        }
-        return promise;
-      });
+        };
+      },
     });
   }
 
-  public use(options: Record<string, Function>): void {
-    Object.entries(options).forEach(([methodName, method]: [string, Function]) => {
-      if (typeof method === 'function') {
-        this.middlewareMap.get(methodName)?.push(method);
+  public usePlugin(method: string, plugin: Plugin) {
+    if (!this.pluginMap.has(method)) {
+      this.pluginMap.set(method, { before: [], after: [] });
+    }
+    const existingPlugin = this.pluginMap.get(method)!;
+    existingPlugin.before.push(...plugin.before);
+    existingPlugin.after.push(...plugin.after);
+  }
+
+  public useMiddleware(method: string, middleware: Middleware) {
+    if (!this.middlewareMap.has(method)) {
+      this.middlewareMap.set(method, []);
+    }
+    this.middlewareMap.get(method)!.push(middleware);
+  }
+
+  private async applyMiddleware(middlewareList: Middleware[], args: any[], next: Method) {
+    let index = -1;
+    const dispatch = async (i: number): Promise<any> => {
+      if (i <= index) {
+        throw new Error('next() called multiple times');
       }
-    });
-  }
+      index = i;
 
-  public usePlugin(options: Record<string, Function>): void {
-    Object.entries(options).forEach(([methodName, method]: [string, Function]) => {
-      if (typeof method === 'function') {
-        this.pluginOptionsMap.get(methodName)?.push(method);
+      const middleware = middlewareList[i];
+      if (!middleware) {
+        return next(...args);
       }
-    });
-  }
 
-  private composeMethod(methodName: string): Action<any> {
-    const middleware = this.middlewareMap.get(methodName) ?? [];
-    return async (args: any[], next?: Function): Promise<any> => {
-      let index = -1;
-      const dispatch = async (i: number): Promise<any> => {
-        if (i < index) {
-          throw new Error('next() 多次调用');
-        }
-        index = i;
-        let fun = middleware[i];
-        if (i === middleware.length && next) {
-          fun = next;
-        }
-        if (!fun) {
-          return;
-        }
-        return await fun(...args, dispatch.bind(this, i + 1));
-      };
-      return await dispatch(0);
+      return middleware(args, dispatch.bind(this, i + 1));
     };
+
+    return dispatch(0);
   }
 
-  private async doAction(
-    args: any[],
-    sourceMethod: Function,
-    beforeMethodName: string,
-    afterMethodName: string,
-    action: Action
-  ): Promise<any> {
+  private async applyPlugins(method: Method, plugin: Plugin, args: any[], result: any) {
     let beforeArgs = args;
-    for (const beforeMethod of this.pluginOptionsMap.get(beforeMethodName) ?? []) {
-      beforeArgs = (await beforeMethod(...beforeArgs)) ?? [];
-      if (isError(beforeArgs)) {
+
+    for (const middleware of plugin.before) {
+      beforeArgs = await this.applyMiddleware([middleware], beforeArgs, () => beforeArgs);
+      if (beforeArgs instanceof Error) {
         throw beforeArgs;
       }
       if (!Array.isArray(beforeArgs)) {
@@ -126,24 +91,17 @@ export class BaseService<T extends EventArgs = EventArgs> extends EventBus<T> {
       }
     }
 
-    let result = await action(beforeArgs, sourceMethod.bind(this));
+    result = await method.call(this, ...beforeArgs);
 
-    for (const afterMethod of this.pluginOptionsMap.get(afterMethodName) ?? []) {
-      result = await afterMethod(result, ...beforeArgs);
-      if (isError(result)) {
+    for (const middleware of plugin.after) {
+      result = await this.applyMiddleware([middleware], [result, ...beforeArgs], () => result);
+      if (result instanceof Error) {
         throw result;
       }
     }
+
     return result;
   }
-
-  private async doTask(): Promise<void> {
-    this.taskDoing = true;
-    let task = this.taskList.shift();
-    while (task) {
-      await task();
-      task = this.taskList.shift();
-    }
-    this.taskDoing = false;
-  }
 }
+
+export default BaseService;
