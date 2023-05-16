@@ -4,6 +4,11 @@ import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer';
 import History from './services/history';
 import Context from './context';
 
+export interface PluginInterface {
+  install(context: Context): void;
+  uninstall(): void;
+}
+
 export interface SceneControlsEnabled {
   enablePan?: boolean;
   enableRotate?: boolean;
