@@ -19,11 +19,11 @@ class UserService extends BaseService {
 }
 
 const user = new UserService();
-user.useMiddleware('getUserName', (args, next) => {
+user.applyMiddleware('getUserName', (args, next) => {
   console.log('== middleware');
   next();
 });
-user.usePlugin('getUserName', {
+user.use('getUserName', {
   before: [
     (args, next) => {
       console.log('==before');

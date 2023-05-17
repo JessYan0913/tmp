@@ -9,7 +9,7 @@ export interface Plugin {
   after: Middleware[];
 }
 
-const excludedMethods = ['usePlugin', 'useMiddleware'] as const;
+const excludedMethods = ['use', 'applyMiddleware'] as const;
 
 type ExcludedMethods = (typeof excludedMethods)[number];
 
@@ -89,7 +89,7 @@ export class BaseService {
     });
   }
 
-  public usePlugin(method: Exclude<keyof this, ExcludedMethods>, plugin: Plugin) {
+  public use(method: Exclude<keyof this, ExcludedMethods>, plugin: Plugin) {
     if (!this.pluginMap.has(method)) {
       this.pluginMap.set(method, { before: [], after: [] });
     }
@@ -98,7 +98,7 @@ export class BaseService {
     existingPlugin.after.push(...plugin.after);
   }
 
-  public useMiddleware(method: Exclude<keyof this, ExcludedMethods>, middleware: Middleware) {
+  public applyMiddleware(method: Exclude<keyof this, ExcludedMethods>, middleware: Middleware) {
     if (!this.middlewareMap.has(method)) {
       this.middlewareMap.set(method, []);
     }
