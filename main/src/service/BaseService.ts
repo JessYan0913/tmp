@@ -9,9 +9,9 @@ export interface Plugin {
   after: Middleware[];
 }
 
-const excludedMethods = ['usePlugin', 'useMiddleware'];
+const excludedMethods = ['usePlugin', 'useMiddleware'] as const;
 
-type ExcludedMethod = (typeof excludedMethods)[number];
+type ExcludedMethods = (typeof excludedMethods)[number];
 
 async function applyMiddleware(this: BaseService, middlewareList: Middleware[], args: any[], next: Method) {
   let index = -1;
@@ -58,17 +58,17 @@ async function applyPlugins(this: BaseService, method: Method, plugin: Plugin, a
 }
 
 export class BaseService {
-  private pluginMap: Map<keyof Exclude<this, ExcludedMethod>, Plugin> = new Map();
-  private middlewareMap: Map<keyof Exclude<this, ExcludedMethod>, Middleware[]> = new Map();
+  private pluginMap: Map<Exclude<keyof this, ExcludedMethods>, Plugin> = new Map();
+  private middlewareMap: Map<Exclude<keyof this, ExcludedMethods>, Middleware[]> = new Map();
 
   constructor() {
     return new Proxy(this, {
       get: (target: BaseService, prop: string) => {
         const originMethod = Reflect.get(target, prop);
-        if (typeof originMethod !== 'function' || excludedMethods.includes(prop)) {
+        if (typeof originMethod !== 'function' || excludedMethods.includes(prop as ExcludedMethods)) {
           return originMethod;
         }
-        const _prop = prop as keyof Exclude<this, ExcludedMethod>;
+        const _prop = prop as Exclude<keyof this, ExcludedMethods>;
         const middlewareList = this.middlewareMap.get(_prop) ?? [];
         const plugin = this.pluginMap.get(_prop);
 
@@ -89,7 +89,7 @@ export class BaseService {
     });
   }
 
-  public usePlugin(method: keyof Exclude<this, ExcludedMethod>, plugin: Plugin) {
+  public usePlugin(method: Exclude<keyof this, ExcludedMethods>, plugin: Plugin) {
     if (!this.pluginMap.has(method)) {
       this.pluginMap.set(method, { before: [], after: [] });
     }
@@ -98,7 +98,7 @@ export class BaseService {
     existingPlugin.after.push(...plugin.after);
   }
 
-  public useMiddleware(method: keyof Exclude<this, ExcludedMethod>, middleware: Middleware) {
+  public useMiddleware(method: Exclude<keyof this, ExcludedMethods>, middleware: Middleware) {
     if (!this.middlewareMap.has(method)) {
       this.middlewareMap.set(method, []);
     }
