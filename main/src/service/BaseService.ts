@@ -9,19 +9,24 @@ export interface Plugin {
   after: Middleware[];
 }
 
+const excludedMethods = ['usePlugin', 'useMiddleware'];
+
+type ExcludedMethod = (typeof excludedMethods)[number];
+
 export class BaseService {
-  private pluginMap: Map<string, Plugin> = new Map();
-  private middlewareMap: Map<string, Middleware[]> = new Map();
+  private pluginMap: Map<keyof Exclude<this, ExcludedMethod>, Plugin> = new Map();
+  private middlewareMap: Map<keyof Exclude<this, ExcludedMethod>, Middleware[]> = new Map();
 
   constructor() {
     return new Proxy(this, {
       get: (target: BaseService, prop: string) => {
         const originMethod = Reflect.get(target, prop);
-        if (typeof originMethod !== 'function' || ['usePlugin', 'useMiddleware'].includes(prop)) {
+        if (typeof originMethod !== 'function' || excludedMethods.includes(prop)) {
           return originMethod;
         }
-        const middlewareList = this.middlewareMap.get(prop) ?? [];
-        const plugin = this.pluginMap.get(prop);
+        const _prop = prop as keyof Exclude<this, ExcludedMethod>;
+        const middlewareList = this.middlewareMap.get(_prop) ?? [];
+        const plugin = this.pluginMap.get(_prop);
 
         return (...args: any[]) => {
           return this.applyMiddleware(middlewareList, args, async () => {
@@ -40,7 +45,7 @@ export class BaseService {
     });
   }
 
-  public usePlugin(method: string, plugin: Plugin) {
+  public usePlugin(method: keyof Exclude<this, ExcludedMethod>, plugin: Plugin) {
     if (!this.pluginMap.has(method)) {
       this.pluginMap.set(method, { before: [], after: [] });
     }
@@ -49,7 +54,7 @@ export class BaseService {
     existingPlugin.after.push(...plugin.after);
   }
 
-  public useMiddleware(method: string, middleware: Middleware) {
+  public useMiddleware(method: keyof Exclude<this, ExcludedMethod>, middleware: Middleware) {
     if (!this.middlewareMap.has(method)) {
       this.middlewareMap.set(method, []);
     }
