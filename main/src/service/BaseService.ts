@@ -13,6 +13,50 @@ const excludedMethods = ['usePlugin', 'useMiddleware'];
 
 type ExcludedMethod = (typeof excludedMethods)[number];
 
+async function applyMiddleware(this: BaseService, middlewareList: Middleware[], args: any[], next: Method) {
+  let index = -1;
+  const dispatch = async (i: number): Promise<any> => {
+    if (i <= index) {
+      throw new Error('next() called multiple times');
+    }
+    index = i;
+
+    const middleware = middlewareList[i];
+    if (!middleware) {
+      return next(...args);
+    }
+
+    return middleware(args, dispatch.bind(this, i + 1));
+  };
+
+  return dispatch(0);
+}
+
+async function applyPlugins(this: BaseService, method: Method, plugin: Plugin, args: any[], result: any) {
+  let beforeArgs = args;
+
+  for (const middleware of plugin.before) {
+    beforeArgs = await applyMiddleware.call(this, [middleware], beforeArgs, () => beforeArgs);
+    if (beforeArgs instanceof Error) {
+      throw beforeArgs;
+    }
+    if (!Array.isArray(beforeArgs)) {
+      beforeArgs = [beforeArgs];
+    }
+  }
+
+  result = await method.call(this, ...beforeArgs);
+
+  for (const middleware of plugin.after) {
+    result = await applyMiddleware.call(this, [middleware], [result, ...beforeArgs], () => result);
+    if (result instanceof Error) {
+      throw result;
+    }
+  }
+
+  return result;
+}
+
 export class BaseService {
   private pluginMap: Map<keyof Exclude<this, ExcludedMethod>, Plugin> = new Map();
   private middlewareMap: Map<keyof Exclude<this, ExcludedMethod>, Middleware[]> = new Map();
@@ -29,11 +73,11 @@ export class BaseService {
         const plugin = this.pluginMap.get(_prop);
 
         return (...args: any[]) => {
-          return this.applyMiddleware(middlewareList, args, async () => {
+          return applyMiddleware.call(this, middlewareList, args, async () => {
             let result: any;
 
             if (plugin) {
-              result = await this.applyPlugins(originMethod, plugin, args, result);
+              result = await applyPlugins.call(this, originMethod, plugin, args, result);
             } else {
               result = await originMethod.call(this, ...args);
             }
@@ -59,50 +103,6 @@ export class BaseService {
       this.middlewareMap.set(method, []);
     }
     this.middlewareMap.get(method)!.push(middleware);
-  }
-
-  private async applyMiddleware(middlewareList: Middleware[], args: any[], next: Method) {
-    let index = -1;
-    const dispatch = async (i: number): Promise<any> => {
-      if (i <= index) {
-        throw new Error('next() called multiple times');
-      }
-      index = i;
-
-      const middleware = middlewareList[i];
-      if (!middleware) {
-        return next(...args);
-      }
-
-      return middleware(args, dispatch.bind(this, i + 1));
-    };
-
-    return dispatch(0);
-  }
-
-  private async applyPlugins(method: Method, plugin: Plugin, args: any[], result: any) {
-    let beforeArgs = args;
-
-    for (const middleware of plugin.before) {
-      beforeArgs = await this.applyMiddleware([middleware], beforeArgs, () => beforeArgs);
-      if (beforeArgs instanceof Error) {
-        throw beforeArgs;
-      }
-      if (!Array.isArray(beforeArgs)) {
-        beforeArgs = [beforeArgs];
-      }
-    }
-
-    result = await method.call(this, ...beforeArgs);
-
-    for (const middleware of plugin.after) {
-      result = await this.applyMiddleware([middleware], [result, ...beforeArgs], () => result);
-      if (result instanceof Error) {
-        throw result;
-      }
-    }
-
-    return result;
   }
 }
 
