@@ -4,10 +4,12 @@ export interface Middleware {
   (args: any[], next: Method): any;
 }
 
-export interface Plugin {
+export interface PluginMethod {
   before: Middleware[];
   after: Middleware[];
 }
+
+export type Plugin<Method extends string | number | symbol> = Record<Method, PluginMethod>;
 
 const excludedMethods = ['use', 'applyMiddleware'] as const;
 
@@ -32,7 +34,7 @@ async function applyMiddleware(this: BaseService, middlewareList: Middleware[], 
   return dispatch(0);
 }
 
-async function applyPlugins(this: BaseService, method: Method, plugin: Plugin, args: any[], result: any) {
+async function applyPlugins(this: BaseService, method: Method, plugin: PluginMethod, args: any[], result: any) {
   let beforeArgs = args;
 
   for (const middleware of plugin.before) {
@@ -58,7 +60,7 @@ async function applyPlugins(this: BaseService, method: Method, plugin: Plugin, a
 }
 
 export class BaseService {
-  private pluginMap: Map<Exclude<keyof this, ExcludedMethods>, Plugin> = new Map();
+  private pluginMap: Map<Exclude<keyof this, ExcludedMethods>, PluginMethod> = new Map();
   private middlewareMap: Map<Exclude<keyof this, ExcludedMethods>, Middleware[]> = new Map();
 
   constructor() {
@@ -89,13 +91,16 @@ export class BaseService {
     });
   }
 
-  public use(method: Exclude<keyof this, ExcludedMethods>, plugin: Plugin) {
-    if (!this.pluginMap.has(method)) {
-      this.pluginMap.set(method, { before: [], after: [] });
+  public use(plugin: Plugin<Exclude<keyof this, ExcludedMethods>>) {
+    for (const key of Object.keys(plugin)) {
+      const _key = key as Exclude<keyof this, ExcludedMethods>;
+      if (!this.pluginMap.has(_key)) {
+        this.pluginMap.set(_key, { before: [], after: [] });
+      }
+      const existingPlugin = this.pluginMap.get(_key)!;
+      existingPlugin.before.push(...Reflect.get(plugin, _key).before);
+      existingPlugin.after.push(...Reflect.get(plugin, _key).after);
     }
-    const existingPlugin = this.pluginMap.get(method)!;
-    existingPlugin.before.push(...plugin.before);
-    existingPlugin.after.push(...plugin.after);
   }
 
   public applyMiddleware(method: Exclude<keyof this, ExcludedMethods>, middleware: Middleware) {

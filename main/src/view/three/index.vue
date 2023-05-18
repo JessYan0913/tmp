@@ -23,19 +23,21 @@ user.applyMiddleware('getUserName', (args, next) => {
   console.log('== middleware');
   next();
 });
-user.use('getUserName', {
-  before: [
-    (args, next) => {
-      console.log('==before');
-      next();
-    },
-  ],
-  after: [
-    (args, next) => {
-      console.log('==after');
-      next();
-    },
-  ],
+user.use({
+  getUserName: {
+    before: [
+      (args, next) => {
+        console.log('==before');
+        next();
+      },
+    ],
+    after: [
+      (args, next) => {
+        console.log('==after');
+        next();
+      },
+    ],
+  },
 });
 user.getUserName();
 
