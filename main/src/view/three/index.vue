@@ -2,49 +2,12 @@
 import { Context, LoaderPlugin } from '@tmp/3d-engine';
 
 import useSelectFile from '@/hooks/useSelectFile';
-import { BaseService } from '@/service/BaseService';
 
 import ThreeScene from './components/ThreeScene.vue';
 
-class UserService extends BaseService {
-  constructor() {
-    super();
-  }
-
-  public getUserName() {
-    console.log('getUserName');
-
-    return 'User';
-  }
-}
-
-const user = new UserService();
-user.applyMiddleware('getUserName', (args, next) => {
-  console.log('== middleware');
-  next();
-});
-user.use({
-  getUserName: {
-    before: [
-      (args, next) => {
-        console.log('==before');
-        next();
-      },
-    ],
-    after: [
-      (args, next) => {
-        console.log('==after');
-        next();
-      },
-    ],
-  },
-});
-user.getUserName();
-
 const context = new Context();
 
-const loader = new LoaderPlugin();
-loader.install(context);
+const loader = new LoaderPlugin(context);
 
 const { execute: selectFileExecute } = useSelectFile();
 

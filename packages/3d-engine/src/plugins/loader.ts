@@ -27,11 +27,27 @@ const fileHandler: FileHandlerFactory = {
 export class LoaderPlugin implements PluginInterface {
   private context?: Context;
 
-  public install(context: Context): void {
+  constructor(context: Context) {
     this.context = context;
   }
 
-  public uninstall(): void {
+  public get name(): string {
+    return 'LoaderPlugin';
+  }
+
+  public init(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public enable(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public disable(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public destroy(): void {
     throw new Error('Method not implemented.');
   }
 

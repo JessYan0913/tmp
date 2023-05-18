@@ -5,8 +5,11 @@ import History from './services/history';
 import Context from './context';
 
 export interface PluginInterface {
-  install(context: Context): void;
-  uninstall(): void;
+  name: string;
+  init(): void;
+  enable(): void;
+  disable(): void;
+  destroy(): void;
 }
 
 export interface SceneControlsEnabled {
