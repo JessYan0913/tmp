@@ -7,7 +7,7 @@ import ThreeScene from './components/ThreeScene.vue';
 
 const context = new Context();
 
-const loader = new LoaderPlugin(context);
+const loader = new LoaderPlugin({ context });
 
 const { execute: selectFileExecute } = useSelectFile();
 

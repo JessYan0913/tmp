@@ -12,23 +12,32 @@ export interface FileHandlerFactory {
   obj: FileHandler;
 }
 
+export type FileExtension = keyof FileHandlerFactory;
+
 const fileHandler: FileHandlerFactory = {
   async obj(context: Context, file: File) {
     const loader = new OBJLoader();
     const content = await readeFile<string>((fileReader) => {
       fileReader.readAsDataURL(file);
     });
-    loader.load(content, (group) => {
-      context.addObject(group);
-    });
+    const group = await loader.loadAsync(content);
+    context.addObject(group);
   },
 };
 
-export class LoaderPlugin implements PluginInterface {
-  private context?: Context;
+export interface LoaderPluginOptions {
+  context: Context;
+  isEnabled?: boolean;
+}
 
-  constructor(context: Context) {
-    this.context = context;
+export class LoaderPlugin implements PluginInterface {
+  private context: Context;
+  public isEnabled: boolean = true;
+  public isLoading: boolean = false;
+
+  constructor(options: LoaderPluginOptions) {
+    this.context = options.context;
+    options.isEnabled && (this.isEnabled = options.isEnabled);
   }
 
   public get name(): string {
@@ -36,30 +45,36 @@ export class LoaderPlugin implements PluginInterface {
   }
 
   public init(): void {
-    throw new Error('Method not implemented.');
+    this.enable();
+    this.isLoading = false;
   }
 
   public enable(): void {
-    throw new Error('Method not implemented.');
+    this.isEnabled = true;
   }
 
   public disable(): void {
-    throw new Error('Method not implemented.');
+    this.isEnabled = false;
   }
 
   public destroy(): void {
-    throw new Error('Method not implemented.');
+    this.disable();
   }
 
   public async loadFile(file: File): Promise<void> {
-    if (!this.context) {
+    if (!this.enable) {
       return;
     }
-    const extendsion: string = getFileExtension(file).toLowerCase();
-    if (!Object.keys(fileHandler).includes(extendsion)) {
+    this.isLoading = true;
+    const extension: string = getFileExtension(file).toLowerCase();
+    if (!Object.keys(fileHandler).includes(extension)) {
       throw new IllegalFileError(Object.keys(fileHandler));
     }
-    fileHandler[extendsion as keyof FileHandlerFactory]?.(this.context, file);
+    if (!fileHandler[extension as FileExtension]) {
+      return;
+    }
+    await fileHandler[extension as keyof FileHandlerFactory](this.context, file);
+    this.isLoading = false;
   }
 }
 
