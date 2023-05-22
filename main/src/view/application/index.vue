@@ -12,7 +12,7 @@ const handleChangeTheme = (event: Event) => {
 
 <template>
   <div>
-    <select @change="handleChangeTheme">
+    <select :value="theme" @change="handleChangeTheme">
       <option value="light">明亮</option>
       <option value="dark">暗色</option>
     </select>
