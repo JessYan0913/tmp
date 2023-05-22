@@ -30,7 +30,7 @@ useTheme();
   background-color: var(--bg-color);
 }
 .menu {
-  background-color: rgba(137, 43, 226, 0.498);
+  background-color: var(--menu-bg-color);
   height: 50px;
   display: flex;
   justify-content: space-evenly;
