@@ -10,6 +10,8 @@ export * from './files';
 
 export * from './request';
 
+export * from './date';
+
 export const toLine = (name: string = '') => name.replace(/\B([A-Z])/g, '-$1').toLowerCase();
 
 export function replacePropertyWithValue(obj: Record<string | number | symbol, any>, value: any, newValue: any) {
