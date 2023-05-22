@@ -13,6 +13,11 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  --bg-color: rgb(142, 201, 6);
+}
+
+html[data-theme='dark'] {
+  --bg-color: #464379;
 }
 
 body {
@@ -29,7 +34,7 @@ body {
   text-align: center;
 }
 
-@media (prefers-color-scheme: light) {
+/* @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
     background-color: #ffffff;
@@ -40,4 +45,4 @@ body {
   button {
     background-color: #f9f9f9;
   }
-}
+} */

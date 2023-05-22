@@ -1,24 +1,20 @@
 <script lang="ts" setup>
-import { useIntervalAsync } from '@/hooks/useIntervalAsync';
+import { useTheme } from '@/hooks/useTheme';
 
-const { flush, cancel, recover } = useIntervalAsync(async () => {
-  let timeout: any = null;
-  await new Promise((resolve) => {
-    timeout = setTimeout(() => {
-      console.log('模拟异步事件');
-      resolve('');
-    }, 2000);
-  });
-  return () => {
-    clearTimeout(timeout);
-  };
-}, 1000);
+const { theme } = useTheme();
+
+const handleChangeTheme = (event: Event) => {
+  if (event.target) {
+    theme.value = (event.target as HTMLSelectElement).value;
+  }
+};
 </script>
 
 <template>
   <div>
-    <button @click="flush">刷新</button>
-    <button @click="cancel">取消</button>
-    <button @click="recover">恢复</button>
+    <select @change="handleChangeTheme">
+      <option value="light">明亮</option>
+      <option value="dark">暗色</option>
+    </select>
   </div>
 </template>
