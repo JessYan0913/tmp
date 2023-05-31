@@ -16,7 +16,7 @@ const props = withDefaults(
     playbackRate?: PlaybackRate;
   }>(),
   {
-    autoplay: true,
+    autoplay: false,
     loop: false,
     poster: '',
     controls: true,
@@ -126,7 +126,9 @@ defineExpose({
 </script>
 
 <template>
-  <video ref="videoRef" class="video-player"></video>
+  <video ref="videoRef" class="video-player">
+    <p>你的浏览器不支持 HTML5 视频。可点击<a :href="src">此链接</a>观看</p>
+  </video>
 </template>
 
 <style lang="scss" scoped>
