@@ -6,6 +6,7 @@ import Context from './context';
 
 export interface PluginInterface {
   name: string;
+  scene?: Scene;
   init(): void;
   enable(): void;
   disable(): void;
@@ -99,6 +100,9 @@ export namespace Event {
       object: Object3D;
     };
     'object:removed': {
+      object: Object3D;
+    };
+    'object:changing': {
       object: Object3D;
     };
     'scene:changed': {
