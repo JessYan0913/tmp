@@ -14,7 +14,7 @@ useTheme();
       <RouterLink to="/webgl/01">webgl-01 </RouterLink>
       <RouterLink to="/three">three </RouterLink>
     </header>
-    <section>
+    <section class="section">
       <RouterView />
     </section>
   </div>
@@ -39,5 +39,8 @@ useTheme();
   & a {
     color: #fff;
   }
+}
+.section {
+  height: 100%;
 }
 </style>
