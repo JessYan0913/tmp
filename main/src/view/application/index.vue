@@ -1,24 +1,20 @@
 <script lang="ts" setup>
-import { FileSelectCancelError, getFileExtension, IllegalFileError, selectFile } from '@tmp/utils';
+import { useTheme } from '@/hooks/useTheme';
 
-console.log(getFileExtension('ddsdsd.txt'));
-const handleSelectFile = async () => {
-  try {
-    const files = await selectFile(['.png']);
-    console.log('====', files);
-  } catch (error) {
-    if (error instanceof FileSelectCancelError) {
-      console.log('取消选择');
-    } else if (error instanceof IllegalFileError) {
-      console.log('文件格式不匹配', error.accepts);
-    }
+const { theme } = useTheme();
+
+const handleChangeTheme = (event: Event) => {
+  if (event.target) {
+    theme.value = (event.target as HTMLSelectElement).value;
   }
 };
 </script>
 
 <template>
   <div>
-    <h1>应用列表</h1>
-    <button @click="handleSelectFile">选择文件</button>
+    <select :value="theme" @change="handleChangeTheme">
+      <option value="light">明亮</option>
+      <option value="dark">暗色</option>
+    </select>
   </div>
 </template>
