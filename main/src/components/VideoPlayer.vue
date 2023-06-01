@@ -4,10 +4,29 @@ import HLS from 'hls.js';
 
 export type PlaybackRate = 0.25 | 0.5 | 0.75 | 1 | 1.25 | 1.5 | 1.75 | 2;
 
+export type VideoType =
+  | 'video/mp4'
+  | 'video/webm'
+  | 'video/ogg'
+  | 'application/x-mpegURL'
+  | 'application/dash+xml'
+  | 'video/x-msvideo'
+  | 'video/quicktime'
+  | 'video/x-ms-wmv';
+
+export interface Track {
+  label: string;
+  src: string;
+  srclang: string;
+  kind: TextTrackKind;
+  mode: TextTrackMode;
+}
+
 const props = withDefaults(
   defineProps<{
     src: string;
-    type: string;
+    type: VideoType;
+    tracks?: Track[];
     autoplay?: boolean;
     loop?: boolean;
     poster?: string;
@@ -127,6 +146,7 @@ defineExpose({
 
 <template>
   <video ref="videoRef" class="video-player">
+    <track src="/subtitles.vtt" kind="subtitles" srclang="en" label="中文字幕" />
     <p>你的浏览器不支持 HTML5 视频。可点击<a :href="src">此链接</a>观看</p>
   </video>
 </template>
@@ -135,5 +155,11 @@ defineExpose({
 .video-player {
   width: 100%;
   background-color: rgba(32, 32, 32, 0.842);
+  &::cue {
+    background: none;
+    color: rgb(0, 255, 162);
+    text-shadow: 0 1px #000, 1px 0 #000, -1px 0 #000, 0 -1px #000;
+    font-size: medium;
+  }
 }
 </style>
