@@ -15,7 +15,7 @@ export interface RoutersActions {
 
 export type RoutersStoreDefinition = StoreDefinition<string, RoutersState, RoutersGetters, RoutersActions>;
 
-const useRoutersStore: RoutersStoreDefinition = defineStore('routers', {
+export const useRoutersStore: RoutersStoreDefinition = defineStore('routers', {
   state: (): RoutersState => ({
     cacheComps: new Set(),
   }),
