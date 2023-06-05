@@ -15,7 +15,7 @@ const { keepAliveComps } = storeToRefs(routerStore);
 <template>
   <div class="layout">
     <header class="menu">
-      <RouterLink to="/application">应用列表 </RouterLink>
+      <RouterLink to="/application">视频组件 </RouterLink>
       <RouterLink to="/application/setting">应用设置 </RouterLink>
       <RouterLink to="/webgl/01">webgl-01 </RouterLink>
       <RouterLink to="/three">three </RouterLink>

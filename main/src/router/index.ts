@@ -27,6 +27,9 @@ const routes: RouteRecordRaw[] = [
         path: '/application/setting',
         name: 'ApplicationSetting',
         component: () => import('../view/application-setting/index.vue'),
+        meta: {
+          leaveCaches: ['/application'],
+        },
       },
       {
         path: '/webgl/01',
