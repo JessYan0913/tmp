@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import HLS from 'hls.js';
 
 export type PlaybackRate = 0.25 | 0.5 | 0.75 | 1 | 1.25 | 1.5 | 1.75 | 2;
@@ -19,7 +19,6 @@ export interface Track {
   src: string;
   srclang: string;
   kind: TextTrackKind;
-  mode: TextTrackMode;
 }
 
 const props = withDefaults(
@@ -27,6 +26,7 @@ const props = withDefaults(
     src: string;
     type: VideoType;
     tracks?: Track[];
+    showingTrack?: string;
     autoplay?: boolean;
     loop?: boolean;
     poster?: string;
@@ -58,22 +58,16 @@ const videoRef = ref<HTMLVideoElement>();
 
 const hls = ref<HLS>(new HLS());
 
-watch(
-  () => ({
-    src: props.src,
-    videoRef: videoRef.value,
-  }),
-  ({ src, videoRef }) => {
-    if (!videoRef) {
-      return;
-    }
-    if (videoRef?.canPlayType(props.type)) {
-      videoRef.src = src;
-    } else if (HLS.isSupported()) {
-      hls.value.loadSource(src);
-    }
+watchEffect(() => {
+  if (!videoRef.value) {
+    return;
   }
-);
+  if (videoRef.value.canPlayType(props.type)) {
+    videoRef.value.src = props.src;
+  } else if (HLS.isSupported()) {
+    hls.value.loadSource(props.src);
+  }
+});
 
 onMounted(() => {
   if (!videoRef.value) {
@@ -85,6 +79,12 @@ onMounted(() => {
   videoRef.value.poster = props.poster;
   videoRef.value.muted = props.muted;
   videoRef.value.playbackRate = props.playbackRate;
+
+  Array.from(videoRef.value.textTracks).forEach((track) => {
+    if (track.label === props.showingTrack) {
+      track.mode = 'showing';
+    }
+  });
 
   hls.value.attachMedia(videoRef.value);
 
@@ -146,7 +146,14 @@ defineExpose({
 
 <template>
   <video ref="videoRef" class="video-player">
-    <track src="/subtitles.vtt" kind="subtitles" srclang="en" label="中文字幕" />
+    <track
+      v-for="({ src, kind, srclang, label }, index) in tracks"
+      :key="index"
+      :src="src"
+      :kind="kind"
+      :srclang="srclang"
+      :label="label"
+    />
     <p>你的浏览器不支持 HTML5 视频。可点击<a :href="src">此链接</a>观看</p>
   </video>
 </template>

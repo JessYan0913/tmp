@@ -35,7 +35,20 @@ const handleChangeTheme = (event: Event) => {
         <input v-model="videoType" />
       </div>
     </form>
-    <VideoPlayer class="video-player" :src="videoSrc" :type="videoType"></VideoPlayer>
+    <VideoPlayer
+      class="video-player"
+      :src="videoSrc"
+      :type="videoType"
+      :tracks="[
+        {
+          src: '/subtitles.vtt',
+          srclang: 'en',
+          label: 'English',
+          kind: 'subtitles',
+        },
+      ]"
+      showing-track="English"
+    ></VideoPlayer>
   </div>
 </template>
 
