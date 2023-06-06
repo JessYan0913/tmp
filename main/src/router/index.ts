@@ -37,27 +37,6 @@ const routes: RouteRecordRaw[] = [
         component: () => import('../view/page-C/index.vue'),
       },
       {
-        path: '/application',
-        name: 'Application',
-        component: () => import('../view/application/index.vue'),
-        meta: {
-          leaveCaches: ['/application/setting'],
-        },
-      },
-      {
-        path: '/application/setting',
-        name: 'ApplicationSetting',
-        component: () => import('../view/application-setting/index.vue'),
-        meta: {
-          leaveCaches: ['/application'],
-        },
-      },
-      {
-        path: '/webgl/01',
-        name: 'Webgl01',
-        component: () => import('../view/webgl-01/index.vue'),
-      },
-      {
         path: '/three',
         name: 'Three',
         component: () => import('../view/three/index.vue'),

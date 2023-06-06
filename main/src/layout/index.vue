@@ -15,13 +15,10 @@ const { keepAliveComps } = storeToRefs(routerStore);
 <template>
   <div class="layout">
     <header class="menu">
-      <!-- <RouterLink to="/application">视频组件 </RouterLink>
-      <RouterLink to="/application/setting">应用设置 </RouterLink>
-      <RouterLink to="/webgl/01">webgl-01 </RouterLink>
-      <RouterLink to="/three">three </RouterLink> -->
       <RouterLink to="/page-A"> 页面A </RouterLink>
       <RouterLink to="/page-B"> 页面B </RouterLink>
       <RouterLink to="/page-C"> 页面C </RouterLink>
+      <RouterLink to="/three">three </RouterLink>
     </header>
     <section class="section">
       <RouterView v-slot="{ Component }">

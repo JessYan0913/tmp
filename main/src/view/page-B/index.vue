@@ -1,12 +1,52 @@
 <script lang="ts" setup name="Page-B">
-import { ref } from 'vue';
+import { TmpPage } from '@tmp/h5-schema';
 
-const value = ref<string>();
+const config: TmpPage = {
+  id: 'page-1',
+  name: 'page1',
+  type: 'page',
+  layout: '',
+  children: [
+    {
+      id: 'form-1',
+      name: 'form1',
+      type: 'form',
+      items: [
+        {
+          id: 'input-1',
+          name: 'input1',
+          type: 'input',
+          label: '姓名',
+          placeholder: '请输入姓名',
+          clearable: true,
+        },
+        {
+          id: 'select-1',
+          name: 'select1',
+          type: 'select',
+          label: '性别',
+          placeholder: '请选择性别',
+          clearable: true,
+          options: [
+            {
+              label: '男',
+              value: 1,
+            },
+            {
+              label: '女',
+              value: 2,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
 </script>
 
 <template>
   <div>
     <h1>Page-B</h1>
-    <input v-model="value" type="date" />
+    <TmpUiPage :config="config"></TmpUiPage>
   </div>
 </template>
