@@ -4,8 +4,10 @@ import { ref } from 'vue';
 import VideoPlayer, { VideoType } from '@/components/VideoPlayer.vue';
 import { useTheme } from '@/hooks/useTheme';
 
+const videoPlayerRef = ref();
 const videoSrc = ref<string>('http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4');
 const videoType = ref<VideoType>('video/mp4');
+const volume = ref<number>(1);
 
 const { theme } = useTheme();
 
@@ -13,6 +15,30 @@ const handleChangeTheme = (event: Event) => {
   if (event.target) {
     theme.value = (event.target as HTMLSelectElement).value;
   }
+};
+
+const handleVideoPlay = () => {
+  console.log('播放');
+};
+
+const handleVideoPaused = () => {
+  console.log('暂停');
+};
+
+const handleVideoLoaded = () => {
+  console.log('加载完成');
+};
+
+const handleVideoSeeked = () => {
+  console.log('快进');
+};
+
+const handleVideoEnded = () => {
+  console.log('结束播放');
+};
+
+const handleVideoWaiting = () => {
+  console.log('正在加载资源');
 };
 </script>
 
@@ -35,8 +61,13 @@ const handleChangeTheme = (event: Event) => {
         <label>视频类型:</label>
         <input v-model="videoType" />
       </div>
+      <div>
+        <label>音量:</label>
+        <input v-model="volume" type="range" max="1" min="0" step="0.01" />
+      </div>
     </form>
     <VideoPlayer
+      ref="videoPlayerRef"
       class="video-player"
       :src="videoSrc"
       :type="videoType"
@@ -45,10 +76,17 @@ const handleChangeTheme = (event: Event) => {
           src: '/subtitles.vtt',
           srclang: 'en',
           label: 'English',
-          kind: 'subtitles',
+          kind: 'captions',
         },
       ]"
+      :volume="Number(volume)"
       showing-track="English"
+      @play="handleVideoPlay"
+      @paused="handleVideoPaused"
+      @loaded="handleVideoLoaded"
+      @seeked="handleVideoSeeked"
+      @ended="handleVideoEnded"
+      @waiting="handleVideoWaiting"
     ></VideoPlayer>
   </div>
 </template>

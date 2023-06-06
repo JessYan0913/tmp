@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref, watchEffect } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
 import HLS from 'hls.js';
 
 export type PlaybackRate = 0.25 | 0.5 | 0.75 | 1 | 1.25 | 1.5 | 1.75 | 2;
@@ -32,6 +32,7 @@ const props = withDefaults(
     poster?: string;
     controls?: boolean;
     muted?: boolean;
+    volume?: number;
     playbackRate?: PlaybackRate;
   }>(),
   {
@@ -40,6 +41,7 @@ const props = withDefaults(
     poster: '',
     controls: true,
     muted: false,
+    volume: 1,
     playbackRate: 1,
   }
 );
@@ -51,12 +53,28 @@ const emits = defineEmits<{
   (event: 'play', videoRef?: HTMLVideoElement): void;
   (event: 'seeking', videoRef?: HTMLVideoElement): void;
   (event: 'seeked', videoRef?: HTMLVideoElement): void;
+  (event: 'waiting', videoRef?: HTMLVideoElement): void;
+  (event: 'volumechange', volume: number, videoRef?: HTMLVideoElement): void;
+  (event: 'ratechange', rate: number, videoRef?: HTMLVideoElement): void;
   (event: 'error', error: MediaError | undefined | null, videoRef?: HTMLVideoElement): void;
 }>();
 
 const videoRef = ref<HTMLVideoElement>();
 
 const hls = ref<HLS>(new HLS());
+
+const volume = computed<number>({
+  set(value: number): void {
+    if (videoRef.value) {
+      console.log('设置音频');
+
+      videoRef.value.volume = Math.min(Math.max(value, 0), 1);
+    }
+  },
+  get(): number {
+    return videoRef.value?.volume ?? 1;
+  },
+});
 
 watchEffect(() => {
   if (!videoRef.value) {
@@ -79,6 +97,7 @@ onMounted(() => {
   videoRef.value.poster = props.poster;
   videoRef.value.muted = props.muted;
   videoRef.value.playbackRate = props.playbackRate;
+  videoRef.value.volume = volume.value;
 
   Array.from(videoRef.value.textTracks).forEach((track) => {
     if (track.label === props.showingTrack) {
@@ -94,6 +113,9 @@ onMounted(() => {
   videoRef.value.addEventListener('play', handleVideoPlay);
   videoRef.value.addEventListener('seeking', handleVideoSeeking);
   videoRef.value.addEventListener('seeked', handleVideoSeeked);
+  videoRef.value.addEventListener('waiting', handleVideoWaiting);
+  videoRef.value.addEventListener('volumechange', handleVideoVolumeChange);
+  videoRef.value.addEventListener('ratechange', handleVideoRateChange);
   videoRef.value.addEventListener('error', handleVideoError);
 });
 
@@ -105,6 +127,9 @@ onUnmounted(() => {
   videoRef.value?.removeEventListener('play', handleVideoPlay);
   videoRef.value?.removeEventListener('seeking', handleVideoSeeking);
   videoRef.value?.removeEventListener('seeked', handleVideoSeeked);
+  videoRef.value?.removeEventListener('waiting', handleVideoWaiting);
+  videoRef.value?.removeEventListener('volumechange', handleVideoVolumeChange);
+  videoRef.value?.removeEventListener('ratechange', handleVideoRateChange);
   videoRef.value?.removeEventListener('error', handleVideoError);
 });
 
@@ -130,6 +155,19 @@ function handleVideoSeeking() {
 
 function handleVideoSeeked() {
   emits('seeked', videoRef.value);
+}
+
+function handleVideoWaiting() {
+  emits('waiting', videoRef.value);
+}
+
+function handleVideoVolumeChange() {
+  volume.value = videoRef.value ? videoRef.value.volume : 1;
+  emits('volumechange', volume.value, videoRef.value);
+}
+
+function handleVideoRateChange() {
+  emits('ratechange', videoRef.value ? videoRef.value.playbackRate : props.playbackRate, videoRef.value);
 }
 
 function handleVideoError() {
@@ -165,7 +203,7 @@ defineExpose({
   &::cue {
     background: none;
     color: rgb(0, 255, 162);
-    text-shadow: 0 1px #000, 1px 0 #000, -1px 0 #000, 0 -1px #000;
+    // text-shadow: 0 1px #000, 1px 0 #000, -1px 0 #000, 0 -1px #000;
     font-size: medium;
   }
 }
