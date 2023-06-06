@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script lang="ts" setup name="Application">
 import { ref } from 'vue';
 
 import VideoPlayer, { VideoType } from '@/components/VideoPlayer.vue';

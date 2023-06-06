@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script lang="ts" setup name="ApplicationSetting">
 import { TmpPage } from '@tmp/h5-schema';
 
 const config: TmpPage = {
@@ -7,23 +7,6 @@ const config: TmpPage = {
   type: 'page',
   layout: '',
   children: [
-    {
-      id: 'select-1',
-      name: 'select1',
-      type: 'select',
-      placeholder: '请选择性别',
-      clearable: true,
-      options: [
-        {
-          label: '男',
-          value: 1,
-        },
-        {
-          label: '女',
-          value: 2,
-        },
-      ],
-    },
     {
       id: 'form-1',
       name: 'form1',
@@ -36,7 +19,6 @@ const config: TmpPage = {
           label: '姓名',
           placeholder: '请输入姓名',
           clearable: true,
-          defaultValue: '32323',
         },
         {
           id: 'select-1',
@@ -64,7 +46,7 @@ const config: TmpPage = {
 
 <template>
   <div>
-    <h1>应用设置</h1>
+    <h1>表单</h1>
     <TmpUiPage :config="config"></TmpUiPage>
   </div>
 </template>

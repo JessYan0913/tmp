@@ -1,21 +1,34 @@
 <script lang="ts" setup>
 import { RouterLink, RouterView } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
 import { useTheme } from '@/hooks/useTheme';
+import { useRoutersStore } from '@/store/routers';
 
 useTheme();
+
+const routerStore = useRoutersStore();
+
+const { keepAliveComps } = storeToRefs(routerStore);
 </script>
 
 <template>
   <div class="layout">
     <header class="menu">
-      <RouterLink to="/application">应用列表 </RouterLink>
+      <!-- <RouterLink to="/application">视频组件 </RouterLink>
       <RouterLink to="/application/setting">应用设置 </RouterLink>
       <RouterLink to="/webgl/01">webgl-01 </RouterLink>
-      <RouterLink to="/three">three </RouterLink>
+      <RouterLink to="/three">three </RouterLink> -->
+      <RouterLink to="/page-A"> 页面A </RouterLink>
+      <RouterLink to="/page-B"> 页面B </RouterLink>
+      <RouterLink to="/page-C"> 页面C </RouterLink>
     </header>
     <section class="section">
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <KeepAlive :include="keepAliveComps">
+          <component :is="Component"></component>
+        </KeepAlive>
+      </RouterView>
     </section>
   </div>
 </template>
