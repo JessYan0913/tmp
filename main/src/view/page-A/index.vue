@@ -21,7 +21,7 @@ const handleVideoPlay = () => {
   console.log('播放');
 };
 
-const handleVideoPaused = () => {
+const handleVideoPause = () => {
   console.log('暂停');
 };
 
@@ -39,6 +39,10 @@ const handleVideoEnded = () => {
 
 const handleVideoWaiting = () => {
   console.log('正在加载资源');
+};
+
+const handleVideoRateChange = () => {
+  console.log('播放速度变化');
 };
 </script>
 
@@ -80,13 +84,15 @@ const handleVideoWaiting = () => {
         },
       ]"
       :volume="Number(volume)"
+      controls
       showing-track="English"
       @play="handleVideoPlay"
-      @paused="handleVideoPaused"
+      @pause="handleVideoPause"
       @loaded="handleVideoLoaded"
       @seeked="handleVideoSeeked"
       @ended="handleVideoEnded"
       @waiting="handleVideoWaiting"
+      @ratechange="handleVideoRateChange"
     ></VideoPlayer>
   </div>
 </template>

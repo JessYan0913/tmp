@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
+import { onMounted, onUnmounted, ref, useAttrs, watchEffect } from 'vue';
 import HLS from 'hls.js';
-
-export type PlaybackRate = 0.25 | 0.5 | 0.75 | 1 | 1.25 | 1.5 | 1.75 | 2;
 
 export type VideoType =
   | 'video/mp4'
@@ -21,60 +19,17 @@ export interface Track {
   kind: TextTrackKind;
 }
 
-const props = withDefaults(
-  defineProps<{
-    src: string;
-    type: VideoType;
-    tracks?: Track[];
-    showingTrack?: string;
-    autoplay?: boolean;
-    loop?: boolean;
-    poster?: string;
-    controls?: boolean;
-    muted?: boolean;
-    volume?: number;
-    playbackRate?: PlaybackRate;
-  }>(),
-  {
-    autoplay: false,
-    loop: false,
-    poster: '',
-    controls: true,
-    muted: false,
-    volume: 1,
-    playbackRate: 1,
-  }
-);
-
-const emits = defineEmits<{
-  (event: 'loaded', videoRef?: HTMLVideoElement): void;
-  (event: 'ended', videoRef?: HTMLVideoElement): void;
-  (event: 'paused', videoRef?: HTMLVideoElement): void;
-  (event: 'play', videoRef?: HTMLVideoElement): void;
-  (event: 'seeking', videoRef?: HTMLVideoElement): void;
-  (event: 'seeked', videoRef?: HTMLVideoElement): void;
-  (event: 'waiting', videoRef?: HTMLVideoElement): void;
-  (event: 'volumechange', volume: number, videoRef?: HTMLVideoElement): void;
-  (event: 'ratechange', rate: number, videoRef?: HTMLVideoElement): void;
-  (event: 'error', error: MediaError | undefined | null, videoRef?: HTMLVideoElement): void;
+const props = defineProps<{
+  src: string;
+  type: VideoType;
+  tracks?: Track[];
 }>();
+
+const attrs = useAttrs();
 
 const videoRef = ref<HTMLVideoElement>();
 
 const hls = ref<HLS>(new HLS());
-
-const volume = computed<number>({
-  set(value: number): void {
-    if (videoRef.value) {
-      console.log('设置音频');
-
-      videoRef.value.volume = Math.min(Math.max(value, 0), 1);
-    }
-  },
-  get(): number {
-    return videoRef.value?.volume ?? 1;
-  },
-});
 
 watchEffect(() => {
   if (!videoRef.value) {
@@ -85,94 +40,24 @@ watchEffect(() => {
   } else if (HLS.isSupported()) {
     hls.value.loadSource(props.src);
   }
+
+  Array.from(videoRef.value.textTracks).forEach((track) => {
+    if (track.label === attrs['showing-track']) {
+      track.mode = 'showing';
+    }
+  });
 });
 
 onMounted(() => {
   if (!videoRef.value) {
     return;
   }
-  videoRef.value.autoplay = props.autoplay;
-  videoRef.value.preload = 'auto';
-  videoRef.value.controls = props.controls;
-  videoRef.value.poster = props.poster;
-  videoRef.value.muted = props.muted;
-  videoRef.value.playbackRate = props.playbackRate;
-  videoRef.value.volume = volume.value;
-
-  Array.from(videoRef.value.textTracks).forEach((track) => {
-    if (track.label === props.showingTrack) {
-      track.mode = 'showing';
-    }
-  });
-
   hls.value.attachMedia(videoRef.value);
-
-  videoRef.value.addEventListener('loadeddata', handleVideoLoaded);
-  videoRef.value.addEventListener('ended', handleVideoEnded);
-  videoRef.value.addEventListener('pause', handleVideoPause);
-  videoRef.value.addEventListener('play', handleVideoPlay);
-  videoRef.value.addEventListener('seeking', handleVideoSeeking);
-  videoRef.value.addEventListener('seeked', handleVideoSeeked);
-  videoRef.value.addEventListener('waiting', handleVideoWaiting);
-  videoRef.value.addEventListener('volumechange', handleVideoVolumeChange);
-  videoRef.value.addEventListener('ratechange', handleVideoRateChange);
-  videoRef.value.addEventListener('error', handleVideoError);
 });
 
 onUnmounted(() => {
   hls.value.destroy();
-  videoRef.value?.removeEventListener('loadeddata', handleVideoLoaded);
-  videoRef.value?.removeEventListener('ended', handleVideoEnded);
-  videoRef.value?.removeEventListener('pause', handleVideoPause);
-  videoRef.value?.removeEventListener('play', handleVideoPlay);
-  videoRef.value?.removeEventListener('seeking', handleVideoSeeking);
-  videoRef.value?.removeEventListener('seeked', handleVideoSeeked);
-  videoRef.value?.removeEventListener('waiting', handleVideoWaiting);
-  videoRef.value?.removeEventListener('volumechange', handleVideoVolumeChange);
-  videoRef.value?.removeEventListener('ratechange', handleVideoRateChange);
-  videoRef.value?.removeEventListener('error', handleVideoError);
 });
-
-function handleVideoLoaded() {
-  emits('loaded', videoRef.value);
-}
-
-function handleVideoEnded() {
-  emits('ended', videoRef.value);
-}
-
-function handleVideoPause() {
-  emits('paused', videoRef.value);
-}
-
-function handleVideoPlay() {
-  emits('play', videoRef.value);
-}
-
-function handleVideoSeeking() {
-  emits('seeking', videoRef.value);
-}
-
-function handleVideoSeeked() {
-  emits('seeked', videoRef.value);
-}
-
-function handleVideoWaiting() {
-  emits('waiting', videoRef.value);
-}
-
-function handleVideoVolumeChange() {
-  volume.value = videoRef.value ? videoRef.value.volume : 1;
-  emits('volumechange', volume.value, videoRef.value);
-}
-
-function handleVideoRateChange() {
-  emits('ratechange', videoRef.value ? videoRef.value.playbackRate : props.playbackRate, videoRef.value);
-}
-
-function handleVideoError() {
-  emits('error', videoRef.value?.error, videoRef.value);
-}
 
 defineExpose({
   pause: () => videoRef.value?.pause(),
@@ -183,7 +68,7 @@ defineExpose({
 </script>
 
 <template>
-  <video ref="videoRef" class="video-player">
+  <video ref="videoRef" class="video-player" preload="auto" v-bind="$attrs">
     <track
       v-for="({ src, kind, srclang, label }, index) in tracks"
       :key="index"
@@ -203,7 +88,7 @@ defineExpose({
   &::cue {
     background: none;
     color: rgb(0, 255, 162);
-    // text-shadow: 0 1px #000, 1px 0 #000, -1px 0 #000, 0 -1px #000;
+    text-shadow: 0 1px #000, 1px 0 #000, -1px 0 #000, 0 -1px #000;
     font-size: medium;
   }
 }
