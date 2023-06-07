@@ -16,38 +16,10 @@ const handleChangeTheme = (event: Event) => {
     theme.value = (event.target as HTMLSelectElement).value;
   }
 };
-
-const handleVideoPlay = () => {
-  console.log('播放');
-};
-
-const handleVideoPause = () => {
-  console.log('暂停');
-};
-
-const handleVideoLoaded = () => {
-  console.log('加载完成');
-};
-
-const handleVideoSeeked = () => {
-  console.log('快进');
-};
-
-const handleVideoEnded = () => {
-  console.log('结束播放');
-};
-
-const handleVideoWaiting = () => {
-  console.log('正在加载资源');
-};
-
-const handleVideoRateChange = () => {
-  console.log('播放速度变化');
-};
 </script>
 
 <template>
-  <div>
+  <div class="wrapper">
     <h1>Page-A</h1>
     <form>
       <div>
@@ -86,18 +58,16 @@ const handleVideoRateChange = () => {
       :volume="Number(volume)"
       controls
       showing-track="English"
-      @play="handleVideoPlay"
-      @pause="handleVideoPause"
-      @loaded="handleVideoLoaded"
-      @seeked="handleVideoSeeked"
-      @ended="handleVideoEnded"
-      @waiting="handleVideoWaiting"
-      @ratechange="handleVideoRateChange"
     ></VideoPlayer>
   </div>
 </template>
 
 <style scoped lang="scss">
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .video-player {
   width: 500px;
   height: 500px;
