@@ -25,6 +25,7 @@ export interface Track {
 const props = defineProps<{
   src: string;
   type: VideoType;
+  poster?: string;
   tracks?: Track[];
   showingTrack?: string;
   volume?: number;
@@ -34,7 +35,7 @@ const { loadSource } = useHLS();
 
 const videoRef = ref<HTMLVideoElement>();
 
-const loaded = ref<boolean>(false);
+const loading = ref<boolean>(true);
 
 watchEffect(() => {
   if (!videoRef.value) {
@@ -54,7 +55,7 @@ watchEffect(() => {
 });
 
 const handlePlayOrPause = () => {
-  if (!videoRef.value || !loaded.value) {
+  if (!videoRef.value || !loading.value) {
     return;
   }
   if (videoRef.value.paused) {
@@ -74,7 +75,15 @@ defineExpose({
 
 <template>
   <div class="video-wrapper">
-    <video ref="videoRef" class="video-player" preload="auto" :controls="false" @loadeddata="loaded = true">
+    <video
+      ref="videoRef"
+      class="video-player"
+      preload="auto"
+      :controls="false"
+      :poster="poster"
+      @waiting="loading = true"
+      @loadeddata="loading = false"
+    >
       <track
         v-for="({ src, kind, srclang, label }, index) in tracks"
         :key="index"
@@ -120,6 +129,7 @@ defineExpose({
   bottom: 0;
   left: 0;
   width: 100%;
+  height: 100%;
   max-width: 100%;
   display: flex;
   justify-content: space-between;
@@ -131,7 +141,7 @@ defineExpose({
 .play-pause-button {
   width: 40px;
   height: 40px;
-  background-color: transparent;
+  background-color: red;
   border: none;
   outline: none;
   cursor: pointer;
@@ -149,7 +159,7 @@ defineExpose({
 .progress {
   height: 100%;
   background-color: #ffffff;
-  width: 0;
+  width: 20px;
 }
 .volume-wrapper {
   display: flex;
@@ -176,6 +186,6 @@ defineExpose({
 .volume-level {
   height: 100%;
   background-color: #ffffff;
-  width: 100%;
+  width: 20%;
 }
 </style>
