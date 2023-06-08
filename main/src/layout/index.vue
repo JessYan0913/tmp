@@ -52,5 +52,6 @@ const { keepAliveComps } = storeToRefs(routerStore);
 }
 .section {
   height: 100%;
+  overflow: auto;
 }
 </style>
