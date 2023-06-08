@@ -220,6 +220,51 @@ const formEditTableRef = ref<InstanceType<typeof EditTable>>();
       </EditTable>
       <button @click="formEditTableRef?.editActions.addRow()">新增</button>
     </section>
+    <section>
+      <h1>获取编辑结果</h1>
+      <EditTable ref="formEditTableRef" class="edit-table" :data-source="tableData">
+        <EditTableColumn
+          prop="date"
+          label="时间"
+          :rules="[{ required: true, message: '时间是必填项', trigger: 'blur' }]"
+        >
+          <template #edit="{ row }">
+            <input v-model="row.date" />
+          </template>
+        </EditTableColumn>
+        <EditTableColumn
+          prop="name"
+          label="姓名"
+          :rules="[{ required: true, message: '姓名是必填项', trigger: 'blur' }]"
+        >
+          <template #edit="{ row }">
+            <input v-model="row.name" />
+          </template>
+        </EditTableColumn>
+        <EditTableColumn
+          prop="address"
+          label="地址"
+          :rules="[{ required: true, message: '地址是必填项', trigger: 'blur' }]"
+        >
+          <template #edit="{ row }">
+            <input v-model="row.address" />
+          </template>
+        </EditTableColumn>
+        <EditTableColumn label="操作">
+          <template #default="{ actions, $index }">
+            <button @click="actions.startEditable($index)">操作</button>
+            <button @click="actions.deleteRow($index)">删除</button>
+          </template>
+          <template #edit="{ actions, $index }">
+            <button @click="actions.saveEditable($index)">保存</button>
+            <button @click="actions.cancelEditable($index)">取消</button>
+            <button @click="actions.deleteRow($index)">删除</button>
+          </template>
+        </EditTableColumn>
+      </EditTable>
+      <button @click="formEditTableRef?.editActions.addRow()">新增</button>
+      <div class="result-wrapper">获取数据:{{ formEditTableRef?.resultData }}</div>
+    </section>
   </div>
 </template>
 
@@ -238,6 +283,9 @@ const formEditTableRef = ref<InstanceType<typeof EditTable>>();
   }
 }
 .edit-table {
+  width: 50%;
+}
+.result-wrapper {
   width: 50%;
 }
 </style>
