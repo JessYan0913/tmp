@@ -67,7 +67,7 @@ const calculateColumnDefaultValue = (scope: ColumnScope) => {
 </script>
 
 <template>
-  <el-table-column :prop="prop" :label="label" :width="width">
+  <el-table-column v-bind="$attrs" :prop="prop" :label="label" :width="width">
     <template #default="scope">
       <el-form-item v-if="isEditing(scope.$index)" :prop="`model.${scope.$index}.formData.${prop}`" :rules="rules">
         <slot

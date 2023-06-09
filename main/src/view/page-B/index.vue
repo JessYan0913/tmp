@@ -72,10 +72,41 @@ const tableData = [
 
 const addEditTableRef = ref<InstanceType<typeof EditTable>>();
 const formEditTableRef = ref<InstanceType<typeof EditTable>>();
+
+const loadData = async () => [
+  {
+    date: '2016-05-03',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+  {
+    date: '2016-05-02',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+  {
+    date: '2016-05-04',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+  {
+    date: '2016-05-01',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles',
+  },
+];
 </script>
 
 <template>
   <div class="wrapper">
+    <section>
+      <h1>另一种数据源配置</h1>
+      <EditTable class="edit-table" :request="loadData">
+        <EditTableColumn prop="date" label="时间"> </EditTableColumn>
+        <EditTableColumn prop="name" label="姓名"> </EditTableColumn>
+        <EditTableColumn prop="address" label="地址"> </EditTableColumn>
+      </EditTable>
+    </section>
     <section>
       <h1>无编辑效果</h1>
       <EditTable class="edit-table" :data-source="tableData">

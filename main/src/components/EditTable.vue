@@ -74,7 +74,7 @@ const convertFormModel = (data: any[]): FormModelItem[] =>
 watchEffect(async () => {
   const model = [...props.dataSource];
   if (typeof props.request === 'function') {
-    model.push(await Promise.resolve(props.request()));
+    model.push(...(await Promise.resolve(props.request())));
   }
   formModel.value.model = convertFormModel(model);
 });
