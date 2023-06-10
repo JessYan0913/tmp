@@ -1,15 +1,11 @@
 <script lang="ts" setup>
-import { RouterLink, RouterView } from 'vue-router';
-import { storeToRefs } from 'pinia';
+import { RouterLink } from 'vue-router';
 
 import { useTheme } from '@/hooks/useTheme';
-import { useRoutersStore } from '@/store/routers';
+
+import Main from './Main.vue';
 
 useTheme();
-
-const routerStore = useRoutersStore();
-
-const { keepAliveComps } = storeToRefs(routerStore);
 </script>
 
 <template>
@@ -21,11 +17,7 @@ const { keepAliveComps } = storeToRefs(routerStore);
       <RouterLink to="/three">three </RouterLink>
     </header>
     <section class="section">
-      <RouterView v-slot="{ Component }">
-        <KeepAlive :include="keepAliveComps">
-          <component :is="Component"></component>
-        </KeepAlive>
-      </RouterView>
+      <Main />
     </section>
   </div>
 </template>
