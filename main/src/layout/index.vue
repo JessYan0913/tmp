@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { RouterLink } from 'vue-router';
-
 import { useTheme } from '@/hooks/useTheme';
 
+import Header from './Header.vue';
 import Main from './Main.vue';
 import Menu from './Menu.vue';
 
@@ -16,10 +15,7 @@ useTheme();
     </el-aside>
     <el-container>
       <el-header class="menu">
-        <RouterLink to="/page-A"> 页面A </RouterLink>
-        <RouterLink to="/page-B"> 页面B </RouterLink>
-        <RouterLink to="/page-C"> 页面C </RouterLink>
-        <RouterLink to="/three">three </RouterLink>
+        <Header />
       </el-header>
       <el-main class="section">
         <Main />
