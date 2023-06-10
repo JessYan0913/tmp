@@ -3,7 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 import { routes } from '@/router';
 import type { Menu } from '@/structure';
 
-export const useMenuList = () => {
+export const useMenus = () => {
   return routes2Menus(routes);
 
   function routes2Menus(routes: RouteRecordRaw[]): Menu[] {
@@ -28,4 +28,4 @@ export const useMenuList = () => {
   }
 };
 
-export default useMenuList;
+export default useMenus;

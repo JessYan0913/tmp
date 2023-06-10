@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useMenuList } from '@/hooks/useMenuList';
+import { useMenus } from '@/hooks/useMenus';
 
-const menuList = useMenuList();
+const menus = useMenus();
 </script>
 
 <template>
-  <el-menu mode="vertical">
-    <template v-for="menu in menuList">
+  <el-menu mode="vertical" router>
+    <template v-for="menu in menus">
       <el-sub-menu v-if="menu.children" :key="menu.index" :index="menu.index">
         <template #title>{{ menu.title }}</template>
         <el-menu-item v-for="childMenu in menu.children" :key="childMenu.index" :index="childMenu.index">
