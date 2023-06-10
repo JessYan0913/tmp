@@ -9,26 +9,26 @@ useTheme();
 </script>
 
 <template>
-  <div class="layout">
-    <header class="menu">
-      <RouterLink to="/page-A"> 页面A </RouterLink>
-      <RouterLink to="/page-B"> 页面B </RouterLink>
-      <RouterLink to="/page-C"> 页面C </RouterLink>
-      <RouterLink to="/three">three </RouterLink>
-    </header>
-    <section class="section">
-      <Main />
-    </section>
-  </div>
+  <el-container class="layout">
+    <el-aside width="200px">Aside</el-aside>
+    <el-container>
+      <el-header class="menu">
+        <RouterLink to="/page-A"> 页面A </RouterLink>
+        <RouterLink to="/page-B"> 页面B </RouterLink>
+        <RouterLink to="/page-C"> 页面C </RouterLink>
+        <RouterLink to="/three">three </RouterLink>
+      </el-header>
+      <el-main class="section">
+        <Main />
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <style lang="scss" scoped>
 .layout {
-  position: absolute;
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
   background-color: var(--bg-color);
 }
 .menu {
