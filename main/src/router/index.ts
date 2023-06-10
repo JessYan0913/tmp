@@ -10,30 +10,39 @@ import useRoutersStore from '@/store/routers';
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: '/page-A',
-    name: 'Page-A',
-    component: () => import('../view/page-A/index.vue'),
+    path: '/path',
+    redirect: '/',
     meta: {
-      menu: true,
-      leaveCaches: ['/page-B'],
+      menu: '组件示例',
     },
-  },
-  {
-    path: '/page-B',
-    name: 'Page-B',
-    component: () => import('../view/page-B/index.vue'),
-    meta: {
-      menu: true,
-      leaveCaches: ['/page-C'],
-    },
-  },
-  {
-    path: '/page-C',
-    name: 'Page-C',
-    component: () => import('../view/page-C/index.vue'),
-    meta: {
-      menu: true,
-    },
+    children: [
+      {
+        path: '/path/page-A',
+        name: 'Page-A',
+        component: () => import('../view/page-A/index.vue'),
+        meta: {
+          menu: '页面一',
+          leaveCaches: ['/page-B'],
+        },
+      },
+      {
+        path: '/path/page-B',
+        name: 'Page-B',
+        component: () => import('../view/page-B/index.vue'),
+        meta: {
+          menu: '页面二',
+          leaveCaches: ['/page-C'],
+        },
+      },
+      {
+        path: '/path/page-C',
+        name: 'Page-C',
+        component: () => import('../view/page-C/index.vue'),
+        meta: {
+          menu: '页面三',
+        },
+      },
+    ],
   },
   {
     path: '/three',
@@ -51,7 +60,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'index',
-      redirect: '/page-A',
+      redirect: '/path/page-A',
       component: () => import('../layout/index.vue'),
       children: routes,
     },

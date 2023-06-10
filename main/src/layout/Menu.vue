@@ -2,6 +2,7 @@
 import { useMenus } from '@/hooks/useMenus';
 
 const menus = useMenus();
+console.log('====>', menus);
 </script>
 
 <template>

@@ -9,15 +9,10 @@ export const useMenus = () => {
   function routes2Menus(routes: RouteRecordRaw[]): Menu[] {
     return routes.reduce<Menu[]>((menuList, route) => {
       if (route.meta?.menu) {
-        let menu: Menu | undefined;
-        if (typeof route.meta.menu === 'boolean') {
-          menu = {
-            title: route.name?.toString() ?? '',
-            index: route.path,
-          };
-        } else {
-          menu = route.meta.menu;
-        }
+        const menu: Menu = {
+          title: typeof route.meta.menu === 'boolean' ? route.name?.toString() ?? '' : route.meta.menu,
+          index: route.path,
+        };
         if (route.children) {
           menu.children = routes2Menus(route.children);
         }
