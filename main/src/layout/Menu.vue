@@ -2,11 +2,10 @@
 import { useMenus } from '@/hooks/useMenus';
 
 const menus = useMenus();
-console.log('====>', menus);
 </script>
 
 <template>
-  <el-menu mode="vertical" router>
+  <el-menu class="menu" mode="vertical" router>
     <template v-for="menu in menus">
       <el-sub-menu v-if="menu.children" :key="menu.index" :index="menu.index">
         <template #title>{{ menu.title }}</template>
@@ -20,3 +19,9 @@ console.log('====>', menus);
     </template>
   </el-menu>
 </template>
+
+<style lang="scss" scoped>
+.menu {
+  height: 100%;
+}
+</style>

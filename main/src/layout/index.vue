@@ -14,10 +14,10 @@ useTheme();
       <Menu />
     </el-aside>
     <el-container>
-      <el-header class="menu">
+      <el-header>
         <Header />
       </el-header>
-      <el-main class="section">
+      <el-main>
         <Main />
       </el-main>
     </el-container>
@@ -30,15 +30,8 @@ useTheme();
   height: 100%;
   background-color: var(--bg-color);
 }
-.menu {
-  background-color: var(--menu-bg-color);
-  height: 50px;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
 
-  & a {
-    color: #fff;
-  }
+.el-header {
+  padding: 0;
 }
 </style>
