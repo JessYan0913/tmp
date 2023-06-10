@@ -4,13 +4,16 @@ import { RouterLink } from 'vue-router';
 import { useTheme } from '@/hooks/useTheme';
 
 import Main from './Main.vue';
+import Menu from './Menu.vue';
 
 useTheme();
 </script>
 
 <template>
   <el-container class="layout">
-    <el-aside width="200px">Aside</el-aside>
+    <el-aside width="200px">
+      <Menu />
+    </el-aside>
     <el-container>
       <el-header class="menu">
         <RouterLink to="/page-A"> 页面A </RouterLink>
@@ -41,9 +44,5 @@ useTheme();
   & a {
     color: #fff;
   }
-}
-.section {
-  height: 100%;
-  overflow: auto;
 }
 </style>

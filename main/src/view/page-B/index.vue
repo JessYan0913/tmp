@@ -1,51 +1,8 @@
 <script lang="ts" setup name="Page-B">
 import { ref } from 'vue';
 
-// import { TmpPage } from '@tmp/h5-schema';
 import EditTable from '@/components/EditTable.vue';
 import EditTableColumn from '@/components/EditTableColumn.vue';
-
-// const config: TmpPage = {
-//   id: 'page-1',
-//   name: 'page1',
-//   type: 'page',
-//   layout: '',
-//   children: [
-//     {
-//       id: 'form-1',
-//       name: 'form1',
-//       type: 'form',
-//       items: [
-//         {
-//           id: 'input-1',
-//           name: 'input1',
-//           type: 'input',
-//           label: '姓名',
-//           placeholder: '请输入姓名',
-//           clearable: true,
-//         },
-//         {
-//           id: 'select-1',
-//           name: 'select1',
-//           type: 'select',
-//           label: '性别',
-//           placeholder: '请选择性别',
-//           clearable: true,
-//           options: [
-//             {
-//               label: '男',
-//               value: 1,
-//             },
-//             {
-//               label: '女',
-//               value: 2,
-//             },
-//           ],
-//         },
-//       ],
-//     },
-//   ],
-// };
 
 const tableData = [
   {
@@ -72,6 +29,7 @@ const tableData = [
 
 const addEditTableRef = ref<InstanceType<typeof EditTable>>();
 const formEditTableRef = ref<InstanceType<typeof EditTable>>();
+const resultTableRef = ref<InstanceType<typeof EditTable>>();
 
 const loadData = async () => [
   {
@@ -253,7 +211,7 @@ const loadData = async () => [
     </section>
     <section>
       <h1>获取编辑结果</h1>
-      <EditTable ref="formEditTableRef" class="edit-table" :data-source="tableData">
+      <EditTable ref="resultTableRef" class="edit-table" :data-source="tableData">
         <EditTableColumn
           prop="date"
           label="时间"
@@ -293,8 +251,8 @@ const loadData = async () => [
           </template>
         </EditTableColumn>
       </EditTable>
-      <button @click="formEditTableRef?.editActions.addRow()">新增</button>
-      <div class="result-wrapper">获取数据:{{ formEditTableRef?.resultData }}</div>
+      <button @click="resultTableRef?.editActions.addRow()">新增</button>
+      <div class="result-wrapper">获取数据:{{ resultTableRef?.resultData }}</div>
     </section>
   </div>
 </template>
