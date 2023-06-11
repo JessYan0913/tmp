@@ -35,11 +35,11 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/example/page-C',
-        name: 'Page-C',
-        component: () => import('../view/page-C/index.vue'),
+        path: '/example/webgl',
+        name: 'WebGL',
+        component: () => import('../view/webgl/index.vue'),
         meta: {
-          menu: '页面三',
+          menu: true,
         },
       },
     ],
