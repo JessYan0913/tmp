@@ -203,10 +203,7 @@ function resizeCanvasToDisplaySize(canvas: HTMLCanvasElement): boolean {
 
 <template>
   <div>
-    <h1>Page-C</h1>
-    <div>
-      <canvas ref="canvasRef"></canvas>
-    </div>
+    <canvas ref="canvasRef"></canvas>
   </div>
 </template>
 
