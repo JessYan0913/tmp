@@ -23,5 +23,6 @@ const menus = useMenus();
 <style lang="scss" scoped>
 .menu {
   height: 100%;
+  background-color: #3282b8;
 }
 </style>

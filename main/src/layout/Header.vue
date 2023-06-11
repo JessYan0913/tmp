@@ -7,6 +7,6 @@
 <style lang="scss" scoped>
 .header {
   height: 100%;
-  background-color: var(--menu-bg-color);
+  background-color: #0f4c75;
 }
 </style>

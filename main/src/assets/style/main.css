@@ -5,21 +5,14 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #0d0d0d;
+  background-color: #bbe1fa;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-  --bg-color: rgb(142, 201, 6);
-  --menu-bg-color: rgb(71, 95, 16);
-}
-
-html[data-theme='dark'] {
-  --bg-color: rgb(39, 39, 54);
-  --menu-bg-color: rgb(35, 35, 126);
 }
 
 body {

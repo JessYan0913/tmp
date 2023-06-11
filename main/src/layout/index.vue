@@ -28,7 +28,7 @@ useTheme();
 .layout {
   width: 100%;
   height: 100%;
-  background-color: var(--bg-color);
+  background-color: #f5f5f5;
 }
 
 .el-header {
