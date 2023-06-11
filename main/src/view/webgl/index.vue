@@ -1,4 +1,4 @@
-<script lang="ts" setup name="Page-C">
+<script lang="ts" setup name="WebGL">
 import { ref, watch } from 'vue';
 
 import fragmentShaderSource from './glsl/fragment-shader.glsl';

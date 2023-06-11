@@ -31,7 +31,7 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('../view/edit-table/index.vue'),
         meta: {
           menu: true,
-          leaveCaches: ['/page-C'],
+          leaveCaches: ['/example/webgl'],
         },
       },
       {
