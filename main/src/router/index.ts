@@ -22,15 +22,15 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('../view/video/index.vue'),
         meta: {
           menu: true,
-          leaveCaches: ['/page-B'],
+          leaveCaches: ['/edit-table'],
         },
       },
       {
-        path: '/example/page-B',
+        path: '/example/edit-table',
         name: 'EditTable',
-        component: () => import('../view/page-B/index.vue'),
+        component: () => import('../view/edit-table/index.vue'),
         meta: {
-          menu: 'EditTable',
+          menu: true,
           leaveCaches: ['/page-C'],
         },
       },

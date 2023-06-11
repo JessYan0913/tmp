@@ -1,4 +1,4 @@
-<script lang="ts" setup name="Page-B">
+<script lang="ts" setup name="EditTable">
 import { ref } from 'vue';
 
 import EditTable from '@/components/EditTable.vue';
