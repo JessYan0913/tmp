@@ -10,32 +10,32 @@ import useRoutersStore from '@/store/routers';
 
 export const routes: RouteRecordRaw[] = [
   {
-    path: '/path',
+    path: '/example',
     redirect: '/',
     meta: {
       menu: '组件示例',
     },
     children: [
       {
-        path: '/path/page-A',
-        name: 'Page-A',
-        component: () => import('../view/page-A/index.vue'),
+        path: '/example/video',
+        name: 'Video',
+        component: () => import('../view/video/index.vue'),
         meta: {
-          menu: '页面一',
+          menu: true,
           leaveCaches: ['/page-B'],
         },
       },
       {
-        path: '/path/page-B',
-        name: 'Page-B',
+        path: '/example/page-B',
+        name: 'EditTable',
         component: () => import('../view/page-B/index.vue'),
         meta: {
-          menu: '页面二',
+          menu: 'EditTable',
           leaveCaches: ['/page-C'],
         },
       },
       {
-        path: '/path/page-C',
+        path: '/example/page-C',
         name: 'Page-C',
         component: () => import('../view/page-C/index.vue'),
         meta: {
@@ -60,7 +60,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'index',
-      redirect: '/path/page-A',
+      redirect: '/example/video',
       component: () => import('../layout/index.vue'),
       children: routes,
     },

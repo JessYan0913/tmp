@@ -1,4 +1,4 @@
-<script lang="ts" setup name="Page-A">
+<script lang="ts" setup name="Video">
 import { ref } from 'vue';
 
 import VideoPlayer, { VideoType } from '@/components/VideoPlayer.vue';
