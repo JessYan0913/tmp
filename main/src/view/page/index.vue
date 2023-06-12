@@ -23,6 +23,12 @@ const page: TmpPage = {
           name: 'userName',
           type: 'input',
           label: '用户名',
+        },
+        {
+          id: 'input-password',
+          name: 'password',
+          type: 'input',
+          label: '密码',
           isPassword: true,
         },
       ],
