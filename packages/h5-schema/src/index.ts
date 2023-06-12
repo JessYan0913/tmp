@@ -1,4 +1,4 @@
-export type TmpActionType = 'route-setting' | 'element-linkage';
+export type TmpActionType = 'route-setting' | 'component-control';
 
 /** ElementId */
 export type Id = string;

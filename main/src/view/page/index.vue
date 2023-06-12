@@ -12,6 +12,21 @@ const page: TmpPage = {
       name: 'userName',
       type: 'input',
       label: '用户名',
+      events: [
+        {
+          event: 'input::change',
+          actionType: 'component-control',
+          target: 'input-userName',
+          method: 'setValue',
+          propMappings: [
+            {
+              name: 'value',
+              ignore: true,
+              defaultValue: '1',
+            },
+          ],
+        },
+      ],
     },
     {
       id: 'form-1',
