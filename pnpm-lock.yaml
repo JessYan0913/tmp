@@ -83,6 +83,7 @@ importers:
       '@rollup/plugin-typescript': ^11.0.0
       '@tmp/3d-engine': workspace:^0.0.1
       '@tmp/components': workspace:^0.0.1
+      '@tmp/h5-core': workspace:^0.0.1
       '@tmp/h5-schema': workspace:^0.0.1
       '@tmp/utils': workspace:^0.0.1
       '@types/three': ^0.150.0
@@ -102,6 +103,7 @@ importers:
     dependencies:
       '@tmp/3d-engine': link:../packages/3d-engine
       '@tmp/components': link:../packages/components
+      '@tmp/h5-core': link:../packages/h5-core
       '@tmp/h5-schema': link:../packages/h5-schema
       '@tmp/utils': link:../packages/utils
       element-plus: 2.2.28_vue@3.2.45

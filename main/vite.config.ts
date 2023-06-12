@@ -3,7 +3,6 @@ import { join, resolve } from 'path';
 import { defineConfig, loadEnv } from 'vite';
 import glsl from 'vite-plugin-glsl';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
-import typescript from '@rollup/plugin-typescript';
 import vue from '@vitejs/plugin-vue';
 
 // https://vitejs.dev/config/
@@ -12,7 +11,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   return {
     base: env.VITE_BASE_URL,
-    plugins: [vue(), typescript(), vueSetupExtend(), glsl()],
+    plugins: [vue(), vueSetupExtend(), glsl()],
     build: {
       emptyOutDir: true,
     },
@@ -21,7 +20,8 @@ export default defineConfig(({ mode }) => {
         { find: '@', replacement: r('./src') },
         { find: /^@tmp\/utils/, replacement: join(__dirname, '../packages/utils/src/index.ts') },
         { find: /^@tmp\/3d-engine/, replacement: join(__dirname, '../packages/3d-engine/src/index.ts') },
-        { find: /^@tmp\/h5-element/, replacement: join(__dirname, '../packages/h5-schema/src/index.ts') },
+        { find: /^@tmp\/h5-schema/, replacement: join(__dirname, '../packages/h5-schema/src/index.ts') },
+        { find: /^@tmp\/h5-core/, replacement: join(__dirname, '../packages/h5-core/src/index.ts') },
         { find: /^@tmp\/components/, replacement: join(__dirname, '../packages/components/src/index.ts') },
         { find: 'vue', replacement: join(__dirname, './node_modules/vue/dist/vue.esm-bundler.js') },
       ],

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { App } from '@tmp/h5-core';
 import { TmpPage } from '@tmp/h5-schema';
 
 const page: TmpPage = {
@@ -67,6 +68,18 @@ const page: TmpPage = {
     },
   ],
 };
+
+const app = new App({
+  data: {
+    id: 'myApp-1',
+    name: 'myApp',
+    type: 'app',
+    layout: '',
+    children: [page],
+  },
+});
+
+console.log(app);
 </script>
 
 <template>
