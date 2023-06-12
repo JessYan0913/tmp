@@ -45,11 +45,19 @@ export const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/page',
+    name: 'Page',
+    component: () => import('../view/page/index.vue'),
+    meta: {
+      menu: '动态页面',
+    },
+  },
+  {
     path: '/three-scene',
-    name: '3D场景',
+    name: 'Three',
     component: () => import('../view/three-scene/index.vue'),
     meta: {
-      menu: true,
+      menu: '3D场景',
     },
   },
 ];
