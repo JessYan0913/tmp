@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { ref, watch } from 'vue';
 import { TmpFormModel } from '@tmp/h5-schema';
 import { ElOption, ElSelect } from 'element-plus';
 
@@ -16,14 +16,21 @@ const emits = defineEmits<{
   (event: 'update:modelValue', value: string): void;
 }>();
 
-const value = computed<string>({
-  set(value: string) {
-    emits('update:modelValue', value);
-  },
-  get(): string {
-    return props.modelValue ?? props.config.defaultValue ?? '';
-  },
-});
+const value = ref<string>(props.modelValue ?? props.config.defaultValue ?? '');
+
+watch(
+  () => value.value,
+  () => emits('update:modelValue', value.value)
+);
+
+// const value = computed<string>({
+//   set(value: string) {
+//     emits('update:modelValue', value);
+//   },
+//   get(): string {
+//     return props.modelValue ?? props.config.defaultValue ?? '';
+//   },
+// });
 </script>
 
 <template>

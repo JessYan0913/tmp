@@ -31,6 +31,23 @@ const page: TmpPage = {
           label: '密码',
           isPassword: true,
         },
+        {
+          id: 'select-sex',
+          name: 'sex',
+          type: 'select',
+          label: '性别',
+          defaultValue: '1',
+          options: [
+            {
+              label: '男',
+              value: '1',
+            },
+            {
+              label: '女',
+              value: '0',
+            },
+          ],
+        },
       ],
     },
   ],

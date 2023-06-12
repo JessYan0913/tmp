@@ -20,9 +20,7 @@ const value = ref<string>(props.modelValue ?? props.config.defaultValue ?? '');
 
 watch(
   () => value.value,
-  () => {
-    emits('update:modelValue', value.value);
-  }
+  () => emits('update:modelValue', value.value)
 );
 
 const showWordLimit = computed<boolean>(() => Boolean(props.config.maxLength || props.config.minLength));

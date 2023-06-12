@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { TmpFormElement, TmpFormModel } from '@tmp/h5-schema';
-import { ElForm } from 'element-plus';
+import { ElButton, ElForm } from 'element-plus';
 
 import TmpUiFormItem from './components/FormItem.vue';
 
@@ -24,6 +24,6 @@ const handleSubmit = () => {
       :config="itemElement"
       :model="value"
     ></TmpUiFormItem>
-    <button @click="handleSubmit">提交</button>
+    <ElButton @click="handleSubmit">提交</ElButton>
   </ElForm>
 </template>
