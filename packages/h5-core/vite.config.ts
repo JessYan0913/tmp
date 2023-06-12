@@ -8,7 +8,10 @@ const deps = Object.keys(pkg.dependencies);
 
 export default defineConfig({
   resolve: {
-    alias: [{ find: /^@tmp\/utils/, replacement: join(__dirname, '../packages/utils/src/index.ts') }],
+    alias: [
+      { find: /^@tmp\/h5-schema/, replacement: join(__dirname, '../packages/h5-schema/src/index.ts') },
+      { find: /^@tmp\/utils/, replacement: join(__dirname, '../packages/utils/src/index.ts') },
+    ],
   },
   build: {
     cssCodeSplit: false,

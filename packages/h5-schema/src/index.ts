@@ -43,6 +43,12 @@ export const enum SourceScope {
   CONST = 'const',
 }
 
+export const enum TmpMappingSpace {
+  EVENT = 'event',
+  EXPRESSION = 'expression',
+  TEMPLATE = 'template',
+}
+
 export interface TmpPropMapping {
   /** 参数类型 */
   name: string;
@@ -53,7 +59,7 @@ export interface TmpPropMapping {
   /** 来源 */
   source?: string;
   /** 取值空间 */
-  sourceScope?: string;
+  sourceScope?: TmpMappingSpace;
   /** 表达式 */
   expression?: string;
   /** 模版 */
@@ -76,10 +82,10 @@ export interface TmpEvent {
 }
 
 export interface TmpElement {
+  /** 元素ID，应该是一个唯一值 */
+  id: Id;
   /** 元素类型 */
   type: string;
-  /** 元素ID，应该是一个唯一值 */
-  id?: Id;
   /** 元素名称 */
   name?: string;
   /** 观察目标元素 */
@@ -107,10 +113,6 @@ export interface TmpContainer extends TmpElement {
   children: TmpElement[];
 }
 
-export interface TmpPage extends TmpContainer {
-  type: 'page';
-}
-
 export interface TmpFormItemElement extends TmpElement {
   /** 表单label */
   label: string;
@@ -121,6 +123,7 @@ export interface TmpFormItemElement extends TmpElement {
 }
 
 export interface TmpFormElement extends TmpContainer {
+  type: 'form';
   /** 表单提交地址 */
   action?: string;
   /** 提交方法 */
@@ -130,3 +133,23 @@ export interface TmpFormElement extends TmpContainer {
 }
 
 export type TmpFormModel = Record<string, any>;
+
+export interface TmpPage extends TmpContainer {
+  type: 'page';
+}
+
+export interface TmpApplication extends TmpContainer {
+  type: 'app';
+  curIndex?: Id;
+  children: TmpPage[];
+}
+
+export interface TmpInstanceMethod {
+  (...args: any[]): any;
+  dependVariables?: string[];
+}
+
+export interface TmpElementInstance {
+  el?: HTMLElement;
+  methods?: Record<string, TmpInstanceMethod>;
+}
