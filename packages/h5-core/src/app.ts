@@ -1,4 +1,12 @@
-import { Id, TmpApplication, TmpEvent, TmpMappingSpace, TmpPage, TmpPropMapping } from '@tmp/h5-schema';
+import {
+  Id,
+  TmpApplication,
+  TmpEvent,
+  TmpInstanceMethod,
+  TmpMappingSpace,
+  TmpPage,
+  TmpPropMapping,
+} from '@tmp/h5-schema';
 import { EventBus } from '@tmp/utils';
 import dot from 'dot';
 
@@ -31,18 +39,18 @@ const computeTargetByMapping = (
 };
 
 export interface AppConfig {
-  data: TmpApplication;
+  data?: TmpApplication;
   curPage?: Id;
 }
 
 export interface EventCache {
   event: TmpEvent;
-  formComponent: Component;
+  fromComponent: Component;
   props: Record<string, any>;
 }
 
 export class App extends EventBus {
-  public data: TmpApplication;
+  public data?: TmpApplication;
   public curPage?: Page;
 
   public pages: Map<Id, Page> = new Map();
@@ -50,10 +58,12 @@ export class App extends EventBus {
 
   constructor(config: AppConfig) {
     super();
-    this.data = config.data;
+    if (config.data) {
+      this.setData(config.data);
+    }
   }
 
-  public setData(data: TmpApplication, curPage: Id): void {
+  public setData(data: TmpApplication, curPage?: Id): void {
     this.data = data;
     this.pages.clear();
     this.eventCaches.clear();
@@ -67,13 +77,14 @@ export class App extends EventBus {
 
   public setPage(curPage?: Id): void {
     if (curPage === void 0) {
-      if (this.data.curIndex) {
+      if (this.data?.curIndex) {
         curPage = this.data.curIndex;
       } else {
         curPage = this.pages.keys().next().value;
       }
     }
     this.curPage = this.pages.get(curPage ?? '');
+    this.bindEvents();
   }
 
   public bindEvents(): void {
@@ -87,10 +98,46 @@ export class App extends EventBus {
           `${component.data.name}::${component.data.id}`,
           (fromComponent: Component, args?: Record<string, any>) => {
             const props = this.calComponentMethodProps(fromComponent, event, args);
-            console.log('====>', props);
+            this.handleEvent(event, fromComponent, props);
           }
         );
       });
+    }
+  }
+
+  public handleEvent(event: TmpEvent, fromComponent: Component, props: Record<string, any>): void {
+    if (event.actionType === 'component-control') {
+      this.controlComponent(event, fromComponent, props);
+    }
+  }
+
+  private controlComponent(event: TmpEvent, fromComponent: Component, props: Record<string, any>): void {
+    if (!this.curPage) {
+      throw new Error('当前页面不存在');
+    }
+    if (!event.target || !event.method) {
+      return;
+    }
+    const targetComponent = this.curPage.getComponent(event.target);
+    if (!targetComponent) {
+      throw new Error(`${event.target}组件不存在，无法响应${fromComponent.data.id}的${event.event}事件`);
+    }
+
+    if (!targetComponent.instance) {
+      this.pushEventCache({ event, fromComponent, props });
+    } else if (
+      targetComponent.instance.methods &&
+      typeof targetComponent.instance.methods[event.method] === 'function'
+    ) {
+      const targetMethod = targetComponent.instance.methods[event.method] as TmpInstanceMethod;
+      let targetMethodProps: Record<string, any> = { fromComponent, app: this };
+      if (targetMethod.dependVariables) {
+        targetMethodProps = targetMethod.dependVariables.reduce(
+          (targetMethodProps, key) => ({ ...targetMethodProps, [key]: props[key] }),
+          targetMethodProps
+        );
+      }
+      targetMethod(targetMethodProps);
     }
   }
 
@@ -107,6 +154,18 @@ export class App extends EventBus {
       (props, mapping) => ({ ...props, [mapping.name]: computeTargetByMapping(fromComponent, mapping, eventArgs) }),
       {}
     );
+  }
+
+  private pushEventCache(cache: EventCache): void {
+    if (!cache.event.target) {
+      return;
+    }
+    const caches = this.eventCaches.get(cache.event.target);
+    if (caches) {
+      caches.push(cache);
+    } else {
+      this.eventCaches.set(cache.event.target, [cache]);
+    }
   }
 }
 
