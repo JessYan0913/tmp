@@ -34,7 +34,7 @@ const page: TmpPage = {
       id: 'form-1',
       name: 'userInfo',
       type: 'form',
-      items: [
+      children: [
         {
           id: 'input-userName',
           name: 'userName',

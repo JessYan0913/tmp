@@ -19,7 +19,7 @@ const handleSubmit = () => {
 <template>
   <ElForm :model="value">
     <TmpUiFormItem
-      v-for="itemElement in config.items"
+      v-for="itemElement in config.children"
       :key="itemElement.id"
       :config="itemElement"
       :model="value"
