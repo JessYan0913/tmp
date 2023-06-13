@@ -94,8 +94,6 @@ export class App extends EventBus {
 
   public emit(event: any, args: AppEmitArgs): boolean {
     if (args.node) {
-      console.log('触发事件啦', `${args.node.data.id}::${event}`);
-
       return super.emit(`${args.node.data.id}::${event}`, args);
     }
     return super.emit(event, args);
@@ -108,7 +106,6 @@ export class App extends EventBus {
     this.removeAllListeners();
     for (const component of this.curPage.components.values()) {
       component.events?.forEach((event) => {
-        console.log('监听事件', `${component.data.id}::${event.event}`);
         this.on(`${component.data.id}::${event.event}`, (fromComponent: Component, args?: Record<string, any>) => {
           const props = this.calComponentMethodProps(fromComponent, event, args);
           this.handleEvent(event, fromComponent, props);

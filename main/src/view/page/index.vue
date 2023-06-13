@@ -26,7 +26,7 @@ const page: TmpPage = {
               ignore: false,
               defaultValue: '1',
               sourceScope: TmpMappingSpace.EXPRESSION,
-              expression: 'Date.now()',
+              expression: 'new Date().toString()',
             },
           ],
         },
