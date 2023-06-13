@@ -25,7 +25,7 @@ const value = ref<string>(props.modelValue ?? props.config.defaultValue ?? '');
 watch(
   () => value.value,
   () => {
-    app?.emit('change', { node, value: value.value });
+    app?.emit('change', { node, value: value.value, model: props.model, prop: props.prop });
     emits('update:modelValue', value.value);
   },
   { immediate: true }

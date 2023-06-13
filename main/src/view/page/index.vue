@@ -87,6 +87,23 @@ const page: TmpPage = {
           type: 'select',
           label: '性别',
           defaultValue: '1',
+          events: [
+            {
+              event: 'change',
+              actionType: 'component-control',
+              target: 'text-1',
+              method: 'setText',
+              propMappings: [
+                {
+                  name: 'newText',
+                  ignore: false,
+                  defaultValue: '1',
+                  sourceScope: TmpMappingSpace.EXPRESSION,
+                  expression: '`用户名: ${event.model.userName} 用户密码${event.model.password} 性别：${event.value}`',
+                },
+              ],
+            },
+          ],
           options: [
             {
               label: '男',

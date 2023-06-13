@@ -22,8 +22,6 @@ watch(
 );
 
 provideMethod('submit', () => {
-  console.log('提交数据：', value.value);
-
   app?.emit('submit', { node, value: value.value });
 });
 </script>
