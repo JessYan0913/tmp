@@ -54,7 +54,7 @@ const page: TmpPage = {
                   ignore: false,
                   defaultValue: '1',
                   sourceScope: TmpMappingSpace.EXPRESSION,
-                  expression: 'Math.random().toString()',
+                  expression: 'event.value + "333333333"',
                 },
               ],
             },
@@ -65,7 +65,6 @@ const page: TmpPage = {
           name: 'password',
           type: 'input',
           label: '密码',
-          isPassword: true,
         },
         {
           id: 'select-sex',
