@@ -25,8 +25,8 @@ const page: TmpPage = {
               name: 'newValue',
               ignore: false,
               defaultValue: '1',
-              sourceScope: TmpMappingSpace.EXPRESSION,
-              expression: 'new Date().toString()',
+              sourceScope: TmpMappingSpace.EVENT,
+              source: 'value',
             },
           ],
         },
@@ -42,6 +42,23 @@ const page: TmpPage = {
           name: 'userName',
           type: 'input',
           label: '用户名',
+          events: [
+            {
+              event: 'change',
+              actionType: 'component-control',
+              target: 'input-password',
+              method: 'setValue',
+              propMappings: [
+                {
+                  name: 'newValue',
+                  ignore: false,
+                  defaultValue: '1',
+                  sourceScope: TmpMappingSpace.EXPRESSION,
+                  expression: 'Math.random().toString()',
+                },
+              ],
+            },
+          ],
         },
         {
           id: 'input-password',

@@ -106,9 +106,9 @@ export class App extends EventBus {
     this.removeAllListeners();
     for (const component of this.curPage.components.values()) {
       component.events?.forEach((event) => {
-        this.on(`${component.data.id}::${event.event}`, (fromComponent: Component, args?: Record<string, any>) => {
-          const props = this.calComponentMethodProps(fromComponent, event, args);
-          this.handleEvent(event, fromComponent, props);
+        this.on(`${component.data.id}::${event.event}`, (args: AppEmitArgs) => {
+          const props = this.calComponentMethodProps(component, event, args);
+          this.handleEvent(event, component, props);
         });
       });
     }

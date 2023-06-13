@@ -3,16 +3,20 @@ import { ref } from 'vue';
 import { TmpFormElement, TmpFormModel } from '@tmp/h5-schema';
 import { ElButton, ElForm } from 'element-plus';
 
+import { useApp } from '../hooks/useApp';
+
 import TmpUiFormItem from './components/FormItem.vue';
 
-defineProps<{
+const props = defineProps<{
   config: TmpFormElement;
 }>();
+
+const { app, node } = useApp(props);
 
 const value = ref<TmpFormModel>({});
 
 const handleSubmit = () => {
-  console.log('=====', value);
+  app?.emit('change', { node, value: value.value });
 };
 </script>
 
