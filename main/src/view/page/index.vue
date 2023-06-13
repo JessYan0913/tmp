@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { provide } from 'vue';
 import { App } from '@tmp/h5-core';
-import { TmpPage } from '@tmp/h5-schema';
+import { TmpMappingSpace, TmpPage } from '@tmp/h5-schema';
 
 const page: TmpPage = {
   id: 'page-1',
@@ -22,9 +22,11 @@ const page: TmpPage = {
           method: 'setValue',
           propMappings: [
             {
-              name: 'value',
-              ignore: true,
+              name: 'newValue',
+              ignore: false,
               defaultValue: '1',
+              sourceScope: TmpMappingSpace.EXPRESSION,
+              expression: 'Date.now()',
             },
           ],
         },

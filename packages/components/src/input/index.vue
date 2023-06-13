@@ -14,13 +14,17 @@ const props = defineProps<{
   modelValue?: string;
 }>();
 
-const { app, node } = useApp(props);
+const { app, node, provideMethod } = useApp(props);
 
 const emits = defineEmits<{
   (event: 'update:modelValue', value: string): void;
 }>();
 
 const value = ref<string>(props.modelValue ?? props.config.defaultValue ?? '');
+
+const showWordLimit = computed<boolean>(() => Boolean(props.config.maxLength || props.config.minLength));
+
+const inputType = computed<string>(() => (props.config.isPassword ? 'password' : 'text'));
 
 watch(
   () => value.value,
@@ -30,9 +34,7 @@ watch(
   }
 );
 
-const showWordLimit = computed<boolean>(() => Boolean(props.config.maxLength || props.config.minLength));
-
-const inputType = computed<string>(() => (props.config.isPassword ? 'password' : 'text'));
+provideMethod('setValue', ({ newValue }: any) => (value.value = newValue), ['newValue']);
 </script>
 
 <template>

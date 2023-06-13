@@ -1,12 +1,14 @@
 import { getCurrentInstance, inject, nextTick, onMounted, onUnmounted, onUpdated } from 'vue';
 import { App } from '@tmp/h5-core';
-import { TmpElementInstance } from '@tmp/h5-schema';
+import { TmpElementInstance, TmpInstanceMethod } from '@tmp/h5-schema';
 
 export const useApp = (props: Record<string, any>) => {
   const app = inject<App | undefined>('app');
   const node = app?.curPage?.getComponent(props.config.id);
 
-  const instance: TmpElementInstance = {};
+  const instance: TmpElementInstance = {
+    methods: {},
+  };
 
   onMounted(() => {
     const vm = getCurrentInstance()?.proxy;
@@ -31,7 +33,18 @@ export const useApp = (props: Record<string, any>) => {
 
   onUnmounted(() => node?.emit('unmounted', {}));
 
-  return { app, node };
+  const provideMethod = (name: string, method: TmpInstanceMethod, dependVariables?: string[]): TmpInstanceMethod => {
+    if (!instance.methods) {
+      instance.methods = {};
+    }
+    if (dependVariables) {
+      method.dependVariables = [...dependVariables];
+    }
+    instance.methods[name] = method;
+    return method;
+  };
+
+  return { app, node, provideMethod };
 };
 
 export default useApp;
