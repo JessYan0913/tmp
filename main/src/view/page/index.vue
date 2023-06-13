@@ -29,6 +29,21 @@ const page: TmpPage = {
             },
           ],
         },
+        {
+          event: 'change',
+          actionType: 'component-control',
+          target: 'select-sex',
+          method: 'setOptions',
+          propMappings: [
+            {
+              name: 'newOptions',
+              ignore: false,
+              defaultValue: '1',
+              sourceScope: TmpMappingSpace.EXPRESSION,
+              expression: `[{value: '0', label: '男生'}, {value: '1', label: '女生'}]`,
+            },
+          ],
+        },
       ],
     },
     {

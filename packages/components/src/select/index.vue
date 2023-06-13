@@ -5,7 +5,7 @@ import { ElOption, ElSelect } from 'element-plus';
 
 import { useApp } from '../hooks/useApp';
 
-import { TmpSelect } from './types';
+import { TmpOptions, TmpSelect } from './types';
 
 const props = defineProps<{
   config: TmpSelect;
@@ -22,6 +22,8 @@ const emits = defineEmits<{
 
 const value = ref<string>(props.modelValue ?? props.config.defaultValue ?? '');
 
+const options = ref<TmpOptions>(props.config.options);
+
 watch(
   () => value.value,
   () => {
@@ -32,11 +34,13 @@ watch(
 );
 
 provideMethod('setValue', ({ newValue }: any) => (value.value = newValue), ['newValue']);
+
+provideMethod('setOptions', ({ newOptions }: any) => (options.value = newOptions), ['newOptions']);
 </script>
 
 <template>
   <ElSelect v-model="value" :placeholder="config.placeholder" :clearable="config.clearable">
-    <ElOption v-for="({ label, value }, index) in config.options" :key="index" :label="label" :value="value">
+    <ElOption v-for="({ label, value }, index) in options" :key="index" :label="label" :value="value">
       {{ label }}
     </ElOption>
   </ElSelect>
