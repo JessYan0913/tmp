@@ -31,7 +31,8 @@ watch(
   () => {
     app?.emit('change', { node, value: value.value });
     emits('update:modelValue', value.value);
-  }
+  },
+  { immediate: true }
 );
 
 provideMethod('setValue', ({ newValue }: any) => (value.value = newValue), ['newValue']);

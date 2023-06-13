@@ -20,17 +20,9 @@ const value = ref<string>(props.modelValue ?? props.config.defaultValue ?? '');
 
 watch(
   () => value.value,
-  () => emits('update:modelValue', value.value)
+  () => emits('update:modelValue', value.value),
+  { immediate: true }
 );
-
-// const value = computed<string>({
-//   set(value: string) {
-//     emits('update:modelValue', value);
-//   },
-//   get(): string {
-//     return props.modelValue ?? props.config.defaultValue ?? '';
-//   },
-// });
 </script>
 
 <template>

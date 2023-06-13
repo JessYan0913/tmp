@@ -16,6 +16,8 @@ const { app, node } = useApp(props);
 const value = ref<TmpFormModel>({});
 
 const handleSubmit = () => {
+  console.log('提交数据：', value.value);
+
   app?.emit('change', { node, value: value.value });
 };
 </script>
