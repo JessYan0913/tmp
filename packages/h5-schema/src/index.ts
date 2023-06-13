@@ -97,15 +97,6 @@ export interface TmpElement {
   [key: string]: any;
 }
 
-export interface TmpOption {
-  /** 字段 */
-  label: string;
-  /** 字段值 */
-  value: string;
-}
-
-export type TmpOptions = TmpOption[];
-
 export interface TmpContainer extends TmpElement {
   /** 布局 */
   layout: string;

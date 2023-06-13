@@ -1,4 +1,13 @@
-import { TmpFormItemElement, TmpOptions } from '@tmp/h5-schema';
+import { TmpFormItemElement } from '@tmp/h5-schema';
+
+export interface TmpOption {
+  /** 字段 */
+  label: string;
+  /** 字段值 */
+  value: string;
+}
+
+export type TmpOptions = TmpOption[];
 
 export interface TmpSelect extends TmpFormItemElement {
   /** 文本提示 */
