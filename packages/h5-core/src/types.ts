@@ -4,6 +4,6 @@ export namespace EventArgs {
   export interface Component {
     mounted: { instance: TmpElementInstance };
     updated: { beforeInstance: TmpElementInstance | null; instance: TmpElementInstance };
-    destroy: unknown;
+    unmounted: unknown;
   }
 }

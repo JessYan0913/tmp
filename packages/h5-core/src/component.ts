@@ -38,7 +38,7 @@ export class Component extends EventBus<EventArgs.Component> {
       this.instance = instance;
     });
 
-    this.once('destroy', () => {
+    this.once('unmounted', () => {
       this.instance = null;
       this.removeAllListeners('updated');
     });

@@ -49,6 +49,11 @@ export interface EventCache {
   props: Record<string, any>;
 }
 
+export interface AppEmitArgs {
+  node?: Component;
+  [key: string | number | symbol]: any;
+}
+
 export class App extends EventBus {
   public data?: TmpApplication;
   public curPage?: Page;
@@ -87,6 +92,15 @@ export class App extends EventBus {
     this.bindEvents();
   }
 
+  public emit(event: any, args: AppEmitArgs): boolean {
+    if (args.node) {
+      console.log('触发事件啦', `${args.node.data.id}::${event}`);
+
+      return super.emit(`${args.node.data.id}::${event}`, args);
+    }
+    return super.emit(event, args);
+  }
+
   public bindEvents(): void {
     if (!this.curPage) {
       return;
@@ -94,13 +108,11 @@ export class App extends EventBus {
     this.removeAllListeners();
     for (const component of this.curPage.components.values()) {
       component.events?.forEach((event) => {
-        this.on(
-          `${component.data.name}::${component.data.id}`,
-          (fromComponent: Component, args?: Record<string, any>) => {
-            const props = this.calComponentMethodProps(fromComponent, event, args);
-            this.handleEvent(event, fromComponent, props);
-          }
-        );
+        console.log('监听事件', `${component.data.id}::${event.event}`);
+        this.on(`${component.data.id}::${event.event}`, (fromComponent: Component, args?: Record<string, any>) => {
+          const props = this.calComponentMethodProps(fromComponent, event, args);
+          this.handleEvent(event, fromComponent, props);
+        });
       });
     }
   }

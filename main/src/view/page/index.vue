@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provide } from 'vue';
 import { App } from '@tmp/h5-core';
 import { TmpPage } from '@tmp/h5-schema';
 
@@ -15,7 +16,7 @@ const page: TmpPage = {
       label: '用户名',
       events: [
         {
-          event: 'input::change',
+          event: 'change',
           actionType: 'component-control',
           target: 'input-userName',
           method: 'setValue',
@@ -80,6 +81,7 @@ const app = new App({
 });
 
 console.log(app);
+provide('app', app);
 </script>
 
 <template>

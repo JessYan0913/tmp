@@ -161,6 +161,7 @@ importers:
     specifiers:
       '@element-plus/icons-vue': ^2.0.10
       '@tmp/basic': workspace:^0.0.1
+      '@tmp/h5-core': workspace:^0.0.1
       '@tmp/h5-schema': workspace:^0.0.1
       '@tmp/utils': workspace:^0.0.1
       '@types/node': ^18.11.18
@@ -177,6 +178,7 @@ importers:
     dependencies:
       '@element-plus/icons-vue': 2.0.10_vue@3.2.45
       '@tmp/basic': link:../basic
+      '@tmp/h5-core': link:../h5-core
       '@tmp/h5-schema': link:../h5-schema
       '@tmp/utils': link:../utils
       element-plus: 2.2.28_vue@3.2.45
@@ -1308,7 +1310,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.0.4
+      vite: 4.0.4_@types+node@18.11.18
       vue: 3.2.45
     dev: true
 
@@ -5684,7 +5686,7 @@ packages:
       fs-extra: 10.1.0
       kolorist: 1.6.0
       ts-morph: 16.0.0
-      vite: 4.1.1_@types+node@18.11.18
+      vite: 4.1.1_ehqldyb6pj366nnhivpazvpfr4
     transitivePeerDependencies:
       - rollup
       - supports-color
