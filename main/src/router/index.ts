@@ -73,6 +73,11 @@ const router = createRouter({
       children: routes,
     },
     {
+      path: '/page-editor',
+      name: 'PageEditor',
+      component: () => import('../view/page-editor/index.vue'),
+    },
+    {
       path: '/404',
       name: '404',
       component: () => import('../layout/404.vue'),

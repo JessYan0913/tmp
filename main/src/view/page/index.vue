@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { provide } from 'vue';
+import { useRouter } from 'vue-router';
 import { App } from '@tmp/h5-core';
 import { TmpMappingSpace, TmpPage } from '@tmp/h5-schema';
+import { ElButton } from 'element-plus';
 
 const page: TmpPage = {
   id: 'page-1',
@@ -166,10 +168,19 @@ const app = new App({
 
 console.log(app);
 provide('app', app);
+
+const router = useRouter();
+const handleToEditor = () => {
+  const routeUrl = router.resolve({
+    path: '/page-editor',
+  });
+  window.open(routeUrl.href, '_blank');
+};
 </script>
 
 <template>
   <div>
+    <ElButton @click="handleToEditor">编辑器</ElButton>
     <TmpUiPage :config="page"></TmpUiPage>
   </div>
 </template>
