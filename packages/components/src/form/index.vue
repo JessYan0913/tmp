@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { TmpFormElement, TmpFormModel } from '@tmp/h5-schema';
-import { ElButton, ElForm } from 'element-plus';
+import { ElForm } from 'element-plus';
 
 import { useApp } from '../hooks/useApp';
 
@@ -11,15 +11,21 @@ const props = defineProps<{
   config: TmpFormElement;
 }>();
 
-const { app, node } = useApp(props);
+const { app, node, provideMethod } = useApp(props);
 
 const value = ref<TmpFormModel>({});
 
-const handleSubmit = () => {
+watch(
+  () => value.value,
+  () => app?.emit('change', { node, value: value.value }),
+  { deep: true }
+);
+
+provideMethod('submit', () => {
   console.log('提交数据：', value.value);
 
-  app?.emit('change', { node, value: value.value });
-};
+  app?.emit('submit', { node, value: value.value });
+});
 </script>
 
 <template>
@@ -30,6 +36,5 @@ const handleSubmit = () => {
       :config="itemElement"
       :model="value"
     ></TmpUiFormItem>
-    <ElButton @click="handleSubmit">提交</ElButton>
   </ElForm>
 </template>

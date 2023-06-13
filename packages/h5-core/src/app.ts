@@ -26,6 +26,8 @@ const computeTargetByMapping = (
       return Reflect.get(eventArgs, source);
     },
     [TmpMappingSpace.EXPRESSION]: ({ expression }: TmpPropMapping) => {
+      console.log('====>', eventArgs, expression);
+
       return new Function('event,fcpt', `return ${expression}`)(eventArgs, fromComponent);
     },
     [TmpMappingSpace.TEMPLATE]: ({ template }: TmpPropMapping) => {

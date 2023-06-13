@@ -13,7 +13,6 @@ const page: TmpPage = {
       id: 'input-1',
       name: 'userName',
       type: 'input',
-      label: '用户名',
       events: [
         {
           event: 'change',
@@ -33,9 +32,39 @@ const page: TmpPage = {
       ],
     },
     {
+      id: 'button-1',
+      name: 'submitButton',
+      type: 'button',
+      text: '提交11111',
+      events: [
+        {
+          event: 'click',
+          actionType: 'component-control',
+          target: 'form-1',
+          method: 'submit',
+        },
+      ],
+    },
+    {
       id: 'form-1',
       name: 'userInfo',
       type: 'form',
+      events: [
+        {
+          event: 'submit',
+          actionType: 'component-control',
+          target: 'input-2',
+          method: 'setValue',
+          propMappings: [
+            {
+              name: 'newValue',
+              ignore: false,
+              sourceScope: TmpMappingSpace.EXPRESSION,
+              expression: 'JSON.stringify(event.value)',
+            },
+          ],
+        },
+      ],
       children: [
         {
           id: 'input-userName',
@@ -84,6 +113,11 @@ const page: TmpPage = {
           ],
         },
       ],
+    },
+    {
+      id: 'input-2',
+      name: 'result',
+      type: 'input',
     },
   ],
 };
