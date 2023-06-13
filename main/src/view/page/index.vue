@@ -32,20 +32,6 @@ const page: TmpPage = {
       ],
     },
     {
-      id: 'button-1',
-      name: 'submitButton',
-      type: 'button',
-      text: '提交11111',
-      events: [
-        {
-          event: 'click',
-          actionType: 'component-control',
-          target: 'form-1',
-          method: 'submit',
-        },
-      ],
-    },
-    {
       id: 'form-1',
       name: 'userInfo',
       type: 'form',
@@ -53,11 +39,11 @@ const page: TmpPage = {
         {
           event: 'submit',
           actionType: 'component-control',
-          target: 'input-2',
-          method: 'setValue',
+          target: 'text-1',
+          method: 'setText',
           propMappings: [
             {
-              name: 'newValue',
+              name: 'newText',
               ignore: false,
               sourceScope: TmpMappingSpace.EXPRESSION,
               expression: 'JSON.stringify(event.value)',
@@ -115,9 +101,23 @@ const page: TmpPage = {
       ],
     },
     {
-      id: 'input-2',
+      id: 'button-1',
+      name: 'submitButton',
+      type: 'button',
+      text: '提交',
+      events: [
+        {
+          event: 'click',
+          actionType: 'component-control',
+          target: 'form-1',
+          method: 'submit',
+        },
+      ],
+    },
+    {
+      id: 'text-1',
       name: 'result',
-      type: 'input',
+      type: 'text',
     },
   ],
 };

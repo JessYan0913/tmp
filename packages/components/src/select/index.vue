@@ -3,6 +3,8 @@ import { ref, watch } from 'vue';
 import { TmpFormModel } from '@tmp/h5-schema';
 import { ElOption, ElSelect } from 'element-plus';
 
+import { useApp } from '../hooks/useApp';
+
 import { TmpSelect } from './types';
 
 const props = defineProps<{
@@ -12,6 +14,8 @@ const props = defineProps<{
   modelValue?: string;
 }>();
 
+const { app, node, provideMethod } = useApp(props);
+
 const emits = defineEmits<{
   (event: 'update:modelValue', value: string): void;
 }>();
@@ -20,9 +24,14 @@ const value = ref<string>(props.modelValue ?? props.config.defaultValue ?? '');
 
 watch(
   () => value.value,
-  () => emits('update:modelValue', value.value),
+  () => {
+    app?.emit('change', { node, value: value.value });
+    emits('update:modelValue', value.value);
+  },
   { immediate: true }
 );
+
+provideMethod('setValue', ({ newValue }: any) => (value.value = newValue), ['newValue']);
 </script>
 
 <template>
