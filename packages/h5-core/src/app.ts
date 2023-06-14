@@ -50,7 +50,7 @@ export interface EventCache {
 }
 
 export interface AppEmitArgs {
-  node?: Component;
+  component?: Component;
   [key: string | number | symbol]: any;
 }
 
