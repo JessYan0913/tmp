@@ -13,11 +13,7 @@ import dot from 'dot';
 import { Component } from './component';
 import { Page } from './page';
 
-const computeTargetByMapping = (
-  fromComponent: Component,
-  mapping: TmpPropMapping,
-  eventArgs: Record<string, any> = {}
-): any => {
+const computeTargetByMapping = (mapping: TmpPropMapping, eventArgs: Record<string, any> = {}): any => {
   const mappingClassify = {
     [TmpMappingSpace.EVENT]: ({ source, defaultValue }: TmpPropMapping) => {
       if (!source) {
@@ -26,10 +22,10 @@ const computeTargetByMapping = (
       return Reflect.get(eventArgs, source);
     },
     [TmpMappingSpace.EXPRESSION]: ({ expression }: TmpPropMapping) => {
-      return new Function('event,fcpt', `return ${expression}`)(eventArgs, fromComponent);
+      return new Function('event', `return ${expression}`)(eventArgs);
     },
     [TmpMappingSpace.TEMPLATE]: ({ template }: TmpPropMapping) => {
-      return dot.template(template ?? '')({ event: eventArgs, fcpt: fromComponent });
+      return dot.template(template ?? '')({ event: eventArgs });
     },
   };
   if (mapping.ignore || !mapping.sourceScope || !Reflect.has(mappingClassify, mapping.sourceScope ?? '')) {
@@ -100,20 +96,20 @@ export class App extends EventBus {
     for (const component of this.curPage.components.values()) {
       component.events?.forEach((event) => {
         this.on(`${component.data.id}::${event.event}`, (args: AppEmitArgs) => {
-          const props = this.calComponentMethodProps(component, event, args);
-          this.handleEvent(event, component, props);
+          this.handleEvent(component, event, args);
         });
       });
     }
   }
 
-  public handleEvent(event: TmpEvent, fromComponent: Component, props: Record<string, any>): void {
+  public handleEvent(component: Component, event: TmpEvent, args: AppEmitArgs): void {
     if (event.actionType === 'component-control') {
-      this.controlComponent(event, fromComponent, props);
+      const props = this.calComponentMethodProps(event, args);
+      this.controlComponent(component, event, props);
     }
   }
 
-  private controlComponent(event: TmpEvent, fromComponent: Component, props: Record<string, any>): void {
+  private controlComponent(fromComponent: Component, event: TmpEvent, props: Record<string, any>): void {
     if (!this.curPage) {
       throw new Error('当前页面不存在');
     }
@@ -143,17 +139,13 @@ export class App extends EventBus {
     }
   }
 
-  private calComponentMethodProps(
-    fromComponent: Component,
-    event: TmpEvent,
-    eventArgs?: Record<string, any>
-  ): Record<string, any> {
+  private calComponentMethodProps(event: TmpEvent, eventArgs?: Record<string, any>): Record<string, any> {
     const { propMappings } = event;
     if (!propMappings) {
       return {};
     }
     return propMappings.reduce<Record<string, any>>(
-      (props, mapping) => ({ ...props, [mapping.name]: computeTargetByMapping(fromComponent, mapping, eventArgs) }),
+      (props, mapping) => ({ ...props, [mapping.name]: computeTargetByMapping(mapping, eventArgs) }),
       {}
     );
   }
