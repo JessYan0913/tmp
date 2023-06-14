@@ -42,6 +42,14 @@ export const routes: RouteRecordRaw[] = [
           menu: true,
         },
       },
+      {
+        path: '/example/resizable',
+        name: 'Resizable',
+        component: () => import('../view/resizable/index.vue'),
+        meta: {
+          menu: true,
+        },
+      },
     ],
   },
   {
