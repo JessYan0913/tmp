@@ -92,13 +92,6 @@ export class App extends EventBus {
     this.bindEvents();
   }
 
-  public emit(event: any, args: AppEmitArgs): boolean {
-    if (args.component) {
-      return super.emit(`${args.component.data.id}::${event}`, args);
-    }
-    return super.emit(event, args);
-  }
-
   public bindEvents(): void {
     if (!this.curPage) {
       return;
