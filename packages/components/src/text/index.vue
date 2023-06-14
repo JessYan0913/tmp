@@ -9,13 +9,13 @@ const props = defineProps<{
   config: TmpText;
 }>();
 
-const { app, node, provideMethod } = useApp(props);
+const { app, component, provideMethod } = useApp(props);
 
 const text = ref<string>(props.config.text ?? '');
 
 watch(
   () => text.value,
-  () => app?.emit('change', { node, text: text.value })
+  () => app?.emit('change', { component, text: text.value })
 );
 
 provideMethod('setText', ({ newText }: any) => (text.value = newText), ['newText']);

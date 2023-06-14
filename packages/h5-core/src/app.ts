@@ -93,8 +93,8 @@ export class App extends EventBus {
   }
 
   public emit(event: any, args: AppEmitArgs): boolean {
-    if (args.node) {
-      return super.emit(`${args.node.data.id}::${event}`, args);
+    if (args.component) {
+      return super.emit(`${args.component.data.id}::${event}`, args);
     }
     return super.emit(event, args);
   }

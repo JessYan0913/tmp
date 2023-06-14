@@ -14,7 +14,7 @@ const props = defineProps<{
   modelValue?: string;
 }>();
 
-const { app, node, provideMethod } = useApp(props);
+const { app, component, provideMethod } = useApp(props);
 
 const emits = defineEmits<{
   (event: 'update:modelValue', value: string): void;
@@ -29,7 +29,7 @@ const inputType = computed<string>(() => (props.config.isPassword ? 'password' :
 watch(
   () => value.value,
   () => {
-    app?.emit('change', { node, value: value.value, model: props.model, prop: props.prop });
+    app?.emit('change', { component, value: value.value, model: props.model, prop: props.prop });
     emits('update:modelValue', value.value);
   },
   { immediate: true }
