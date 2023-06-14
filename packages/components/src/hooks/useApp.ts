@@ -4,7 +4,7 @@ import { TmpElementInstance, TmpInstanceMethod } from '@tmp/h5-schema';
 
 export const useApp = (props: Record<string, any>) => {
   const app = inject<App | undefined>('app');
-  const node = app?.curPage?.getComponent(props.config.id);
+  const component = app?.curPage?.getComponent(props.config.id);
 
   const instance: TmpElementInstance = {
     methods: {},
@@ -15,13 +15,13 @@ export const useApp = (props: Record<string, any>) => {
     if (vm) {
       instance.el = vm.$el;
     }
-    node?.emit('mounted', { instance });
+    component?.emit('mounted', { instance });
   });
 
   onUpdated(() => {
     nextTick(() => {
       const vm = getCurrentInstance()?.proxy;
-      node?.emit('updated', {
+      component?.emit('updated', {
         beforeInstance: instance,
         instance: {
           ...instance,
@@ -31,7 +31,7 @@ export const useApp = (props: Record<string, any>) => {
     });
   });
 
-  onUnmounted(() => node?.emit('unmounted', {}));
+  onUnmounted(() => component?.emit('unmounted', {}));
 
   const provideMethod = (name: string, method: TmpInstanceMethod, dependVariables?: string[]): TmpInstanceMethod => {
     if (!instance.methods) {
@@ -44,7 +44,7 @@ export const useApp = (props: Record<string, any>) => {
     return method;
   };
 
-  return { app, node, provideMethod };
+  return { app, component, provideMethod };
 };
 
 export default useApp;
