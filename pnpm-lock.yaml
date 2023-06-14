@@ -202,11 +202,13 @@ importers:
       rimraf: ^3.0.2
       typescript: ^4.9.3
       vite: ^4.1.0
+      vue: ^3.2.45
     dependencies:
       '@tmp/h5-schema': link:../h5-schema
       '@tmp/utils': link:../utils
       dot: 2.0.0-beta.1
       rimraf: 3.0.2
+      vue: 3.2.45
     devDependencies:
       typescript: 4.9.4
       vite: 4.1.1

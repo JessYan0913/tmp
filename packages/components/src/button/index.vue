@@ -27,6 +27,11 @@ const text = computed<string>(() => {
 const handleClick = () => {
   triggerEvent('click');
 };
+
+defineExpose({
+  text,
+  disabled,
+});
 </script>
 
 <template>

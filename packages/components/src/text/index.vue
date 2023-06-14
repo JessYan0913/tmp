@@ -19,6 +19,10 @@ watch(
 );
 
 provideMethod('setText', ({ newText }: any) => (text.value = newText), ['newText']);
+
+defineExpose({
+  text,
+});
 </script>
 
 <template>

@@ -116,7 +116,7 @@ const page: TmpPage = {
                   ignore: false,
                   defaultValue: '1',
                   sourceScope: TmpMappingSpace.EXPRESSION,
-                  expression: '`用户名: ${event.model.userName} 用户密码${event.model.password} 性别：${event.value}`',
+                  expression: '`用户名: ${namespace["input-userName"].value}`',
                 },
               ],
             },

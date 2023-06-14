@@ -1,3 +1,4 @@
+import { unref } from 'vue';
 import {
   Id,
   TmpApplication,
@@ -12,27 +13,6 @@ import dot from 'dot';
 
 import { Component } from './component';
 import { Page } from './page';
-
-const computeTargetByMapping = (mapping: TmpPropMapping, eventArgs: Record<string, any> = {}): any => {
-  const mappingClassify = {
-    [TmpMappingSpace.EVENT]: ({ source, defaultValue }: TmpPropMapping) => {
-      if (!source) {
-        return defaultValue;
-      }
-      return Reflect.get(eventArgs, source);
-    },
-    [TmpMappingSpace.EXPRESSION]: ({ expression }: TmpPropMapping) => {
-      return new Function('event', `return ${expression}`)(eventArgs);
-    },
-    [TmpMappingSpace.TEMPLATE]: ({ template }: TmpPropMapping) => {
-      return dot.template(template ?? '')({ event: eventArgs });
-    },
-  };
-  if (mapping.ignore || !mapping.sourceScope || !Reflect.has(mappingClassify, mapping.sourceScope ?? '')) {
-    return mapping.defaultValue;
-  }
-  return mappingClassify[mapping.sourceScope](mapping);
-};
 
 export interface AppConfig {
   data?: TmpApplication;
@@ -86,6 +66,21 @@ export class App extends EventBus {
     }
     this.curPage = this.pages.get(curPage ?? '');
     this.bindEvents();
+  }
+
+  public get namespace(): Record<string, any> {
+    const result: Record<string, any> = {};
+    if (this.curPage) {
+      for (const { data, instance } of this.curPage.components.values()) {
+        const exposed = instance?.exposed ?? {};
+        result[data.id] = new Proxy(exposed, {
+          get(target, p, receiver) {
+            return unref(Reflect.get(target, p, receiver));
+          },
+        });
+      }
+    }
+    return result;
   }
 
   public bindEvents(): void {
@@ -144,6 +139,27 @@ export class App extends EventBus {
     if (!propMappings) {
       return {};
     }
+    const namespace = { ...this.namespace };
+    const computeTargetByMapping = (mapping: TmpPropMapping, eventArgs: Record<string, any> = {}): any => {
+      const mappingClassify = {
+        [TmpMappingSpace.EVENT]: ({ source, defaultValue }: TmpPropMapping) => {
+          if (!source) {
+            return defaultValue;
+          }
+          return Reflect.get(eventArgs, source);
+        },
+        [TmpMappingSpace.EXPRESSION]: ({ expression }: TmpPropMapping) => {
+          return new Function('event, namespace', `return ${expression}`)(eventArgs, namespace);
+        },
+        [TmpMappingSpace.TEMPLATE]: ({ template }: TmpPropMapping) => {
+          return dot.template(template ?? '')({ event: eventArgs, namespace });
+        },
+      };
+      if (mapping.ignore || !mapping.sourceScope || !Reflect.has(mappingClassify, mapping.sourceScope ?? '')) {
+        return mapping.defaultValue;
+      }
+      return mappingClassify[mapping.sourceScope](mapping);
+    };
     return propMappings.reduce<Record<string, any>>(
       (props, mapping) => ({ ...props, [mapping.name]: computeTargetByMapping(mapping, eventArgs) }),
       {}

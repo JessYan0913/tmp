@@ -12,9 +12,9 @@ export const useApp = (props: Record<string, any>) => {
 
   onMounted(() => {
     const vm = getCurrentInstance()?.proxy;
-    if (vm) {
-      instance.el = vm.$el;
-    }
+    const exposed = getCurrentInstance()?.exposed;
+    Reflect.set(instance, 'el', vm?.$el);
+    Reflect.set(instance, 'exposed', exposed);
     component?.emit('mounted', { instance });
   });
 

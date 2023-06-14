@@ -143,5 +143,5 @@ export interface TmpInstanceMethod {
 export interface TmpElementInstance {
   el?: HTMLElement;
   methods?: Record<string, TmpInstanceMethod>;
-  exports?: Record<string, any>;
+  exposed?: Record<string, any>;
 }

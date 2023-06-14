@@ -24,6 +24,10 @@ watch(
 provideMethod('submit', () => {
   triggerEvent('submit', { value: value.value });
 });
+
+defineExpose({
+  value,
+});
 </script>
 
 <template>

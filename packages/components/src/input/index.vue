@@ -31,11 +31,16 @@ watch(
   () => {
     triggerEvent('change', { value: value.value, model: props.model, prop: props.prop });
     emits('update:modelValue', value.value);
-  },
-  { immediate: true }
+  }
 );
 
 provideMethod('setValue', ({ newValue }: any) => (value.value = newValue), ['newValue']);
+
+defineExpose({
+  value,
+  model: props.model,
+  prop: props.prop,
+});
 </script>
 
 <template>

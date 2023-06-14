@@ -27,15 +27,21 @@ const options = ref<TmpOptions>(props.config.options);
 watch(
   () => value.value,
   () => {
-    triggerEvent('change', { value: value.value, model: props.model, prop: props.prop });
+    triggerEvent('change', { value: value.value });
     emits('update:modelValue', value.value);
-  },
-  { immediate: true }
+  }
 );
 
 provideMethod('setValue', ({ newValue }: any) => (value.value = newValue), ['newValue']);
 
 provideMethod('setOptions', ({ newOptions }: any) => (options.value = newOptions), ['newOptions']);
+
+defineExpose({
+  value,
+  options,
+  model: props.model,
+  prop: props.prop,
+});
 </script>
 
 <template>
