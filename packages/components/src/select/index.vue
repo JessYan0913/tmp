@@ -14,7 +14,7 @@ const props = defineProps<{
   modelValue?: string;
 }>();
 
-const { app, component, provideMethod } = useApp(props);
+const { triggerEvent, provideMethod } = useApp(props);
 
 const emits = defineEmits<{
   (event: 'update:modelValue', value: string): void;
@@ -27,7 +27,7 @@ const options = ref<TmpOptions>(props.config.options);
 watch(
   () => value.value,
   () => {
-    app?.emit('change', { component, value: value.value, model: props.model, prop: props.prop });
+    triggerEvent('change', { value: value.value, model: props.model, prop: props.prop });
     emits('update:modelValue', value.value);
   },
   { immediate: true }

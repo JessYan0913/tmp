@@ -10,7 +10,7 @@ const props = defineProps<{
   config: TmpButton;
 }>();
 
-const { app, component } = useApp(props);
+const { triggerEvent } = useApp(props);
 
 const disabled = ref<boolean>(props.config.disabled ?? false);
 
@@ -25,7 +25,7 @@ const text = computed<string>(() => {
 });
 
 const handleClick = () => {
-  app?.emit('click', { component });
+  triggerEvent('click');
 };
 </script>
 

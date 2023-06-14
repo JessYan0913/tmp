@@ -44,7 +44,14 @@ export const useApp = (props: Record<string, any>) => {
     return method;
   };
 
-  return { app, component, provideMethod };
+  const triggerEvent = (event: string, payload: Record<string, any> = {}) => {
+    if (!component) {
+      return;
+    }
+    app?.emit(`${component.data.id}::${event}`, payload);
+  };
+
+  return { app, component, provideMethod, triggerEvent };
 };
 
 export default useApp;

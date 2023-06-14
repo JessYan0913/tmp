@@ -11,18 +11,18 @@ const props = defineProps<{
   config: TmpFormElement;
 }>();
 
-const { app, component, provideMethod } = useApp(props);
+const { triggerEvent, provideMethod } = useApp(props);
 
 const value = ref<TmpFormModel>({});
 
 watch(
   () => value.value,
-  () => app?.emit('change', { component, value: value.value }),
+  () => triggerEvent('change', { value: value.value }),
   { deep: true }
 );
 
 provideMethod('submit', () => {
-  app?.emit('submit', { component, value: value.value });
+  triggerEvent('submit', { value: value.value });
 });
 </script>
 
