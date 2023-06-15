@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, nextTick, ref, shallowRef, watch } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 
 export interface Pagination {
   pageSize: number;
@@ -44,10 +44,10 @@ const emit = defineEmits<{
   (event: 'onSelectChange', value: any): void;
 }>();
 
-const isAlive = ref<boolean>(true);
+const containerRef = ref<HTMLDivElement>();
 const loading = ref<boolean>(false);
 const noMore = ref<boolean>(false);
-const data = shallowRef();
+const data = ref<any[]>([]);
 const total = ref<number>(0);
 const current = ref<number>(1);
 const disabled = computed<boolean>(() => (current.value > 1 && !props.scrollable) || loading.value || noMore.value);
@@ -62,9 +62,7 @@ watch(
 );
 
 const reload = () => {
-  isAlive.value = false;
   nextTick(() => {
-    isAlive.value = true;
     data.value = [...props.dataSource];
     total.value = 0;
     current.value = 1;
@@ -102,7 +100,7 @@ defineExpose({
 </script>
 
 <template>
-  <div v-if="isAlive" class="infinite-list-wrapper">
+  <div ref="containerRef" class="infinite-list-wrapper">
     <div v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled" :infinite-scroll-distance="10">
       <slot name="operation"></slot>
       <div v-for="(item, index) in data" :key="index" @click="handleSelectChange(item)">
