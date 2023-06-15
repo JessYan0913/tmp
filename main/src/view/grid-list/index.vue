@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import GridList from '@/components/GridList.vue';
 
-const data = Array.from({ length: 200000 }, (_, index) => index);
+const data = () => {
+  return {
+    data: Array.from({ length: 100000 }, (_, index) => index),
+    total: 10000,
+  };
+};
 </script>
 
 <template>
   <GridList
     :scrollable="false"
-    :data-source="data"
+    :data-source="data().data"
     :column-gap="20"
     :row-gap="20"
     :item-min-width="250"

@@ -1,23 +1,9 @@
 <script lang="ts" setup>
 import { computed, nextTick, onMounted, ref, watch } from 'vue';
 
-export interface Pagination {
-  pageSize: number;
-  current: number;
-}
-
-export interface RequestResult<T> {
-  data: T[];
-  total: number;
-}
-
-export type RequestFunc<T> = (pagination: Pagination) => Promise<RequestResult<T>> | RequestResult<T>;
-
 const props = withDefaults(
   defineProps<{
     dataSource?: any[];
-    pageSize?: number;
-    request?: RequestFunc<any>;
     itemMinWidth?: number;
     itemMinHeight?: number;
     rowGap?: number;
@@ -25,7 +11,6 @@ const props = withDefaults(
   }>(),
   {
     dataSource: () => [],
-    pageSize: () => 5,
     request: () => ({
       data: [],
       total: 0,
@@ -38,7 +23,6 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{
-  (event: 'loaded'): void;
   (event: 'onSelectChange', value: any): void;
 }>();
 
@@ -48,9 +32,6 @@ const containerWidth = ref<number>(0);
 const loading = ref<boolean>(false);
 const noMore = ref<boolean>(false);
 const data = ref<any[]>([]);
-const total = ref<number>(0);
-const current = ref<number>(1);
-const disabled = computed<boolean>(() => current.value > 1 || loading.value || noMore.value);
 /** 起始索引 */
 const startIndex = ref<number>(0);
 /** 结束索引 */
@@ -96,35 +77,6 @@ onMounted(() => {
   }
 });
 
-const reload = () => {
-  nextTick(() => {
-    data.value = [...props.dataSource];
-    total.value = 0;
-    current.value = 1;
-    noMore.value = false;
-    load();
-  });
-};
-
-const load = async () => {
-  loading.value = true;
-  const result = await Promise.resolve(
-    props.request({
-      pageSize: props.pageSize,
-      current: current.value,
-    })
-  );
-  loading.value = false;
-  total.value = result.total;
-  if (result.total === 0 || result.data.length < props.pageSize) {
-    noMore.value = true;
-  } else {
-    current.value += 1;
-  }
-  data.value.push(...result.data);
-  emit('loaded');
-};
-
 const handleSelectChange = (value: any) => {
   emit('onSelectChange', value);
 };
@@ -141,16 +93,12 @@ const handleScroll = () => {
   startOffset.value =
     containerRef.value.scrollTop - (containerRef.value.scrollTop % (props.itemMinHeight + props.rowGap));
 };
-
-defineExpose({
-  reload,
-});
 </script>
 
 <template>
   <div ref="containerRef" class="infinite-list-wrapper" @scroll="handleScroll">
     <div class="list-phantom"></div>
-    <div v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled" :infinite-scroll-distance="10">
+    <div class="list">
       <slot name="operation"></slot>
       <div v-for="(item, index) in data.slice(startIndex, endIndex)" :key="index" @click="handleSelectChange(item)">
         <slot :item="item" :index="index">
