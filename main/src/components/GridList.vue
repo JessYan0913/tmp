@@ -22,7 +22,6 @@ const props = withDefaults(
     itemMinHeight?: string | number;
     rowGap?: string;
     columnGap?: string;
-    scrollable?: boolean;
   }>(),
   {
     dataSource: () => [],
@@ -35,7 +34,6 @@ const props = withDefaults(
     itemMinHeight: () => '200px',
     rowGap: () => '0px',
     columnGap: () => '0px',
-    scrollable: () => true,
   }
 );
 
@@ -50,8 +48,7 @@ const noMore = ref<boolean>(false);
 const data = ref<any[]>([]);
 const total = ref<number>(0);
 const current = ref<number>(1);
-const disabled = computed<boolean>(() => (current.value > 1 && !props.scrollable) || loading.value || noMore.value);
-const overflow = computed<string>(() => (props.scrollable ? 'auto' : 'scroll'));
+const disabled = computed<boolean>(() => current.value > 1 || loading.value || noMore.value);
 
 watch(
   () => props.dataSource,
@@ -124,7 +121,7 @@ defineExpose({
 <style lang="scss" scoped>
 .infinite-list-wrapper {
   text-align: center;
-  overflow-y: v-bind(overflow);
+  overflow-y: scroll;
 
   .list {
     display: grid;
