@@ -79,10 +79,20 @@ watch(
   { immediate: true }
 );
 
+const handleContainerResize = () => {
+  nextTick(() => {
+    if (containerRef.value) {
+      containerHeight.value = containerRef.value.clientHeight;
+      containerWidth.value = containerRef.value.clientWidth;
+    }
+  });
+};
+
+const resizeObserver = new ResizeObserver(handleContainerResize);
+
 onMounted(() => {
   if (containerRef.value) {
-    containerHeight.value = containerRef.value.clientHeight;
-    containerWidth.value = containerRef.value.clientWidth;
+    resizeObserver.observe(containerRef.value);
   }
 });
 

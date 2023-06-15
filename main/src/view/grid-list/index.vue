@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import GridList from '@/components/GridList.vue';
 
-const data = Array.from({ length: 20 }, (_, index) => index);
+const data = Array.from({ length: 200000 }, (_, index) => index);
 </script>
 
 <template>
