@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, nextTick, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 
 export interface Pagination {
   pageSize: number;
@@ -18,10 +18,10 @@ const props = withDefaults(
     dataSource?: any[];
     pageSize?: number;
     request?: RequestFunc<any>;
-    itemMinWidth?: string | number;
-    itemMinHeight?: string | number;
-    rowGap?: string;
-    columnGap?: string;
+    itemMinWidth?: number;
+    itemMinHeight?: number;
+    rowGap?: number;
+    columnGap?: number;
   }>(),
   {
     dataSource: () => [],
@@ -30,10 +30,10 @@ const props = withDefaults(
       data: [],
       total: 0,
     }),
-    itemMinWidth: () => '200px',
-    itemMinHeight: () => '200px',
-    rowGap: () => '0px',
-    columnGap: () => '0px',
+    itemMinWidth: () => 200,
+    itemMinHeight: () => 200,
+    rowGap: () => 0,
+    columnGap: () => 0,
   }
 );
 
@@ -43,12 +43,33 @@ const emit = defineEmits<{
 }>();
 
 const containerRef = ref<HTMLDivElement>();
+const containerHeight = ref<number>(0);
+const containerWidth = ref<number>(0);
 const loading = ref<boolean>(false);
 const noMore = ref<boolean>(false);
 const data = ref<any[]>([]);
 const total = ref<number>(0);
 const current = ref<number>(1);
 const disabled = computed<boolean>(() => current.value > 1 || loading.value || noMore.value);
+/** 起始索引 */
+const startIndex = ref<number>(0);
+/** 结束索引 */
+const endIndex = computed<number>(() => startIndex.value + visibleCount.value);
+const startOffset = ref<number>(0);
+/** 计算列数 */
+const columnNum = computed<number>(
+  () => Math.floor((containerWidth.value - props.itemMinWidth) / (props.itemMinWidth + props.columnGap)) + 1
+);
+/** 计算行数 */
+const rowNum = computed<number>(() => Math.ceil(data.value.length / columnNum.value));
+/** 计算总高度 */
+const listHeight = computed<number>(() => rowNum.value * props.itemMinHeight + (rowNum.value - 1) * props.rowGap);
+/** 可见行数 */
+const visibleRowNum = computed<number>(
+  () => Math.ceil((containerHeight.value - props.itemMinHeight) / (props.itemMinHeight + props.rowGap)) + 1
+);
+/** 可见item数量 */
+const visibleCount = computed<number>(() => visibleRowNum.value * columnNum.value);
 
 watch(
   () => props.dataSource,
@@ -57,6 +78,13 @@ watch(
   },
   { immediate: true }
 );
+
+onMounted(() => {
+  if (containerRef.value) {
+    containerHeight.value = containerRef.value.clientHeight;
+    containerWidth.value = containerRef.value.clientWidth;
+  }
+});
 
 const reload = () => {
   nextTick(() => {
@@ -91,16 +119,30 @@ const handleSelectChange = (value: any) => {
   emit('onSelectChange', value);
 };
 
+const handleScroll = () => {
+  if (!containerRef.value) {
+    return;
+  }
+
+  const startRowNum = Math.ceil(
+    (containerRef.value.scrollTop - props.itemMinHeight) / (props.itemMinHeight + props.rowGap)
+  );
+  startIndex.value = startRowNum * columnNum.value;
+  startOffset.value =
+    containerRef.value.scrollTop - (containerRef.value.scrollTop % (props.itemMinHeight + props.rowGap));
+};
+
 defineExpose({
   reload,
 });
 </script>
 
 <template>
-  <div ref="containerRef" class="infinite-list-wrapper">
+  <div ref="containerRef" class="infinite-list-wrapper" @scroll="handleScroll">
+    <div class="list-phantom"></div>
     <div v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled" :infinite-scroll-distance="10">
       <slot name="operation"></slot>
-      <div v-for="(item, index) in data" :key="index" @click="handleSelectChange(item)">
+      <div v-for="(item, index) in data.slice(startIndex, endIndex)" :key="index" @click="handleSelectChange(item)">
         <slot :item="item" :index="index">
           {{ item }}
         </slot>
@@ -122,13 +164,25 @@ defineExpose({
 .infinite-list-wrapper {
   text-align: center;
   overflow-y: scroll;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+
+  .list-phantom {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    height: calc(v-bind(listHeight) * 1px);
+  }
 
   .list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(v-bind(itemMinWidth), 1fr));
-    grid-auto-rows: minmax(auto, v-bind(itemMinHeight));
-    column-gap: v-bind(columnGap);
-    row-gap: v-bind(rowGap);
+    grid-template-columns: repeat(auto-fill, minmax(calc(v-bind(itemMinWidth) * 1px), 1fr));
+    grid-auto-rows: minmax(auto, calc(v-bind(itemMinHeight) * 1px));
+    column-gap: calc(v-bind(columnGap) * 1px);
+    row-gap: calc(v-bind(rowGap) * 1px);
+    transform: translate3d(0, calc(v-bind(startOffset) * 1px), 0);
 
     div:first-of-type {
       grid-column-start: 1;

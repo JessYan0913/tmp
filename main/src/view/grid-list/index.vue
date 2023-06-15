@@ -8,9 +8,9 @@ const data = Array.from({ length: 20 }, (_, index) => index);
   <GridList
     :scrollable="false"
     :data-source="data"
-    column-gap="20px"
-    row-gap="20px"
-    item-min-width="250px"
+    :column-gap="20"
+    :row-gap="20"
+    :item-min-width="250"
     class="grid-list"
   >
     <template #default="{ item }">
