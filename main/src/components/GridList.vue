@@ -21,7 +21,6 @@ const props = withDefaults(
     itemMinWidth?: string;
     rowGap?: string;
     columnGap?: string;
-    operable?: boolean;
     scrollable?: boolean;
   }>(),
   {
@@ -103,7 +102,7 @@ defineExpose({
 <template>
   <div v-if="isAlive" class="infinite-list-wrapper">
     <div v-infinite-scroll="load" class="list" :infinite-scroll-disabled="disabled" :infinite-scroll-distance="10">
-      <div v-if="operable"><slot name="operation"></slot></div>
+      <slot name="operation"></slot>
       <div v-for="(item, index) in data" :key="index" @click="handleSelectChange(item)">
         <slot :item="item" :index="index">
           {{ item }}

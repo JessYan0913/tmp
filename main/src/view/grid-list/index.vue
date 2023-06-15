@@ -5,14 +5,7 @@ const data = Array.from({ length: 20 }, (_, index) => index);
 </script>
 
 <template>
-  <GridList
-    :data-source="data"
-    column-gap="20px"
-    row-gap="20px"
-    item-min-width="250px"
-    :operable="false"
-    class="grid-list"
-  >
+  <GridList :data-source="data" column-gap="20px" row-gap="20px" item-min-width="250px" class="grid-list">
     <template #default="{ item }">
       <div class="item">{{ item }}</div>
     </template>
