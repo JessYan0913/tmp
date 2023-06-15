@@ -50,6 +50,14 @@ export const routes: RouteRecordRaw[] = [
           menu: true,
         },
       },
+      {
+        path: '/example/grid-list',
+        name: 'GridList',
+        component: () => import('../view/grid-list/index.vue'),
+        meta: {
+          menu: true,
+        },
+      },
     ],
   },
   {
