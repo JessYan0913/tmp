@@ -18,6 +18,11 @@ const data = Array.from({ length: 20 }, (_, index) => index);
   height: 500px;
 }
 .item {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: rgb(42, 129, 100);
   color: aliceblue;
   font-size: 24px;

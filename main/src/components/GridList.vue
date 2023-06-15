@@ -18,7 +18,8 @@ const props = withDefaults(
     dataSource?: any[];
     pageSize?: number;
     request?: RequestFunc<any>;
-    itemMinWidth?: string;
+    itemMinWidth?: string | number;
+    itemMinHeight?: string | number;
     rowGap?: string;
     columnGap?: string;
     scrollable?: boolean;
@@ -31,6 +32,7 @@ const props = withDefaults(
       total: 0,
     }),
     itemMinWidth: () => '200px',
+    itemMinHeight: () => '200px',
     rowGap: () => '0px',
     columnGap: () => '0px',
     scrollable: () => true,
@@ -129,6 +131,7 @@ defineExpose({
   .list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(v-bind(itemMinWidth), 1fr));
+    grid-auto-rows: minmax(auto, v-bind(itemMinHeight));
     column-gap: v-bind(columnGap);
     row-gap: v-bind(rowGap);
 
