@@ -1,23 +1,16 @@
 <script setup lang="ts">
-import GridList from '@/components/GridList.vue';
+import GridList, { Pagination, RequestFunc } from '@/components/GridList.vue';
 
-const data = () => {
+const data: RequestFunc<number> = ({ page, limit }: Pagination) => {
   return {
-    data: Array.from({ length: 50 }, (_, index) => index),
+    data: Array.from({ length: 50 }, (_, index) => index + (page - 1) * limit),
     total: 10000,
   };
 };
 </script>
 
 <template>
-  <GridList
-    :scrollable="false"
-    :data-source="data().data"
-    :column-gap="20"
-    :row-gap="20"
-    :item-min-width="200"
-    class="grid-list"
-  >
+  <GridList :request="data" :column-gap="20" :row-gap="20" :item-min-width="200" class="grid-list">
     <template #default="{ item }">
       <div class="item">{{ item }}</div>
     </template>

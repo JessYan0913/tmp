@@ -3,9 +3,23 @@ import { computed, ref, watch } from 'vue';
 
 import { useVirtualGridList } from '@/hooks/useVirtualGridList';
 
+export interface Pagination {
+  limit: number;
+  page: number;
+}
+
+export interface RequestResult<T> {
+  data: T[];
+  total: number;
+}
+
+export type RequestFunc<T> = (pagination: Pagination) => Promise<RequestResult<T>> | RequestResult<T>;
+
 const props = withDefaults(
   defineProps<{
     dataSource?: any[];
+    request?: RequestFunc<any>;
+    limit?: number;
     itemMinWidth?: number | string;
     itemMinHeight?: number | string;
     rowGap?: number | string;
@@ -13,14 +27,15 @@ const props = withDefaults(
   }>(),
   {
     dataSource: () => [],
+    limit: 50,
     request: () => ({
       data: [],
       total: 0,
     }),
-    itemMinWidth: () => 200,
-    itemMinHeight: () => 200,
-    rowGap: () => 0,
-    columnGap: () => 0,
+    itemMinWidth: 200,
+    itemMinHeight: 200,
+    rowGap: 0,
+    columnGap: 0,
   }
 );
 
@@ -32,6 +47,8 @@ const containerRef = ref<HTMLDivElement>();
 const loading = ref<boolean>(false);
 const noMore = ref<boolean>(false);
 const data = ref<any[]>([]);
+const total = ref<number>(0);
+const page = ref<number>(1);
 /** 计算最小宽度的像素值 */
 const itemMinWidth = computed<number>(() => convertToPixels(props.itemMinWidth));
 /** 计算最小高度的像素值 */
@@ -58,6 +75,42 @@ watch(
   { immediate: true }
 );
 
+watch(
+  () => props.request,
+  () => {
+    load();
+  },
+  { immediate: true }
+);
+
+function handleScroll(event: Event) {
+  event.preventDefault();
+  const container = event.target as HTMLDivElement;
+  const canLoad = container.scrollTop + container.clientHeight >= container.scrollHeight && !loading.value;
+  if (canLoad) {
+    load();
+  }
+}
+
+async function load() {
+  loading.value = true;
+  const result = await Promise.resolve(
+    props.request({
+      limit: props.limit,
+      page: page.value,
+    })
+  );
+
+  total.value = result.total;
+  if (result.total === 0 || result.data.length < props.limit) {
+    noMore.value = true;
+  } else {
+    page.value = page.value + 1;
+  }
+  data.value.push(...result.data);
+  loading.value = false;
+}
+
 function convertToPixels(value: string | number): number {
   if (typeof value === 'number') {
     return value;
@@ -80,7 +133,7 @@ function convertToPixels(value: string | number): number {
 </script>
 
 <template>
-  <div ref="containerRef" class="infinite-list-wrapper">
+  <div ref="containerRef" class="infinite-list-wrapper" @scroll="handleScroll">
     <div class="list">
       <slot name="operation"></slot>
       <div v-for="(item, index) in data.slice(startIndex, endIndex)" :key="index" @click="emit('onSelectChange', item)">
