@@ -24,6 +24,7 @@ const props = withDefaults(
     itemMinHeight?: number | string;
     rowGap?: number | string;
     columnGap?: number | string;
+    loadDistance?: number;
   }>(),
   {
     dataSource: () => [],
@@ -36,6 +37,7 @@ const props = withDefaults(
     itemMinHeight: 200,
     rowGap: 0,
     columnGap: 0,
+    loadDistance: 0,
   }
 );
 
@@ -90,7 +92,9 @@ function handleScroll(event: Event) {
   event.preventDefault();
   const container = event.target as HTMLDivElement;
   const canLoad =
-    container.scrollTop + container.clientHeight >= container.scrollHeight && !loading.value && !noMore.value;
+    container.scrollTop + container.clientHeight >= container.scrollHeight - props.loadDistance &&
+    !loading.value &&
+    !noMore.value;
   if (canLoad) {
     load();
   }
