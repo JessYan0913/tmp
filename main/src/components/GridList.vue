@@ -140,7 +140,10 @@ function convertToPixels(value: string | number): number {
 
 <template>
   <div ref="containerRef" class="infinite-list-wrapper" @scroll="handleScroll">
-    <div class="list">
+    <div v-if="data.length === 0">
+      <slot name="empty">No Data</slot>
+    </div>
+    <div v-else class="list">
       <slot name="operation"></slot>
       <div v-for="(item, index) in data.slice(startIndex, endIndex)" :key="index" @click="emit('onSelectChange', item)">
         <slot :item="item" :index="index">
