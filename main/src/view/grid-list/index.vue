@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import GridList, { Pagination, RequestFunc } from '@/components/GridList.vue';
+import GridList, { RequestFunc } from '@/components/GridList.vue';
 
-const data: RequestFunc<number> = ({ page, limit }: Pagination) => {
-  return {
-    data: Array.from({ length: 50 }, (_, index) => index + (page - 1) * limit),
-    total: 10000,
-  };
+const data: RequestFunc<number> = ({ page, limit }) => {
+  return new Promise((resolve) => {
+    console.log('开始加载啦', page, limit);
+
+    setTimeout(() => {
+      resolve({
+        data: Array.from({ length: 50 }, (_, index) => index + (page - 1) * limit),
+        total: 150,
+      });
+    }, 2000);
+  });
 };
 </script>
 

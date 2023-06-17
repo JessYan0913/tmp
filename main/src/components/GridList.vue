@@ -86,7 +86,8 @@ watch(
 function handleScroll(event: Event) {
   event.preventDefault();
   const container = event.target as HTMLDivElement;
-  const canLoad = container.scrollTop + container.clientHeight >= container.scrollHeight && !loading.value;
+  const canLoad =
+    container.scrollTop + container.clientHeight >= container.scrollHeight && !loading.value && !noMore.value;
   if (canLoad) {
     load();
   }
@@ -102,12 +103,12 @@ async function load() {
   );
 
   total.value = result.total;
-  if (result.total === 0 || result.data.length < props.limit) {
+  data.value.push(...result.data);
+  if (data.value.length === result.total || result.total === 0 || result.data.length < props.limit) {
     noMore.value = true;
   } else {
     page.value = page.value + 1;
   }
-  data.value.push(...result.data);
   loading.value = false;
 }
 
