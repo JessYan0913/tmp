@@ -104,6 +104,7 @@ onMounted(() => {
   if (containerRef.value) {
     resizeObserver.observe(containerRef.value);
   }
+  handleScroll();
 });
 
 const handleSelectChange = (value: any) => {
@@ -114,13 +115,10 @@ const handleScroll = () => {
   if (!containerRef.value) {
     return;
   }
-
-  const startRowNum = Math.ceil(
-    (containerRef.value.scrollTop - itemMinHeight.value) / (itemMinHeight.value + rowGap.value)
-  );
+  const scrollTop = containerRef.value.scrollTop;
+  const startRowNum = Math.ceil((scrollTop - itemMinHeight.value) / (itemMinHeight.value + rowGap.value));
   startIndex.value = startRowNum * columnNum.value;
-  startOffset.value =
-    containerRef.value.scrollTop - (containerRef.value.scrollTop % (itemMinHeight.value + rowGap.value));
+  startOffset.value = scrollTop - (scrollTop % (itemMinHeight.value + rowGap.value));
 };
 
 const convertToPixels = (value: string): number => {

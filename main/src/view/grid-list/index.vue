@@ -3,7 +3,7 @@ import GridList from '@/components/GridList.vue';
 
 const data = () => {
   return {
-    data: Array.from({ length: 100 }, (_, index) => index),
+    data: Array.from({ length: 50 }, (_, index) => index),
     total: 10000,
   };
 };
@@ -15,7 +15,7 @@ const data = () => {
     :data-source="data().data"
     :column-gap="20"
     :row-gap="20"
-    :item-min-width="'100%'"
+    :item-min-width="200"
     class="grid-list"
   >
     <template #default="{ item }">
