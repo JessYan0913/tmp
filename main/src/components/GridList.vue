@@ -45,10 +45,13 @@ const emit = defineEmits<{
 
 const containerRef = ref<HTMLDivElement>();
 const loading = ref<boolean>(false);
-const noMore = ref<boolean>(false);
 const data = ref<any[]>([]);
 const total = ref<number>(0);
 const page = ref<number>(1);
+/** 没有更多了 */
+const noMore = computed<boolean>(
+  () => total.value === 0 || data.value.length >= total.value || data.value.length < props.limit
+);
 /** 计算最小宽度的像素值 */
 const itemMinWidth = computed<number>(() => convertToPixels(props.itemMinWidth));
 /** 计算最小高度的像素值 */
@@ -104,9 +107,7 @@ async function load() {
 
   total.value = result.total;
   data.value.push(...result.data);
-  if (data.value.length === result.total || result.total === 0 || result.data.length < props.limit) {
-    noMore.value = true;
-  } else {
+  if (!noMore.value) {
     page.value = page.value + 1;
   }
   loading.value = false;
