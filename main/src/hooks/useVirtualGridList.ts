@@ -1,5 +1,5 @@
 import type { Ref } from 'vue';
-import { computed, nextTick, onMounted, onUnmounted, ref, watchEffect } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch, watchEffect } from 'vue';
 
 export interface VirtualGridListConfig {
   containerRef: Ref<HTMLElement | undefined>;
@@ -38,7 +38,9 @@ export const useVirtualGridList = ({
   /** 计算行数 */
   const rowNum = computed<number>(() => Math.ceil(data.value.length / columnNum.value));
   /** 计算总高度 */
-  const listHeight = computed<number>(() => rowNum.value * itemMinHeight.value + (rowNum.value - 1) * rowGap.value);
+  const listHeight = computed<number>(() =>
+    Math.max(rowNum.value * itemMinHeight.value + (rowNum.value - 1) * rowGap.value, 0)
+  );
   /** 可见行数 */
   const visibleRowNum = computed<number>(
     () => Math.ceil((containerHeight.value - itemMinHeight.value) / (itemMinHeight.value + rowGap.value)) + 1
@@ -46,8 +48,14 @@ export const useVirtualGridList = ({
   /** 可见item数量 */
   const visibleCount = computed<number>(() => visibleRowNum.value * columnNum.value);
 
+  watch(
+    () => listHeight.value,
+    () => {
+      phantomElement.style.height = `${listHeight.value}px`;
+    }
+  );
+
   watchEffect(() => {
-    phantomElement.style.height = `${listHeight.value}px`;
     endIndex.value = startIndex.value + visibleCount.value;
   });
 

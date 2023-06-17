@@ -8,7 +8,7 @@ const data: RequestFunc<number> = ({ page, limit }) => {
     setTimeout(() => {
       resolve({
         data: Array.from({ length: 50 }, (_, index) => index + (page - 1) * limit),
-        total: 150,
+        total: 100,
       });
     }, 2000);
   });

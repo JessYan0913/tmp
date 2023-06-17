@@ -144,7 +144,6 @@ function convertToPixels(value: string | number): number {
       <slot name="empty">No Data</slot>
     </div>
     <div v-else class="list">
-      <slot name="operation"></slot>
       <div v-for="(item, index) in data.slice(startIndex, endIndex)" :key="index" @click="emit('onSelectChange', item)">
         <slot :item="item" :index="index">
           {{ item }}
