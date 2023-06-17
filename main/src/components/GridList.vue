@@ -140,7 +140,7 @@ function convertToPixels(value: string | number): number {
 
 <template>
   <div ref="containerRef" class="infinite-list-wrapper" @scroll="handleScroll">
-    <div v-if="data.length === 0">
+    <div v-if="data.length === 0 && !loading">
       <slot name="empty">No Data</slot>
     </div>
     <div v-else class="list">

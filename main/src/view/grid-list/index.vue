@@ -10,15 +10,24 @@ const data: RequestFunc<number> = ({ page, limit }) => {
         data: Array.from({ length: 50 }, (_, index) => index + (page - 1) * limit),
         total: 150,
       });
-    }, 5000);
+    }, 2000);
   });
 };
 </script>
 
 <template>
   <GridList :request="data" :column-gap="20" :row-gap="20" :item-min-width="200" class="grid-list">
+    <template #empty>
+      <p>暂无数据</p>
+    </template>
     <template #default="{ item }">
       <div class="item">{{ item }}</div>
+    </template>
+    <template #loading>
+      <p>加载中...</p>
+    </template>
+    <template #noMore>
+      <p>没有更多了</p>
     </template>
   </GridList>
 </template>
