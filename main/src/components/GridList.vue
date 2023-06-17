@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-import { computed, nextTick, onMounted, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+
+import { useVirtualGridList } from '@/hooks/useVirtualGridList';
 
 const props = withDefaults(
   defineProps<{
@@ -27,59 +29,26 @@ const emit = defineEmits<{
 }>();
 
 const containerRef = ref<HTMLDivElement>();
-const containerHeight = ref<number>(0);
-const containerWidth = ref<number>(0);
-const phantomRef = ref<HTMLDivElement>();
 const loading = ref<boolean>(false);
 const noMore = ref<boolean>(false);
 const data = ref<any[]>([]);
-/** 起始索引 */
-const startIndex = ref<number>(0);
-/** 结束索引 */
-const endIndex = computed<number>(() => startIndex.value + visibleCount.value);
-const startOffset = ref<number>(0);
 /** 计算最小宽度的像素值 */
-const itemMinWidth = computed<number>(() => {
-  if (typeof props.itemMinWidth === 'number') {
-    return props.itemMinWidth;
-  }
-  return convertToPixels(props.itemMinWidth);
-});
+const itemMinWidth = computed<number>(() => convertToPixels(props.itemMinWidth));
 /** 计算最小高度的像素值 */
-const itemMinHeight = computed<number>(() => {
-  if (typeof props.itemMinHeight === 'number') {
-    return props.itemMinHeight;
-  }
-  return convertToPixels(props.itemMinHeight);
-});
+const itemMinHeight = computed<number>(() => convertToPixels(props.itemMinHeight));
 /** 计算列间距的像素值 */
-const columnGap = computed<number>(() => {
-  if (typeof props.columnGap === 'number') {
-    return props.columnGap;
-  }
-  return convertToPixels(props.columnGap);
-});
+const columnGap = computed<number>(() => convertToPixels(props.columnGap));
 /** 计算行间距的像素值 */
-const rowGap = computed<number>(() => {
-  if (typeof props.rowGap === 'number') {
-    return props.rowGap;
-  }
-  return convertToPixels(props.rowGap);
+const rowGap = computed<number>(() => convertToPixels(props.rowGap));
+/** 计算虚拟列表的起始/终止索引 */
+const { startIndex, endIndex, startOffset } = useVirtualGridList({
+  containerRef,
+  data,
+  itemMinWidth,
+  itemMinHeight,
+  columnGap,
+  rowGap,
 });
-/** 计算列数 */
-const columnNum = computed<number>(
-  () => Math.floor((containerWidth.value - itemMinWidth.value) / (itemMinWidth.value + columnGap.value)) + 1
-);
-/** 计算行数 */
-const rowNum = computed<number>(() => Math.ceil(data.value.length / columnNum.value));
-/** 计算总高度 */
-const listHeight = computed<number>(() => rowNum.value * itemMinHeight.value + (rowNum.value - 1) * rowGap.value);
-/** 可见行数 */
-const visibleRowNum = computed<number>(
-  () => Math.ceil((containerHeight.value - itemMinHeight.value) / (itemMinHeight.value + rowGap.value)) + 1
-);
-/** 可见item数量 */
-const visibleCount = computed<number>(() => visibleRowNum.value * columnNum.value);
 
 watch(
   () => props.dataSource,
@@ -89,55 +58,32 @@ watch(
   { immediate: true }
 );
 
-const handleContainerResize = () => {
-  nextTick(() => {
-    if (containerRef.value) {
-      containerHeight.value = containerRef.value.clientHeight;
-      containerWidth.value = containerRef.value.clientWidth;
-    }
-  });
-};
-
-const resizeObserver = new ResizeObserver(handleContainerResize);
-
-onMounted(() => {
-  if (containerRef.value) {
-    resizeObserver.observe(containerRef.value);
+function convertToPixels(value: string | number): number {
+  if (typeof value === 'number') {
+    return value;
   }
-  handleScroll();
-});
-
-const handleSelectChange = (value: any) => {
-  emit('onSelectChange', value);
-};
-
-const handleScroll = () => {
   if (!containerRef.value) {
-    return;
-  }
-  const scrollTop = containerRef.value.scrollTop;
-  const startRowNum = Math.ceil((scrollTop - itemMinHeight.value) / (itemMinHeight.value + rowGap.value));
-  startIndex.value = startRowNum * columnNum.value;
-  startOffset.value = scrollTop - (scrollTop % (itemMinHeight.value + rowGap.value));
-};
-
-const convertToPixels = (value: string): number => {
-  if (!phantomRef.value) {
     return 0;
   }
-  phantomRef.value.style.width = value;
-  const computedStyle = getComputedStyle(phantomRef.value);
+  let shadowDiv: HTMLDivElement | null = containerRef.value.querySelector('#shadow');
+  if (!shadowDiv) {
+    shadowDiv = document.createElement('div');
+    shadowDiv.style.position = 'absolute';
+    shadowDiv.style.visibility = 'hidden';
+    containerRef.value.appendChild(shadowDiv);
+  }
+  shadowDiv.style.width = value;
+  const computedStyle = getComputedStyle(shadowDiv);
   const pixels = parseFloat(computedStyle.width);
   return pixels;
-};
+}
 </script>
 
 <template>
-  <div ref="containerRef" class="infinite-list-wrapper" @scroll="handleScroll">
-    <div ref="phantomRef" class="list-phantom"></div>
+  <div ref="containerRef" class="infinite-list-wrapper">
     <div class="list">
       <slot name="operation"></slot>
-      <div v-for="(item, index) in data.slice(startIndex, endIndex)" :key="index" @click="handleSelectChange(item)">
+      <div v-for="(item, index) in data.slice(startIndex, endIndex)" :key="index" @click="emit('onSelectChange', item)">
         <slot :item="item" :index="index">
           {{ item }}
         </slot>
@@ -161,15 +107,6 @@ const convertToPixels = (value: string): number => {
   overflow-y: scroll;
   position: relative;
   -webkit-overflow-scrolling: touch;
-
-  .list-phantom {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    z-index: -1;
-    height: calc(v-bind(listHeight) * 1px);
-  }
 
   .list {
     display: grid;
