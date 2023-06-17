@@ -4,10 +4,10 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue';
 const props = withDefaults(
   defineProps<{
     dataSource?: any[];
-    itemMinWidth?: number;
-    itemMinHeight?: number;
-    rowGap?: number;
-    columnGap?: number;
+    itemMinWidth?: number | string;
+    itemMinHeight?: number | string;
+    rowGap?: number | string;
+    columnGap?: number | string;
   }>(),
   {
     dataSource: () => [],
@@ -29,6 +29,7 @@ const emit = defineEmits<{
 const containerRef = ref<HTMLDivElement>();
 const containerHeight = ref<number>(0);
 const containerWidth = ref<number>(0);
+const phantomRef = ref<HTMLDivElement>();
 const loading = ref<boolean>(false);
 const noMore = ref<boolean>(false);
 const data = ref<any[]>([]);
@@ -37,17 +38,45 @@ const startIndex = ref<number>(0);
 /** 结束索引 */
 const endIndex = computed<number>(() => startIndex.value + visibleCount.value);
 const startOffset = ref<number>(0);
+/** 计算最小宽度的像素值 */
+const itemMinWidth = computed<number>(() => {
+  if (typeof props.itemMinWidth === 'number') {
+    return props.itemMinWidth;
+  }
+  return convertToPixels(props.itemMinWidth);
+});
+/** 计算最小高度的像素值 */
+const itemMinHeight = computed<number>(() => {
+  if (typeof props.itemMinHeight === 'number') {
+    return props.itemMinHeight;
+  }
+  return convertToPixels(props.itemMinHeight);
+});
+/** 计算列间距的像素值 */
+const columnGap = computed<number>(() => {
+  if (typeof props.columnGap === 'number') {
+    return props.columnGap;
+  }
+  return convertToPixels(props.columnGap);
+});
+/** 计算行间距的像素值 */
+const rowGap = computed<number>(() => {
+  if (typeof props.rowGap === 'number') {
+    return props.rowGap;
+  }
+  return convertToPixels(props.rowGap);
+});
 /** 计算列数 */
 const columnNum = computed<number>(
-  () => Math.floor((containerWidth.value - props.itemMinWidth) / (props.itemMinWidth + props.columnGap)) + 1
+  () => Math.floor((containerWidth.value - itemMinWidth.value) / (itemMinWidth.value + columnGap.value)) + 1
 );
 /** 计算行数 */
 const rowNum = computed<number>(() => Math.ceil(data.value.length / columnNum.value));
 /** 计算总高度 */
-const listHeight = computed<number>(() => rowNum.value * props.itemMinHeight + (rowNum.value - 1) * props.rowGap);
+const listHeight = computed<number>(() => rowNum.value * itemMinHeight.value + (rowNum.value - 1) * rowGap.value);
 /** 可见行数 */
 const visibleRowNum = computed<number>(
-  () => Math.ceil((containerHeight.value - props.itemMinHeight) / (props.itemMinHeight + props.rowGap)) + 1
+  () => Math.ceil((containerHeight.value - itemMinHeight.value) / (itemMinHeight.value + rowGap.value)) + 1
 );
 /** 可见item数量 */
 const visibleCount = computed<number>(() => visibleRowNum.value * columnNum.value);
@@ -87,17 +116,27 @@ const handleScroll = () => {
   }
 
   const startRowNum = Math.ceil(
-    (containerRef.value.scrollTop - props.itemMinHeight) / (props.itemMinHeight + props.rowGap)
+    (containerRef.value.scrollTop - itemMinHeight.value) / (itemMinHeight.value + rowGap.value)
   );
   startIndex.value = startRowNum * columnNum.value;
   startOffset.value =
-    containerRef.value.scrollTop - (containerRef.value.scrollTop % (props.itemMinHeight + props.rowGap));
+    containerRef.value.scrollTop - (containerRef.value.scrollTop % (itemMinHeight.value + rowGap.value));
+};
+
+const convertToPixels = (value: string): number => {
+  if (!phantomRef.value) {
+    return 0;
+  }
+  phantomRef.value.style.width = value;
+  const computedStyle = getComputedStyle(phantomRef.value);
+  const pixels = parseFloat(computedStyle.width);
+  return pixels;
 };
 </script>
 
 <template>
   <div ref="containerRef" class="infinite-list-wrapper" @scroll="handleScroll">
-    <div class="list-phantom"></div>
+    <div ref="phantomRef" class="list-phantom"></div>
     <div class="list">
       <slot name="operation"></slot>
       <div v-for="(item, index) in data.slice(startIndex, endIndex)" :key="index" @click="handleSelectChange(item)">

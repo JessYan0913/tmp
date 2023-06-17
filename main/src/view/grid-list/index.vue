@@ -15,7 +15,7 @@ const data = () => {
     :data-source="data().data"
     :column-gap="20"
     :row-gap="20"
-    :item-min-width="250"
+    :item-min-width="'100%'"
     class="grid-list"
   >
     <template #default="{ item }">
