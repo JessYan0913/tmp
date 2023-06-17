@@ -92,6 +92,7 @@ export const useVirtualGridList = ({
     startIndex,
     endIndex,
     startOffset,
+    listHeight,
   };
 };
 

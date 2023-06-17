@@ -63,7 +63,7 @@ const columnGap = computed<number>(() => convertToPixels(props.columnGap));
 /** 计算行间距的像素值 */
 const rowGap = computed<number>(() => convertToPixels(props.rowGap));
 /** 计算虚拟列表的起始/终止索引 */
-const { startIndex, endIndex, startOffset } = useVirtualGridList({
+const { startIndex, endIndex, startOffset, listHeight } = useVirtualGridList({
   containerRef,
   data,
   itemMinWidth,
@@ -147,16 +147,13 @@ function convertToPixels(value: string | number): number {
           {{ item }}
         </slot>
       </div>
-      <slot v-if="!loading && data.length === 0" name="empty">
-        <p></p>
-      </slot>
     </div>
-    <slot v-if="loading" name="loading">
-      <p>Loading...</p>
-    </slot>
-    <slot v-if="noMore && data.length > 0" name="noMore">
-      <p class="no-more-text"></p>
-    </slot>
+    <div v-if="loading" class="bottom">
+      <slot name="loading"></slot>
+    </div>
+    <div v-if="noMore && data.length > 0" class="bottom">
+      <slot name="noMore"></slot>
+    </div>
   </div>
 </template>
 
@@ -180,10 +177,11 @@ function convertToPixels(value: string | number): number {
       grid-column-end: 1;
     }
   }
+}
 
-  .no-more-text {
-    font-style: italic;
-    font-family: cursive;
-  }
+.bottom {
+  width: 100%;
+  position: absolute;
+  top: calc(v-bind(listHeight) * 1px);
 }
 </style>

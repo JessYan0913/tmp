@@ -10,7 +10,7 @@ const data: RequestFunc<number> = ({ page, limit }) => {
         data: Array.from({ length: 50 }, (_, index) => index + (page - 1) * limit),
         total: 150,
       });
-    }, 2000);
+    }, 5000);
   });
 };
 </script>
