@@ -2,6 +2,12 @@ import { ref } from 'vue';
 import { BaseError } from '@tmp/utils';
 import Crypto from 'crypto-js';
 
+export class UploadError extends BaseError {
+  constructor(fileName: string, cause?: any) {
+    super(`${fileName}上传失败`, cause);
+  }
+}
+
 export interface FileChunk {
   fileName: string;
   fileType: string;
@@ -17,15 +23,44 @@ export interface FileReadResult {
   uid: string;
 }
 
-export class UploadError extends BaseError {
-  constructor(fileName: string, cause?: any) {
-    super(`${fileName}上传失败`, cause);
-  }
+export interface UploadFileParams {
+  file: Blob;
+  fileName: string;
+  fileType: string;
+  chunkIndex: number;
+  chunkSize: number;
+  uid: string;
+}
+
+export interface UploadResult {
+  progress: number;
+  [key: string]: any;
+}
+
+export interface UploadConfirmParams {
+  fileName: string;
+  fileType: string;
+  uid: string;
+  md5: string;
+}
+
+export interface UploadConfirmResult {
+  progress: number;
+  contentUrl: string;
+  [key: string]: any;
+}
+
+export interface FailureHandlerParams {
+  fileName: string;
+  fileType: string;
+  uid: string;
+  md5: string;
 }
 
 export interface UploadConfig {
-  uploadFile: Function;
-  uploadConfirm: Function;
+  uploadFile: (params: UploadFileParams) => Promise<UploadResult>;
+  uploadConfirm: (params: UploadConfirmParams) => Promise<UploadConfirmResult>;
+  failureHandler: (params: FailureHandlerParams) => Promise<void>;
 }
 
 const chunkSize = 1024 * 1024 * 5;
@@ -57,7 +92,7 @@ async function readFile(file: File | Blob, fileName: string, fileType: string): 
   };
 }
 
-export const useUpload = ({ uploadFile, uploadConfirm }: UploadConfig) => {
+export const useUpload = ({ uploadFile, uploadConfirm, failureHandler }: UploadConfig) => {
   const loading = ref<boolean>(false);
 
   const error = ref<UploadError>();
@@ -68,9 +103,8 @@ export const useUpload = ({ uploadFile, uploadConfirm }: UploadConfig) => {
     content: File | Blob | string,
     fileName: string,
     fileType: string,
-    charset?: string,
-    referenceIds?: string
-  ): Promise<string> => {
+    charset?: string
+  ): Promise<UploadConfirmResult> => {
     if (typeof content === 'string') {
       content = new Blob([content], { type: `${fileType};charset=${charset}` });
     }
@@ -90,26 +124,12 @@ export const useUpload = ({ uploadFile, uploadConfirm }: UploadConfig) => {
           progress.value = uploadResult.progress;
         })
       );
-      const confirmResult = await uploadConfirm({
-        finished: true,
-        fileName,
-        fileType,
-        uid,
-        md5,
-        referenceIds,
-      });
-      progress.value = confirmResult.progress;
-      return confirmResult.contentId;
+      const result = await uploadConfirm({ fileName, fileType, uid, md5 });
+      progress.value = result.progress;
+      return result;
     } catch (e) {
       error.value = new UploadError(fileName, e);
-      uploadConfirm({
-        finished: false,
-        fileName,
-        fileType,
-        uid,
-        md5,
-        referenceIds,
-      });
+      failureHandler({ fileName, fileType, uid, md5 });
       throw error.value;
     } finally {
       loading.value = false;
