@@ -14,7 +14,7 @@ export interface FileChunk {
   fileChunk: Blob;
   chunkIndex: number;
   chunkSize: number;
-  chunks: number;
+  chunkCount: number;
 }
 
 export interface FileReadResult {
@@ -24,11 +24,11 @@ export interface FileReadResult {
 }
 
 export interface UploadFileParams {
-  file: Blob;
+  fileChunk: Blob;
   fileName: string;
   fileType: string;
   chunkIndex: number;
-  chunkSize: number;
+  chunkCount: number;
   uid: string;
 }
 
@@ -66,9 +66,9 @@ export interface UploadConfig {
 const chunkSize = 1024 * 1024 * 5;
 async function readFile(file: File | Blob, fileName: string, fileType: string): Promise<FileReadResult> {
   const fileChunks: FileChunk[] = [];
-  const chunks = Math.ceil(file.size / chunkSize);
+  const chunkCount = Math.ceil(file.size / chunkSize);
   const MD5 = Crypto.algo.MD5.create();
-  for (let chunkIndex = 0; chunkIndex < chunks; chunkIndex++) {
+  for (let chunkIndex = 0; chunkIndex < chunkCount; chunkIndex++) {
     const start = chunkIndex * chunkSize;
     const end = Math.min(start + chunkSize, file.size);
     const fileChunk = file.slice(start, end);
@@ -76,14 +76,7 @@ async function readFile(file: File | Blob, fileName: string, fileType: string): 
     const i8Array = new Uint8Array(fileContent);
     const wordArray = Crypto.lib.WordArray.create(Array.from(i8Array), i8Array.length);
     MD5.update(wordArray);
-    fileChunks.push({
-      fileName,
-      fileType,
-      chunkIndex,
-      chunkSize,
-      chunks,
-      fileChunk,
-    });
+    fileChunks.push({ fileName, fileType, chunkIndex, chunkSize, chunkCount, fileChunk });
   }
   return {
     fileChunks,
@@ -112,15 +105,8 @@ export const useUpload = ({ uploadFile, uploadConfirm, failureHandler }: UploadC
     const { fileChunks, md5, uid } = await readFile(content, fileName, fileType);
     try {
       await Promise.all(
-        fileChunks.map(async ({ chunkIndex, chunks, fileChunk, fileName, fileType }) => {
-          const uploadResult = await uploadFile({
-            file: fileChunk,
-            fileName,
-            fileType,
-            chunkIndex,
-            chunkSize: chunks,
-            uid,
-          });
+        fileChunks.map(async (chunk) => {
+          const uploadResult = await uploadFile({ ...chunk, uid });
           progress.value = uploadResult.progress;
         })
       );
