@@ -8,7 +8,7 @@ const { state, actions } = useAuthStore();
 </script>
 
 <template>
-  <div>
+  <div class="container">
     <div v-if="!state.isAuthed">
       <div>
         <span>用户名：</span>
@@ -19,3 +19,10 @@ const { state, actions } = useAuthStore();
     <button v-if="state.isAuthed" @click="actions.logout">退出</button>
   </div>
 </template>
+
+<style scoped>
+.container {
+  border: 1px solid rgb(114, 232, 250);
+  width: 500px;
+}
+</style>

@@ -5,7 +5,7 @@ const { state } = useAuthStore();
 </script>
 
 <template>
-  <div>
+  <div class="container">
     <div v-if="!state.isAuthed">
       <h1>请登录</h1>
     </div>
@@ -14,3 +14,10 @@ const { state } = useAuthStore();
     </div>
   </div>
 </template>
+
+<style scoped>
+.container {
+  border: 1px solid salmon;
+  width: 500px;
+}
+</style>
