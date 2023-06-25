@@ -58,6 +58,14 @@ export const routes: RouteRecordRaw[] = [
           menu: true,
         },
       },
+      {
+        path: '/example/store',
+        name: 'Store',
+        component: () => import('../view/store/index.vue'),
+        meta: {
+          menu: true,
+        },
+      },
     ],
   },
   {
