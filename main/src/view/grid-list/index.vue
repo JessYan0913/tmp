@@ -8,15 +8,15 @@ const data: RequestFunc<number> = ({ page, limit }) => {
     setTimeout(() => {
       resolve({
         data: Array.from({ length: limit }, (_, index) => index + (page - 1) * limit),
-        total: 100000,
+        total: 300,
       });
-    }, 2000);
+    }, 1000);
   });
 };
 </script>
 
 <template>
-  <GridList :request="data" :column-gap="20" :row-gap="20" :limit="10000" :item-min-width="200" class="grid-list">
+  <GridList :request="data" :column-gap="20" :row-gap="20" :limit="100" item-min-width="100%" class="grid-list">
     <template #empty>
       <p>暂无数据</p>
     </template>

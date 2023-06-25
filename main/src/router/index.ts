@@ -50,14 +50,14 @@ export const routes: RouteRecordRaw[] = [
           menu: true,
         },
       },
-      {
-        path: '/example/grid-list',
-        name: 'GridList',
-        component: () => import('../view/grid-list/index.vue'),
-        meta: {
-          menu: true,
-        },
-      },
+      // {
+      //   path: '/example/grid-list',
+      //   name: 'GridList',
+      //   component: () => import('../view/grid-list/index.vue'),
+      //   meta: {
+      //     menu: true,
+      //   },
+      // },
     ],
   },
   {
@@ -92,6 +92,14 @@ const router = createRouter({
       path: '/page-editor',
       name: 'PageEditor',
       component: () => import('../view/page-editor/index.vue'),
+    },
+    {
+      path: '/example/grid-list',
+      name: 'GridList',
+      component: () => import('../view/grid-list/index.vue'),
+      meta: {
+        menu: true,
+      },
     },
     {
       path: '/404',
