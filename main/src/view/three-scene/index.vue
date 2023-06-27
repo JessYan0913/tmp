@@ -22,9 +22,7 @@ const handleUpload = async () => {
     <div class="menu">
       <el-button @click="handleUpload">上传</el-button>
     </div>
-    <div class="scene">
-      <ThreeScene :context="context" />
-    </div>
+    <ThreeScene class="scene" :context="context" />
   </div>
 </template>
 
@@ -37,6 +35,7 @@ const handleUpload = async () => {
   display: flex;
   flex-direction: column;
 }
+
 .menu {
   width: 100%;
   height: 50px;
@@ -44,6 +43,7 @@ const handleUpload = async () => {
   justify-content: start;
   align-items: center;
 }
+
 .scene {
   flex: 1;
 }
