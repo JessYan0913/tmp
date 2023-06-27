@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { ElButton } from 'element-plus';
+import { VBtn } from 'vuetify/components/VBtn';
 
 import { useApp } from '../hooks/useApp';
 
@@ -35,5 +35,5 @@ defineExpose({
 </script>
 
 <template>
-  <ElButton :disabled="disabled" @click="handleClick">{{ text }}</ElButton>
+  <VBtn :disabled="disabled" @click="handleClick">{{ text }}</VBtn>
 </template>

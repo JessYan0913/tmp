@@ -179,6 +179,7 @@ importers:
       vite-plugin-vue-setup-extend: ^0.4.0
       vue: ^3.2.45
       vue-tsc: ^1.0.24
+      vuetify: ^3.3.5
     dependencies:
       '@element-plus/icons-vue': 2.0.10_vue@3.2.45
       '@tmp/basic': link:../basic
@@ -188,6 +189,7 @@ importers:
       element-plus: 2.2.28_vue@3.2.45
       sass: 1.58.2
       vue: 3.2.45
+      vuetify: 3.3.5_prq2uz4lho2pwp6irk4cfkrxwu
     devDependencies:
       '@types/node': 18.11.18
       '@vitejs/plugin-vue': 4.0.0_vite@4.1.1+vue@3.2.45
@@ -1320,7 +1322,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.0.4
+      vite: 4.0.4_@types+node@18.11.18
       vue: 3.2.45
     dev: true
 
@@ -6022,6 +6024,29 @@ packages:
       '@vue/runtime-dom': 3.2.45
       '@vue/server-renderer': 3.2.45_vue@3.2.45
       '@vue/shared': 3.2.45
+
+  /vuetify/3.3.5_prq2uz4lho2pwp6irk4cfkrxwu:
+    resolution: {integrity: sha512-vkfPgPmKfSJa+jq6Ov+CTg7L1t2jLPKa7Slef9OrVHcLqg+gLuIj0z4PJE6E9HjFTUbgZShShOGxps52REJRIA==}
+    engines: {node: ^12.20 || >=14.13}
+    peerDependencies:
+      typescript: '>=4.7'
+      vite-plugin-vuetify: ^1.0.0-alpha.12
+      vue: ^3.2.0
+      vue-i18n: ^9.0.0
+      webpack-plugin-vuetify: ^2.0.0-alpha.11
+    peerDependenciesMeta:
+      typescript:
+        optional: true
+      vite-plugin-vuetify:
+        optional: true
+      vue-i18n:
+        optional: true
+      webpack-plugin-vuetify:
+        optional: true
+    dependencies:
+      typescript: 4.9.4
+      vue: 3.2.45
+    dev: false
 
   /w3c-xmlserializer/4.0.0:
     resolution: {integrity: sha512-d+BFHzbiCx6zGfz0HyQ6Rg69w9k19nviJspaj4yNscGjrHu94sVP+aRm75yEbCh+r2/yR+7q6hux9LVtbuTGBw==}

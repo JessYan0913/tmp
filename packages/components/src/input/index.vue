@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
+import { VTextField } from 'vuetify/components/VTextField';
 import { TmpFormModel } from '@tmp/h5-schema';
-import { ElInput } from 'element-plus';
 
 import { useApp } from '../hooks/useApp';
 
@@ -44,7 +44,7 @@ defineExpose({
 </script>
 
 <template>
-  <ElInput
+  <VTextField
     v-model="value"
     :placeholder="config.placeholder"
     :clearable="config.clearable"
@@ -55,5 +55,5 @@ defineExpose({
   >
     <template #prepend v-if="config.prepend"> {{ config.prepend }} </template>
     <template #append v-if="config.append"> {{ config.append }} </template>
-  </ElInput>
+  </VTextField>
 </template>
