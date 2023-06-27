@@ -8,21 +8,25 @@ const tableData = [
   {
     date: '2016-05-03',
     name: 'Tom',
+    sex: 'female',
     address: 'No. 189, Grove St, Los Angeles',
   },
   {
     date: '2016-05-02',
     name: 'Tom',
+    sex: 'female',
     address: 'No. 189, Grove St, Los Angeles',
   },
   {
     date: '2016-05-04',
     name: 'Tom',
+    sex: 'female',
     address: 'No. 189, Grove St, Los Angeles',
   },
   {
     date: '2016-05-01',
     name: 'Tom',
+    sex: 'female',
     address: 'No. 189, Grove St, Los Angeles',
   },
 ];
@@ -84,6 +88,17 @@ const loadData = async () => [
         <EditTableColumn prop="name" label="姓名">
           <template #edit="{ row }">
             <input v-model="row.name" />
+          </template>
+        </EditTableColumn>
+        <EditTableColumn prop="sex" label="性别">
+          <template #default="{ row }">
+            {{ row.sex === 'male' ? '男' : '女' }}
+          </template>
+          <template #edit="{ row }">
+            <el-select v-model="row.sex">
+              <el-option value="male" label="男"></el-option>
+              <el-option value="female" label="女"></el-option>
+            </el-select>
           </template>
         </EditTableColumn>
         <EditTableColumn prop="address" label="地址">
@@ -271,9 +286,11 @@ const loadData = async () => [
     margin-bottom: 100px;
   }
 }
+
 .edit-table {
   width: 50%;
 }
+
 .result-wrapper {
   width: 50%;
 }
