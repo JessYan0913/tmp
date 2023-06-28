@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
+import { VSelect } from 'vuetify/components/VSelect';
 import { TmpFormModel } from '@tmp/h5-schema';
-import { ElOption, ElSelect } from 'element-plus';
 
 import { useApp } from '../hooks/useApp';
 
-import { TmpOptions, TmpSelect } from './types';
+import { TmpItems, TmpSelect } from './types';
 
 const props = defineProps<{
   config: TmpSelect;
@@ -22,7 +22,7 @@ const emits = defineEmits<{
 
 const value = ref<string>(props.modelValue ?? props.config.defaultValue ?? '');
 
-const options = ref<TmpOptions>(props.config.options);
+const items = ref<TmpItems>(props.config.items);
 
 watch(
   () => value.value,
@@ -34,20 +34,16 @@ watch(
 
 provideMethod('setValue', ({ newValue }: any) => (value.value = newValue), ['newValue']);
 
-provideMethod('setOptions', ({ newOptions }: any) => (options.value = newOptions), ['newOptions']);
+provideMethod('setItems', ({ newItems }: any) => (items.value = newItems), ['newItems']);
 
 defineExpose({
   value,
-  options,
+  options: items,
   model: props.model,
   prop: props.prop,
 });
 </script>
 
 <template>
-  <ElSelect v-model="value" :placeholder="config.placeholder" :clearable="config.clearable">
-    <ElOption v-for="({ label, value }, index) in options" :key="index" :label="label" :value="value">
-      {{ label }}
-    </ElOption>
-  </ElSelect>
+  <VSelect v-model="value" :placeholder="config.placeholder" :items="items" :label="config.label" clearable> </VSelect>
 </template>

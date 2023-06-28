@@ -98,6 +98,7 @@ const page: TmpPage = {
           name: 'password',
           type: 'input',
           label: '密码',
+          clearable: true,
         },
         {
           id: 'select-sex',
@@ -105,6 +106,7 @@ const page: TmpPage = {
           type: 'select',
           label: '性别',
           defaultValue: '1',
+          clearable: true,
           events: [
             {
               event: 'change',
@@ -122,13 +124,13 @@ const page: TmpPage = {
               ],
             },
           ],
-          options: [
+          items: [
             {
-              label: '男',
+              title: '男',
               value: '1',
             },
             {
-              label: '女',
+              title: '女',
               value: '0',
             },
           ],

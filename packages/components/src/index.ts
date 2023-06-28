@@ -1,6 +1,5 @@
 import { App } from 'vue';
 import { createVuetify } from 'vuetify';
-import * as components from 'vuetify/components';
 
 import 'vuetify/styles';
 
@@ -12,9 +11,12 @@ import Select from './select/index.vue';
 import Text from './text/index.vue';
 import Upload from './upload/index.vue';
 
+import 'vuetify/dist/vuetify.css';
+import '@mdi/font/css/materialdesignicons.css';
+
 export default {
   install: (app: App) => {
-    const vuetify = createVuetify({ components });
+    const vuetify = createVuetify();
     app.use(vuetify);
     app.component('TmpUiPage', Page);
     app.component('TmpUiForm', Form);
