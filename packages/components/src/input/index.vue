@@ -22,8 +22,6 @@ const emits = defineEmits<{
 
 const value = ref<string>(props.modelValue ?? props.config.defaultValue ?? '');
 
-const showWordLimit = computed<boolean>(() => Boolean(props.config.maxLength || props.config.minLength));
-
 const inputType = computed<string>(() => (props.config.isPassword ? 'password' : 'text'));
 
 watch(
@@ -44,15 +42,7 @@ defineExpose({
 </script>
 
 <template>
-  <VTextField
-    v-model="value"
-    :placeholder="config.placeholder"
-    :clearable="config.clearable"
-    :maxlength="config.maxLength"
-    :minlength="config.minLength"
-    :show-word-limit="showWordLimit"
-    :type="inputType"
-  >
+  <VTextField v-model="value" :placeholder="config.placeholder" :clearable="config.clearable" :type="inputType">
     <template #prepend v-if="config.prepend"> {{ config.prepend }} </template>
     <template #append v-if="config.append"> {{ config.append }} </template>
   </VTextField>
