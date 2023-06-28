@@ -6,6 +6,7 @@ import 'vuetify/styles';
 import Button from './button/index.vue';
 import Form from './form/index.vue';
 import Input from './input/index.vue';
+import Overlay from './overlay/index.vue';
 import Page from './page/index.vue';
 import Select from './select/index.vue';
 import Text from './text/index.vue';
@@ -25,5 +26,6 @@ export default {
     app.component('TmpUiSelect', Select);
     app.component('TmpUiButton', Button);
     app.component('TmpUiText', Text);
+    app.component('TmpUiOverlay', Overlay);
   },
 };

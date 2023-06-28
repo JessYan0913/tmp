@@ -91,15 +91,15 @@ export class App extends EventBus {
     for (const component of this.curPage.components.values()) {
       component.events?.forEach((event) => {
         this.on(`${component.data.id}::${event.event}`, (args: AppEmitArgs) => {
-          this.handleEvent(component, event, args);
+          const props = this.calComponentMethodProps(event, args);
+          this.handleEvent(component, event, props);
         });
       });
     }
   }
 
-  public handleEvent(component: Component, event: TmpEvent, args: AppEmitArgs): void {
+  public handleEvent(component: Component, event: TmpEvent, props: Record<string, any>): void {
     if (event.actionType === 'component-control') {
-      const props = this.calComponentMethodProps(event, args);
       this.controlComponent(component, event, props);
     }
   }

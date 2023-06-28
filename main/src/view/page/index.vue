@@ -56,7 +56,7 @@ const page: TmpPage = {
         {
           event: 'submit',
           actionType: 'component-control',
-          target: 'text-1',
+          target: 'text1',
           method: 'setText',
           propMappings: [
             {
@@ -149,12 +149,33 @@ const page: TmpPage = {
           target: 'form-1',
           method: 'submit',
         },
+        {
+          event: 'click',
+          actionType: 'component-control',
+          target: 'overlay1',
+          method: 'setVisibility',
+          propMappings: [
+            {
+              name: 'newVisibility',
+              ignore: false,
+              sourceScope: TmpMappingSpace.EXPRESSION,
+              expression: 'true',
+            },
+          ],
+        },
       ],
     },
     {
-      id: 'text-1',
-      name: 'result',
-      type: 'text',
+      id: 'overlay1',
+      name: 'resultOverlay1',
+      type: 'overlay',
+      children: [
+        {
+          id: 'text1',
+          name: 'result',
+          type: 'text',
+        },
+      ],
     },
   ],
 };
