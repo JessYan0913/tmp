@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import { CircleCloseFilled, Upload } from '@element-plus/icons-vue';
+import { VBtn } from 'vuetify/components/VBtn';
 import { useSelectFileUpload } from '@tmp/basic';
 import { Request } from '@tmp/utils';
-import { ElButton, ElIcon } from 'element-plus';
 
 import { TmpFile, TmpPicture, TmpUpload } from './types';
 
@@ -68,13 +67,11 @@ async function fetchUploadFile(file: File): Promise<any> {
 <template>
   <!-- <ElFormItem :label="config.label" :prop="config.name"> -->
   <div class="upload-wrapper">
-    <ElButton class="upload-btn" type="primary" @click="handleClickUpload">
-      文件上传<ElIcon class="el-icon--right"><Upload /></ElIcon>
-    </ElButton>
+    <VBtn class="upload-btn" type="primary" @click="handleClickUpload"> 文件上传 </VBtn>
     <div v-if="listType === 'list'">
       <div v-for="(file, index) in files" :key="index" class="file-list__item">
         <span class="name">{{ file.name }}</span>
-        <ElIcon @click="handleClickDeleteFile(index)"><CircleCloseFilled /></ElIcon>
+        <VBtn @click="handleClickDeleteFile(index)">删除</VBtn>
       </div>
     </div>
     <div v-if="listType === 'picture'">
