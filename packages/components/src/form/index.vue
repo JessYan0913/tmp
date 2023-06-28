@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import { VForm } from 'vuetify/components/VForm';
 import { TmpFormElement, TmpFormModel } from '@tmp/h5-schema';
-import { ElForm } from 'element-plus';
 
 import TmpUiComponent from '../Component.vue';
 import { useApp } from '../hooks/useApp';
@@ -30,7 +30,7 @@ defineExpose({
 </script>
 
 <template>
-  <ElForm :model="value">
+  <VForm :model="value">
     <TmpUiComponent
       v-for="itemElement in config.children"
       :key="itemElement.id"
@@ -39,5 +39,5 @@ defineExpose({
       :model="value"
     >
     </TmpUiComponent>
-  </ElForm>
+  </VForm>
 </template>
