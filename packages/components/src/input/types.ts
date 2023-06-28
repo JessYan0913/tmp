@@ -35,4 +35,8 @@ export interface TmpInput extends TmpFormItemElement {
   reverse?: boolean;
   /** 隐藏提示和验证信息 */
   hideDetails?: boolean | 'auto';
+  /** 外部图标 */
+  prependIcon?: string;
+  /** 插槽后图标 */
+  appendIcon?: string;
 }

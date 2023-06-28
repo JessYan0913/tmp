@@ -42,8 +42,14 @@ defineExpose({
 </script>
 
 <template>
-  <VTextField v-model="value" :placeholder="config.placeholder" :clearable="config.clearable" :type="inputType">
-    <template #prepend v-if="config.prepend"> {{ config.prepend }} </template>
-    <template #append v-if="config.append"> {{ config.append }} </template>
+  <VTextField
+    v-model="value"
+    :label="config.label"
+    :placeholder="config.placeholder"
+    :prepend="config.prependIcon"
+    :append="config.appendIcon"
+    :clearable="config.clearable"
+    :type="inputType"
+  >
   </VTextField>
 </template>

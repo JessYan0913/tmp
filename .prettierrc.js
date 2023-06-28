@@ -10,4 +10,4 @@ module.exports = {
   endOfLine: 'auto',
   vueIndentScriptAndStyle: false,
   vueIndentHTML: false,
-}
+};

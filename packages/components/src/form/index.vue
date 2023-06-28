@@ -3,9 +3,8 @@ import { ref, watch } from 'vue';
 import { TmpFormElement, TmpFormModel } from '@tmp/h5-schema';
 import { ElForm } from 'element-plus';
 
+import TmpUiComponent from '../Component.vue';
 import { useApp } from '../hooks/useApp';
-
-import TmpUiFormItem from './components/FormItem.vue';
 
 const props = defineProps<{
   config: TmpFormElement;
@@ -32,11 +31,13 @@ defineExpose({
 
 <template>
   <ElForm :model="value">
-    <TmpUiFormItem
+    <TmpUiComponent
       v-for="itemElement in config.children"
       :key="itemElement.id"
+      v-model="value[itemElement.name ?? '']"
       :config="itemElement"
       :model="value"
-    ></TmpUiFormItem>
+    >
+    </TmpUiComponent>
   </ElForm>
 </template>

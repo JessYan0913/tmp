@@ -21,11 +21,13 @@ export const useApp = (props: Record<string, any>) => {
   onUpdated(() => {
     nextTick(() => {
       const vm = getCurrentInstance()?.proxy;
+      const exposed = getCurrentInstance()?.exposed ?? undefined;
       component?.emit('updated', {
         beforeInstance: instance,
         instance: {
           ...instance,
           el: vm ? vm.$el : instance.el,
+          exposed: exposed,
         },
       });
     });
