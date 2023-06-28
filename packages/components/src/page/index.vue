@@ -9,8 +9,7 @@ defineProps<{
 </script>
 
 <template>
-  <div>
-    <slot></slot>
+  <v-container>
     <TmpUiComponent v-for="itemElement in config.children" :key="itemElement.id" :config="itemElement"></TmpUiComponent>
-  </div>
+  </v-container>
 </template>
