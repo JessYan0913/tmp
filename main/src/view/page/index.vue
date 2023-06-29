@@ -170,6 +170,7 @@ const page: TmpPage = {
       name: 'resultOverlay1',
       type: 'overlay',
       persistent: true,
+      scrim: 'yellow',
       children: [
         {
           id: 'text1',

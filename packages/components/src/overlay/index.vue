@@ -30,7 +30,12 @@ defineExpose({
 </script>
 
 <template>
-  <VOverlay v-model="visibility" :persistent="config.persistent" :scrim="config.scrim">
+  <VOverlay
+    v-model="visibility"
+    :persistent="config.persistent"
+    :scrim="config.scrim"
+    :scroll-strategy="config.scrollStrategy"
+  >
     <TmpUiComponent v-for="itemElement in config.children" :key="itemElement.id" :config="itemElement">
     </TmpUiComponent>
   </VOverlay>
