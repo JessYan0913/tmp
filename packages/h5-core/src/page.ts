@@ -1,4 +1,4 @@
-import { Id, TmpContainer, TmpElement, TmpPage } from '@tmp/h5-schema';
+import { Id, isTmpElement, TmpContainer, TmpElement, TmpPage } from '@tmp/h5-schema';
 
 import { App } from './app';
 import { Component } from './component';
@@ -30,6 +30,24 @@ export class Page extends Component {
       app: this.app,
     });
     this.components.set(data.id, component);
+    if (data.type === 'card') {
+      if (isTmpElement(data.content)) {
+        this.initComponent(data.content, component);
+      }
+      if (isTmpElement(data.title)) {
+        this.initComponent(data.title, component);
+      }
+      if (isTmpElement(data.subtitle)) {
+        this.initComponent(data.subtitle, component);
+      }
+      if (Array.isArray(data.actions)) {
+        data.actions.forEach((action) => {
+          if (isTmpElement(action)) {
+            this.initComponent(action, component);
+          }
+        });
+      }
+    }
     data.children?.forEach((child: TmpElement) => this.initComponent(child, component));
   }
 

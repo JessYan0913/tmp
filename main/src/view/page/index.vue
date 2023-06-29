@@ -53,7 +53,6 @@ const page: TmpPage = {
       name: 'card1',
       type: 'card',
       title: '标题',
-      subtitle: '副标题',
       content: {
         id: 'form-1',
         name: 'userInfo',
@@ -143,30 +142,32 @@ const page: TmpPage = {
           },
         ],
       },
-    },
-    {
-      id: 'button-1',
-      name: 'submitButton',
-      type: 'button',
-      text: '提交',
-      events: [
+      actions: [
         {
-          event: 'click',
-          actionType: 'component-control',
-          target: 'form-1',
-          method: 'submit',
-        },
-        {
-          event: 'click',
-          actionType: 'component-control',
-          target: 'overlay1',
-          method: 'setVisibility',
-          propMappings: [
+          id: 'button-1',
+          name: 'submitButton',
+          type: 'button',
+          text: '提交',
+          events: [
             {
-              name: 'newVisibility',
-              ignore: false,
-              sourceScope: 'expression',
-              expression: 'true',
+              event: 'click',
+              actionType: 'component-control',
+              target: 'form-1',
+              method: 'submit',
+            },
+            {
+              event: 'click',
+              actionType: 'component-control',
+              target: 'overlay1',
+              method: 'setVisibility',
+              propMappings: [
+                {
+                  name: 'newVisibility',
+                  ignore: false,
+                  sourceScope: 'expression',
+                  expression: 'true',
+                },
+              ],
             },
           ],
         },

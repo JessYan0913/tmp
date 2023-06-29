@@ -24,5 +24,9 @@ defineProps<{
       <span v-if="typeof config.content === 'string'">{{ config.content }}</span>
       <TmpUiComponent v-else-if="config.content !== void 0" :config="config.content"></TmpUiComponent>
     </template>
+    <template #actions>
+      <TmpUiComponent v-for="actionElement in config.actions" :key="actionElement.id" :config="actionElement">
+      </TmpUiComponent>
+    </template>
   </VCard>
 </template>
