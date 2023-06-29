@@ -169,11 +169,34 @@ const page: TmpPage = {
       id: 'overlay1',
       name: 'resultOverlay1',
       type: 'overlay',
+      persistent: true,
       children: [
         {
           id: 'text1',
           name: 'result',
           type: 'text',
+        },
+        {
+          id: 'closeOverlayBtn',
+          name: 'close',
+          type: 'button',
+          text: '关闭',
+          events: [
+            {
+              event: 'click',
+              actionType: 'component-control',
+              target: 'overlay1',
+              method: 'setVisibility',
+              propMappings: [
+                {
+                  name: 'newVisibility',
+                  ignore: false,
+                  sourceScope: TmpMappingSpace.EXPRESSION,
+                  expression: 'false',
+                },
+              ],
+            },
+          ],
         },
       ],
     },
