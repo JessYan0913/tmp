@@ -30,7 +30,7 @@ export class Component extends EventBus<EventArgs.Component> {
     this.page = page;
     this.parent = parent;
 
-    this.once('mounted', ({ instance }) => {
+    this.on('mounted', ({ instance }) => {
       this.instance = instance;
       this.flashEventCaches();
     });
@@ -40,7 +40,7 @@ export class Component extends EventBus<EventArgs.Component> {
       this.flashEventCaches();
     });
 
-    this.once('unmounted', () => {
+    this.on('unmounted', () => {
       this.instance = null;
       this.removeAllListeners('updated');
     });

@@ -111,7 +111,7 @@ const page: TmpPage = {
             {
               event: 'change',
               actionType: 'component-control',
-              target: 'text-1',
+              target: 'text1',
               method: 'setText',
               propMappings: [
                 {
