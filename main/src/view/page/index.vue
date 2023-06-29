@@ -49,93 +49,100 @@ const page: TmpPage = {
       ],
     },
     {
-      id: 'form-1',
-      name: 'userInfo',
-      type: 'form',
-      events: [
-        {
-          event: 'submit',
-          actionType: 'component-control',
-          target: 'text1',
-          method: 'setText',
-          propMappings: [
-            {
-              name: 'newText',
-              ignore: false,
-              sourceScope: TmpMappingSpace.EXPRESSION,
-              expression: 'JSON.stringify(event.value)',
-            },
-          ],
-        },
-      ],
-      children: [
-        {
-          id: 'input-userName',
-          name: 'userName',
-          type: 'input',
-          label: '用户名',
-          placeholder: '请输入用户名',
-          events: [
-            {
-              event: 'change',
-              actionType: 'component-control',
-              target: 'input-password',
-              method: 'setValue',
-              propMappings: [
-                {
-                  name: 'newValue',
-                  ignore: false,
-                  defaultValue: '1',
-                  sourceScope: TmpMappingSpace.EXPRESSION,
-                  expression: 'event.value + "333333333"',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          id: 'input-password',
-          name: 'password',
-          type: 'input',
-          label: '密码',
-          clearable: true,
-        },
-        {
-          id: 'select-sex',
-          name: 'sex',
-          type: 'select',
-          label: '性别',
-          defaultValue: '1',
-          clearable: true,
-          events: [
-            {
-              event: 'change',
-              actionType: 'component-control',
-              target: 'text1',
-              method: 'setText',
-              propMappings: [
-                {
-                  name: 'newText',
-                  ignore: false,
-                  defaultValue: '1',
-                  sourceScope: TmpMappingSpace.EXPRESSION,
-                  expression: '`用户名: ${namespace["input-userName"].value}`',
-                },
-              ],
-            },
-          ],
-          items: [
-            {
-              title: '男',
-              value: '1',
-            },
-            {
-              title: '女',
-              value: '0',
-            },
-          ],
-        },
-      ],
+      id: 'card1',
+      name: 'card1',
+      type: 'card',
+      title: '标题',
+      subtitle: '副标题',
+      content: {
+        id: 'form-1',
+        name: 'userInfo',
+        type: 'form',
+        events: [
+          {
+            event: 'submit',
+            actionType: 'component-control',
+            target: 'text1',
+            method: 'setText',
+            propMappings: [
+              {
+                name: 'newText',
+                ignore: false,
+                sourceScope: TmpMappingSpace.EXPRESSION,
+                expression: 'JSON.stringify(event.value)',
+              },
+            ],
+          },
+        ],
+        children: [
+          {
+            id: 'input-userName',
+            name: 'userName',
+            type: 'input',
+            label: '用户名',
+            placeholder: '请输入用户名',
+            events: [
+              {
+                event: 'change',
+                actionType: 'component-control',
+                target: 'input-password',
+                method: 'setValue',
+                propMappings: [
+                  {
+                    name: 'newValue',
+                    ignore: false,
+                    defaultValue: '1',
+                    sourceScope: TmpMappingSpace.EXPRESSION,
+                    expression: 'event.value + "333333333"',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: 'input-password',
+            name: 'password',
+            type: 'input',
+            label: '密码',
+            clearable: true,
+          },
+          {
+            id: 'select-sex',
+            name: 'sex',
+            type: 'select',
+            label: '性别',
+            defaultValue: '1',
+            clearable: true,
+            events: [
+              {
+                event: 'change',
+                actionType: 'component-control',
+                target: 'text1',
+                method: 'setText',
+                propMappings: [
+                  {
+                    name: 'newText',
+                    ignore: false,
+                    defaultValue: '1',
+                    sourceScope: TmpMappingSpace.EXPRESSION,
+                    expression: '`用户名: ${namespace["input-userName"].value}`',
+                  },
+                ],
+              },
+            ],
+            items: [
+              {
+                title: '男',
+                value: '1',
+              },
+              {
+                title: '女',
+                value: '0',
+              },
+            ],
+          },
+        ],
+      },
     },
     {
       id: 'button-1',

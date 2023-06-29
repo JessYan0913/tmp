@@ -4,6 +4,7 @@ import { createVuetify } from 'vuetify';
 import 'vuetify/styles';
 
 import Button from './button/index.vue';
+import Card from './card/index.vue';
 import Form from './form/index.vue';
 import Input from './input/index.vue';
 import Overlay from './overlay/index.vue';
@@ -27,5 +28,6 @@ export default {
     app.component('TmpUiButton', Button);
     app.component('TmpUiText', Text);
     app.component('TmpUiOverlay', Overlay);
+    app.component('TmpUiCard', Card);
   },
 };
