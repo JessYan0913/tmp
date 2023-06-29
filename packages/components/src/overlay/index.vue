@@ -35,6 +35,7 @@ defineExpose({
     :persistent="config.persistent"
     :scrim="config.scrim"
     :scroll-strategy="config.scrollStrategy"
+    absolute
   >
     <TmpUiComponent v-for="itemElement in config.children" :key="itemElement.id" :config="itemElement">
     </TmpUiComponent>
