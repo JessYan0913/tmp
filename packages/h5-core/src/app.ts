@@ -1,13 +1,5 @@
 import { unref } from 'vue';
-import {
-  Id,
-  TmpApplication,
-  TmpEvent,
-  TmpInstanceMethod,
-  TmpMappingSpace,
-  TmpPage,
-  TmpPropMapping,
-} from '@tmp/h5-schema';
+import { Id, TmpApplication, TmpEvent, TmpInstanceMethod, TmpPage, TmpPropMapping } from '@tmp/h5-schema';
 import { EventBus } from '@tmp/utils';
 import dot from 'dot';
 
@@ -143,16 +135,16 @@ export class App extends EventBus {
     const namespace = { ...this.namespace };
     const computeTargetByMapping = (mapping: TmpPropMapping, eventArgs: Record<string, any> = {}): any => {
       const mappingClassify = {
-        [TmpMappingSpace.EVENT]: ({ source, defaultValue }: TmpPropMapping) => {
+        ['event']: ({ source, defaultValue }: TmpPropMapping) => {
           if (!source) {
             return defaultValue;
           }
           return Reflect.get(eventArgs, source);
         },
-        [TmpMappingSpace.EXPRESSION]: ({ expression }: TmpPropMapping) => {
+        ['expression']: ({ expression }: TmpPropMapping) => {
           return new Function('event, namespace', `return ${expression}`)(eventArgs, namespace);
         },
-        [TmpMappingSpace.TEMPLATE]: ({ template }: TmpPropMapping) => {
+        ['template']: ({ template }: TmpPropMapping) => {
           return dot.template(template ?? '')({ event: eventArgs, namespace });
         },
       };

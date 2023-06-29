@@ -2,7 +2,7 @@
 import { provide } from 'vue';
 import { useRouter } from 'vue-router';
 import { App } from '@tmp/h5-core';
-import { TmpMappingSpace, TmpPage } from '@tmp/h5-schema';
+import { TmpPage } from '@tmp/h5-schema';
 import { ElButton } from 'element-plus';
 
 const page: TmpPage = {
@@ -26,7 +26,7 @@ const page: TmpPage = {
               name: 'newValue',
               ignore: false,
               defaultValue: '1',
-              sourceScope: TmpMappingSpace.EVENT,
+              sourceScope: 'event',
               source: 'value',
             },
           ],
@@ -41,7 +41,7 @@ const page: TmpPage = {
               name: 'newItems',
               ignore: false,
               defaultValue: '1',
-              sourceScope: TmpMappingSpace.EXPRESSION,
+              sourceScope: 'expression',
               expression: `[{value: '0', title: '男生'}, {value: '1', title: '女生'}]`,
             },
           ],
@@ -68,7 +68,7 @@ const page: TmpPage = {
               {
                 name: 'newText',
                 ignore: false,
-                sourceScope: TmpMappingSpace.EXPRESSION,
+                sourceScope: 'expression',
                 expression: 'JSON.stringify(event.value)',
               },
             ],
@@ -92,7 +92,7 @@ const page: TmpPage = {
                     name: 'newValue',
                     ignore: false,
                     defaultValue: '1',
-                    sourceScope: TmpMappingSpace.EXPRESSION,
+                    sourceScope: 'expression',
                     expression: 'event.value + "333333333"',
                   },
                 ],
@@ -124,7 +124,7 @@ const page: TmpPage = {
                     name: 'newText',
                     ignore: false,
                     defaultValue: '1',
-                    sourceScope: TmpMappingSpace.EXPRESSION,
+                    sourceScope: 'expression',
                     expression: '`用户名: ${namespace["input-userName"].value}`',
                   },
                 ],
@@ -165,7 +165,7 @@ const page: TmpPage = {
             {
               name: 'newVisibility',
               ignore: false,
-              sourceScope: TmpMappingSpace.EXPRESSION,
+              sourceScope: 'expression',
               expression: 'true',
             },
           ],
@@ -199,7 +199,7 @@ const page: TmpPage = {
                 {
                   name: 'newVisibility',
                   ignore: false,
-                  sourceScope: TmpMappingSpace.EXPRESSION,
+                  sourceScope: 'expression',
                   expression: 'false',
                 },
               ],

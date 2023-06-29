@@ -12,17 +12,17 @@ defineProps<{
 
 <template>
   <VCard>
-    <template v-if="config.title" #title>
+    <template #title>
       <span v-if="typeof config.title === 'string'">{{ config.title }}</span>
-      <TmpUiComponent v-else :config="config.title"></TmpUiComponent>
+      <TmpUiComponent v-else-if="config.title !== void 0" :config="config.title"></TmpUiComponent>
     </template>
-    <template v-if="config.subtitle" #subtitle>
+    <template #subtitle>
       <span v-if="typeof config.subtitle === 'string'">{{ config.subtitle }}</span>
-      <TmpUiComponent v-else :config="config.subtitle"></TmpUiComponent>
+      <TmpUiComponent v-else-if="config.subtitle !== void 0" :config="config.subtitle"></TmpUiComponent>
     </template>
-    <template v-if="config.content" #text>
+    <template #text>
       <span v-if="typeof config.content === 'string'">{{ config.content }}</span>
-      <TmpUiComponent v-else :config="config.content"></TmpUiComponent>
+      <TmpUiComponent v-else-if="config.content !== void 0" :config="config.content"></TmpUiComponent>
     </template>
   </VCard>
 </template>
