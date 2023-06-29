@@ -2,6 +2,7 @@ import path from 'path';
 
 import { defineConfig } from 'vite';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
+import vuetify from 'vite-plugin-vuetify';
 import vue from '@vitejs/plugin-vue';
 
 import pkg from './package.json';
@@ -9,7 +10,7 @@ import pkg from './package.json';
 const deps = Object.keys(pkg.dependencies);
 
 export default defineConfig({
-  plugins: [vue(), vueSetupExtend()],
+  plugins: [vue(), vueSetupExtend(), vuetify()],
 
   resolve: {
     alias:

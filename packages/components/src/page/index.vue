@@ -10,7 +10,6 @@ defineProps<{
 
 <template>
   <div>
-    <slot></slot>
     <TmpUiComponent v-for="itemElement in config.children" :key="itemElement.id" :config="itemElement"></TmpUiComponent>
   </div>
 </template>

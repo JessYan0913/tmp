@@ -30,15 +30,17 @@ export class Component extends EventBus<EventArgs.Component> {
     this.page = page;
     this.parent = parent;
 
-    this.once('mounted', ({ instance }) => {
+    this.on('mounted', ({ instance }) => {
       this.instance = instance;
+      this.flashEventCaches();
     });
 
     this.on('updated', ({ instance }) => {
       this.instance = instance;
+      this.flashEventCaches();
     });
 
-    this.once('unmounted', () => {
+    this.on('unmounted', () => {
       this.instance = null;
       this.removeAllListeners('updated');
     });
@@ -46,6 +48,16 @@ export class Component extends EventBus<EventArgs.Component> {
 
   public setInstance(instance: TmpElementInstance): void {
     this.emit('updated', { beforeInstance: this.instance, instance: instance });
+  }
+
+  public flashEventCaches() {
+    const eventCaches = this.app.eventCaches.get(this.data.id);
+    if (!Array.isArray(eventCaches) || eventCaches.length === 0) {
+      return;
+    }
+    for (let eventCache = eventCaches.shift(); eventCache; eventCache = eventCaches.shift()) {
+      this.app.handleEvent(eventCache.fromComponent, eventCache.event, eventCache.props);
+    }
   }
 }
 

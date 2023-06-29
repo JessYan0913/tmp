@@ -2,7 +2,7 @@
 import { provide } from 'vue';
 import { useRouter } from 'vue-router';
 import { App } from '@tmp/h5-core';
-import { TmpMappingSpace, TmpPage } from '@tmp/h5-schema';
+import { TmpPage } from '@tmp/h5-schema';
 import { ElButton } from 'element-plus';
 
 const page: TmpPage = {
@@ -26,7 +26,7 @@ const page: TmpPage = {
               name: 'newValue',
               ignore: false,
               defaultValue: '1',
-              sourceScope: TmpMappingSpace.EVENT,
+              sourceScope: 'event',
               source: 'value',
             },
           ],
@@ -35,123 +35,179 @@ const page: TmpPage = {
           event: 'change',
           actionType: 'component-control',
           target: 'select-sex',
-          method: 'setOptions',
+          method: 'setItems',
           propMappings: [
             {
-              name: 'newOptions',
+              name: 'newItems',
               ignore: false,
               defaultValue: '1',
-              sourceScope: TmpMappingSpace.EXPRESSION,
-              expression: `[{value: '0', label: '男生'}, {value: '1', label: '女生'}]`,
+              sourceScope: 'expression',
+              expression: `[{value: '0', title: '男生'}, {value: '1', title: '女生'}]`,
             },
           ],
         },
       ],
     },
     {
-      id: 'form-1',
-      name: 'userInfo',
-      type: 'form',
-      events: [
+      id: 'card1',
+      name: 'card1',
+      type: 'card',
+      title: '标题',
+      content: {
+        id: 'form-1',
+        name: 'userInfo',
+        type: 'form',
+        events: [
+          {
+            event: 'submit',
+            actionType: 'component-control',
+            target: 'text1',
+            method: 'setText',
+            propMappings: [
+              {
+                name: 'newText',
+                ignore: false,
+                sourceScope: 'expression',
+                expression: 'JSON.stringify(event.value)',
+              },
+            ],
+          },
+        ],
+        children: [
+          {
+            id: 'input-userName',
+            name: 'userName',
+            type: 'input',
+            label: '用户名',
+            placeholder: '请输入用户名',
+            events: [
+              {
+                event: 'change',
+                actionType: 'component-control',
+                target: 'input-password',
+                method: 'setValue',
+                propMappings: [
+                  {
+                    name: 'newValue',
+                    ignore: false,
+                    defaultValue: '1',
+                    sourceScope: 'expression',
+                    expression: 'event.value + "333333333"',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: 'input-password',
+            name: 'password',
+            type: 'input',
+            label: '密码',
+            clearable: true,
+          },
+          {
+            id: 'select-sex',
+            name: 'sex',
+            type: 'select',
+            label: '性别',
+            defaultValue: '1',
+            clearable: true,
+            events: [
+              {
+                event: 'change',
+                actionType: 'component-control',
+                target: 'text1',
+                method: 'setText',
+                propMappings: [
+                  {
+                    name: 'newText',
+                    ignore: false,
+                    defaultValue: '1',
+                    sourceScope: 'expression',
+                    expression: '`用户名: ${namespace["input-userName"].value}`',
+                  },
+                ],
+              },
+            ],
+            items: [
+              {
+                title: '男',
+                value: '1',
+              },
+              {
+                title: '女',
+                value: '0',
+              },
+            ],
+          },
+        ],
+      },
+      actions: [
         {
-          event: 'submit',
-          actionType: 'component-control',
-          target: 'text-1',
-          method: 'setText',
-          propMappings: [
+          id: 'button-1',
+          name: 'submitButton',
+          type: 'button',
+          text: '提交',
+          events: [
             {
-              name: 'newText',
-              ignore: false,
-              sourceScope: TmpMappingSpace.EXPRESSION,
-              expression: 'JSON.stringify(event.value)',
+              event: 'click',
+              actionType: 'component-control',
+              target: 'form-1',
+              method: 'submit',
+            },
+            {
+              event: 'click',
+              actionType: 'component-control',
+              target: 'overlay1',
+              method: 'setVisibility',
+              propMappings: [
+                {
+                  name: 'newVisibility',
+                  ignore: false,
+                  sourceScope: 'expression',
+                  expression: 'true',
+                },
+              ],
             },
           ],
         },
       ],
+    },
+    {
+      id: 'overlay1',
+      name: 'resultOverlay1',
+      type: 'overlay',
+      persistent: true,
+      scrim: 'yellow',
       children: [
         {
-          id: 'input-userName',
-          name: 'userName',
-          type: 'input',
-          label: '用户名',
+          id: 'text1',
+          name: 'result',
+          type: 'text',
+        },
+        {
+          id: 'closeOverlayBtn',
+          name: 'close',
+          type: 'button',
+          text: '关闭',
           events: [
             {
-              event: 'change',
+              event: 'click',
               actionType: 'component-control',
-              target: 'input-password',
-              method: 'setValue',
+              target: 'overlay1',
+              method: 'setVisibility',
               propMappings: [
                 {
-                  name: 'newValue',
+                  name: 'newVisibility',
                   ignore: false,
-                  defaultValue: '1',
-                  sourceScope: TmpMappingSpace.EXPRESSION,
-                  expression: 'event.value + "333333333"',
+                  sourceScope: 'expression',
+                  expression: 'false',
                 },
               ],
             },
           ],
         },
-        {
-          id: 'input-password',
-          name: 'password',
-          type: 'input',
-          label: '密码',
-        },
-        {
-          id: 'select-sex',
-          name: 'sex',
-          type: 'select',
-          label: '性别',
-          defaultValue: '1',
-          events: [
-            {
-              event: 'change',
-              actionType: 'component-control',
-              target: 'text-1',
-              method: 'setText',
-              propMappings: [
-                {
-                  name: 'newText',
-                  ignore: false,
-                  defaultValue: '1',
-                  sourceScope: TmpMappingSpace.EXPRESSION,
-                  expression: '`用户名: ${namespace["input-userName"].value}`',
-                },
-              ],
-            },
-          ],
-          options: [
-            {
-              label: '男',
-              value: '1',
-            },
-            {
-              label: '女',
-              value: '0',
-            },
-          ],
-        },
       ],
-    },
-    {
-      id: 'button-1',
-      name: 'submitButton',
-      type: 'button',
-      text: '提交',
-      events: [
-        {
-          event: 'click',
-          actionType: 'component-control',
-          target: 'form-1',
-          method: 'submit',
-        },
-      ],
-    },
-    {
-      id: 'text-1',
-      name: 'result',
-      type: 'text',
     },
   ],
 };

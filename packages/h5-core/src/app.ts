@@ -1,13 +1,5 @@
 import { unref } from 'vue';
-import {
-  Id,
-  TmpApplication,
-  TmpEvent,
-  TmpInstanceMethod,
-  TmpMappingSpace,
-  TmpPage,
-  TmpPropMapping,
-} from '@tmp/h5-schema';
+import { Id, TmpApplication, TmpEvent, TmpInstanceMethod, TmpPage, TmpPropMapping } from '@tmp/h5-schema';
 import { EventBus } from '@tmp/utils';
 import dot from 'dot';
 
@@ -91,15 +83,15 @@ export class App extends EventBus {
     for (const component of this.curPage.components.values()) {
       component.events?.forEach((event) => {
         this.on(`${component.data.id}::${event.event}`, (args: AppEmitArgs) => {
-          this.handleEvent(component, event, args);
+          const props = this.calComponentMethodProps(event, args);
+          this.handleEvent(component, event, props);
         });
       });
     }
   }
 
-  public handleEvent(component: Component, event: TmpEvent, args: AppEmitArgs): void {
+  public handleEvent(component: Component, event: TmpEvent, props: Record<string, any>): void {
     if (event.actionType === 'component-control') {
-      const props = this.calComponentMethodProps(event, args);
       this.controlComponent(component, event, props);
     }
   }
@@ -113,7 +105,8 @@ export class App extends EventBus {
     }
     const targetComponent = this.curPage.getComponent(event.target);
     if (!targetComponent) {
-      throw new Error(`${event.target}组件不存在，无法响应${fromComponent.data.id}的${event.event}事件`);
+      console.error(`${event.target}组件不存在，无法响应${fromComponent.data.id}的${event.event}事件`);
+      return;
     }
 
     if (!targetComponent.instance) {
@@ -142,16 +135,16 @@ export class App extends EventBus {
     const namespace = { ...this.namespace };
     const computeTargetByMapping = (mapping: TmpPropMapping, eventArgs: Record<string, any> = {}): any => {
       const mappingClassify = {
-        [TmpMappingSpace.EVENT]: ({ source, defaultValue }: TmpPropMapping) => {
+        ['event']: ({ source, defaultValue }: TmpPropMapping) => {
           if (!source) {
             return defaultValue;
           }
           return Reflect.get(eventArgs, source);
         },
-        [TmpMappingSpace.EXPRESSION]: ({ expression }: TmpPropMapping) => {
+        ['expression']: ({ expression }: TmpPropMapping) => {
           return new Function('event, namespace', `return ${expression}`)(eventArgs, namespace);
         },
-        [TmpMappingSpace.TEMPLATE]: ({ template }: TmpPropMapping) => {
+        ['template']: ({ template }: TmpPropMapping) => {
           return dot.template(template ?? '')({ event: eventArgs, namespace });
         },
       };

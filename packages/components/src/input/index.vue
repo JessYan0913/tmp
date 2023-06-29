@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
+import { VTextField } from 'vuetify/components/VTextField';
 import { TmpFormModel } from '@tmp/h5-schema';
-import { ElInput } from 'element-plus';
 
 import { useApp } from '../hooks/useApp';
 
@@ -21,8 +21,6 @@ const emits = defineEmits<{
 }>();
 
 const value = ref<string>(props.modelValue ?? props.config.defaultValue ?? '');
-
-const showWordLimit = computed<boolean>(() => Boolean(props.config.maxLength || props.config.minLength));
 
 const inputType = computed<string>(() => (props.config.isPassword ? 'password' : 'text'));
 
@@ -44,16 +42,14 @@ defineExpose({
 </script>
 
 <template>
-  <ElInput
+  <VTextField
     v-model="value"
+    :label="config.label"
     :placeholder="config.placeholder"
+    :prepend="config.prependIcon"
+    :append="config.appendIcon"
     :clearable="config.clearable"
-    :maxlength="config.maxLength"
-    :minlength="config.minLength"
-    :show-word-limit="showWordLimit"
     :type="inputType"
   >
-    <template #prepend v-if="config.prepend"> {{ config.prepend }} </template>
-    <template #append v-if="config.append"> {{ config.append }} </template>
-  </ElInput>
+  </VTextField>
 </template>
