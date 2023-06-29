@@ -113,7 +113,8 @@ export class App extends EventBus {
     }
     const targetComponent = this.curPage.getComponent(event.target);
     if (!targetComponent) {
-      throw new Error(`${event.target}组件不存在，无法响应${fromComponent.data.id}的${event.event}事件`);
+      console.error(`${event.target}组件不存在，无法响应${fromComponent.data.id}的${event.event}事件`);
+      return;
     }
 
     if (!targetComponent.instance) {
