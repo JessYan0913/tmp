@@ -6,20 +6,20 @@ import { TmpPage } from '@tmp/h5-schema';
 import { ElButton } from 'element-plus';
 
 const page: TmpPage = {
-  id: 'page-1',
-  name: 'page-1',
+  id: 'page1',
+  name: 'page1',
   type: 'page',
   path: '/index',
   children: [
     {
-      id: 'input-1',
+      id: 'input1',
       name: 'userName',
       type: 'input',
       events: [
         {
           event: 'change',
           actionType: 'component-control',
-          target: 'input-userName',
+          target: 'inputUserName',
           method: 'setValue',
           propMappings: [
             {
@@ -34,7 +34,7 @@ const page: TmpPage = {
         {
           event: 'change',
           actionType: 'component-control',
-          target: 'select-sex',
+          target: 'selectSex',
           method: 'setItems',
           propMappings: [
             {
@@ -54,7 +54,7 @@ const page: TmpPage = {
       type: 'card',
       title: '标题',
       content: {
-        id: 'form-1',
+        id: 'form1',
         name: 'userInfo',
         type: 'form',
         events: [
@@ -75,7 +75,7 @@ const page: TmpPage = {
         ],
         children: [
           {
-            id: 'input-userName',
+            id: 'inputUserName',
             name: 'userName',
             type: 'input',
             label: '用户名',
@@ -84,7 +84,7 @@ const page: TmpPage = {
               {
                 event: 'change',
                 actionType: 'component-control',
-                target: 'input-password',
+                target: 'inputPassword',
                 method: 'setValue',
                 propMappings: [
                   {
@@ -99,14 +99,14 @@ const page: TmpPage = {
             ],
           },
           {
-            id: 'input-password',
+            id: 'inputPassword',
             name: 'password',
             type: 'input',
             label: '密码',
             clearable: true,
           },
           {
-            id: 'select-sex',
+            id: 'selectSex',
             name: 'sex',
             type: 'select',
             label: '性别',
@@ -124,7 +124,7 @@ const page: TmpPage = {
                     ignore: false,
                     defaultValue: '1',
                     sourceScope: 'expression',
-                    expression: '`用户名: ${namespace["input-userName"].value}`',
+                    expression: '`用户名: ${inputUserName.value}`',
                   },
                 ],
               },
@@ -144,7 +144,7 @@ const page: TmpPage = {
       },
       actions: [
         {
-          id: 'button-1',
+          id: 'button1',
           name: 'submitButton',
           type: 'button',
           text: '提交',
@@ -152,7 +152,7 @@ const page: TmpPage = {
             {
               event: 'click',
               actionType: 'component-control',
-              target: 'form-1',
+              target: 'form1',
               method: 'submit',
             },
             {
@@ -215,7 +215,7 @@ const page: TmpPage = {
       type: 'card',
       title: '价格计算器',
       content: {
-        id: 'form-1',
+        id: 'form1',
         name: 'userInfo',
         type: 'form',
         children: [
@@ -239,7 +239,7 @@ const page: TmpPage = {
                     ignore: false,
                     defaultValue: '1',
                     sourceScope: 'expression',
-                    expression: '$.inputPrice.value * $.inputNum.value',
+                    expression: 'inputPrice.value * inputNum.value',
                   },
                 ],
               },
@@ -265,7 +265,7 @@ const page: TmpPage = {
                     ignore: false,
                     defaultValue: '1',
                     sourceScope: 'expression',
-                    expression: '$.inputPrice.value * $.inputNum.value',
+                    expression: 'inputPrice.value * inputNum.value',
                   },
                 ],
               },

@@ -142,7 +142,13 @@ export class App extends EventBus {
           return Reflect.get(eventArgs, source);
         },
         ['expression']: ({ expression }: TmpPropMapping) => {
-          return new Function('event, $', `return ${expression}`)(eventArgs, namespace);
+          const keys = Object.keys(namespace);
+          keys.push('event');
+
+          const values = Object.values(namespace);
+          values.push(eventArgs);
+
+          return new Function(keys.join(','), `return ${expression}`)(...values);
         },
         ['template']: ({ template }: TmpPropMapping) => {
           return dot.template(template ?? '')({ event: eventArgs, $: namespace });
