@@ -94,8 +94,6 @@ export interface TmpElement {
 }
 
 export interface TmpContainer extends TmpElement {
-  /** 布局 */
-  layout: string;
   /** 自元素 */
   children: TmpElement[];
 }
@@ -123,6 +121,8 @@ export type TmpFormModel = Record<string, any>;
 
 export interface TmpPage extends TmpContainer {
   type: 'page';
+  /** 页面路径 */
+  path?: string;
 }
 
 export interface TmpApplication extends TmpContainer {

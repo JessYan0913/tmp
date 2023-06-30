@@ -9,7 +9,7 @@ const page: TmpPage = {
   id: 'page-1',
   name: 'page-1',
   type: 'page',
-  layout: '',
+  path: '/index',
   children: [
     {
       id: 'input-1',
