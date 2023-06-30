@@ -215,7 +215,7 @@ const page: TmpPage = {
       type: 'card',
       title: '价格计算器',
       content: {
-        id: 'form1',
+        id: 'form2',
         name: 'userInfo',
         type: 'form',
         children: [
