@@ -142,10 +142,10 @@ export class App extends EventBus {
           return Reflect.get(eventArgs, source);
         },
         ['expression']: ({ expression }: TmpPropMapping) => {
-          return new Function('event, namespace', `return ${expression}`)(eventArgs, namespace);
+          return new Function('event, $', `return ${expression}`)(eventArgs, namespace);
         },
         ['template']: ({ template }: TmpPropMapping) => {
-          return dot.template(template ?? '')({ event: eventArgs, namespace });
+          return dot.template(template ?? '')({ event: eventArgs, $: namespace });
         },
       };
       if (mapping.ignore || !mapping.sourceScope || !Reflect.has(mappingClassify, mapping.sourceScope ?? '')) {
