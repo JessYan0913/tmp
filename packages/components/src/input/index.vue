@@ -11,18 +11,18 @@ const props = defineProps<{
   config: TmpInput;
   model?: TmpFormModel;
   prop?: string;
-  modelValue?: string;
+  modelValue?: string | number;
 }>();
 
 const { triggerEvent, provideMethod } = useApp(props);
 
 const emits = defineEmits<{
-  (event: 'update:modelValue', value: string): void;
+  (event: 'update:modelValue', value: string | number): void;
 }>();
 
-const value = ref<string>(props.modelValue ?? props.config.defaultValue ?? '');
+const value = ref<string | number>(props.modelValue ?? props.config.defaultValue ?? '');
 
-const inputType = computed<string>(() => (props.config.isPassword ? 'password' : 'text'));
+const inputType = computed<string>(() => props.config.inputType ?? 'text');
 
 watch(
   () => value.value,

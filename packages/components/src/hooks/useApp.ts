@@ -19,16 +19,16 @@ export const useApp = (props: Record<string, any>) => {
   });
 
   onUpdated(() => {
+    const currentInstance = getCurrentInstance();
     nextTick(() => {
-      const vm = getCurrentInstance()?.proxy;
-      const exposed = getCurrentInstance()?.exposed ?? undefined;
+      const vm = currentInstance?.proxy;
+      const exposed = currentInstance?.exposed;
+      const newInstance = { ...instance };
+      Reflect.set(instance, 'el', vm?.$el);
+      Reflect.set(instance, 'exposed', exposed);
       component?.emit('updated', {
         beforeInstance: instance,
-        instance: {
-          ...instance,
-          el: vm ? vm.$el : instance.el,
-          exposed: exposed,
-        },
+        instance: newInstance,
       });
     });
   });

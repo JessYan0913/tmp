@@ -1,6 +1,8 @@
 import { TmpFormItemElement } from '@tmp/h5-schema';
 
 export interface TmpInput extends TmpFormItemElement {
+  /** 输入框类型 */
+  inputType?: 'text' | 'number' | 'time' | 'email';
   /** 文本内容 */
   defaultValue?: string;
   /** 文本提示 */
@@ -13,8 +15,6 @@ export interface TmpInput extends TmpFormItemElement {
   prefix?: string;
   /** 后缀 */
   suffix?: string;
-  /** 是否为密码 */
-  isPassword?: boolean;
   /** 背景颜色 */
   bgColor?: string;
   /** 未聚焦时颜色 */

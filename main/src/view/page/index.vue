@@ -209,6 +209,80 @@ const page: TmpPage = {
         },
       ],
     },
+    {
+      id: 'card2',
+      name: 'card2',
+      type: 'card',
+      title: '价格计算器',
+      content: {
+        id: 'form-1',
+        name: 'userInfo',
+        type: 'form',
+        children: [
+          {
+            id: 'inputPrice',
+            name: 'price',
+            type: 'input',
+            label: '单价',
+            placeholder: '请输入单价',
+            clearable: true,
+            inputType: 'number',
+            events: [
+              {
+                event: 'change',
+                actionType: 'component-control',
+                target: 'inputTotalPrice',
+                method: 'setValue',
+                propMappings: [
+                  {
+                    name: 'newValue',
+                    ignore: false,
+                    defaultValue: '1',
+                    sourceScope: 'expression',
+                    expression: 'namespace.inputPrice.value * namespace.inputNum.value',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: 'inputNum',
+            name: 'num',
+            type: 'input',
+            label: '数量',
+            placeholder: '请输入数量',
+            clearable: true,
+            inputType: 'number',
+            events: [
+              {
+                event: 'change',
+                actionType: 'component-control',
+                target: 'inputTotalPrice',
+                method: 'setValue',
+                propMappings: [
+                  {
+                    name: 'newValue',
+                    ignore: false,
+                    defaultValue: '1',
+                    sourceScope: 'expression',
+                    expression: 'namespace.inputPrice.value * namespace.inputNum.value',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            id: 'inputTotalPrice',
+            name: 'totalPrice',
+            type: 'input',
+            label: '总价',
+            placeholder: '请输入总价',
+            clearable: true,
+            inputType: 'number',
+          },
+        ],
+      },
+    },
   ],
 };
 
