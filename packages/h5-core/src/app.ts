@@ -1,5 +1,5 @@
 import { unref } from 'vue';
-import { Id, TmpApplication, TmpEvent, TmpInstanceMethod, TmpPage, TmpPropMapping } from '@tmp/h5-schema';
+import { Id, TmpApplication, TmpEventConfig, TmpInstanceMethod, TmpPage, TmpPropMapping } from '@tmp/h5-schema';
 import { EventBus } from '@tmp/utils';
 import dot from 'dot';
 
@@ -12,7 +12,7 @@ export interface AppConfig {
 }
 
 export interface EventCache {
-  event: TmpEvent;
+  eventConfig: TmpEventConfig;
   fromComponent: Component;
   props: Record<string, any>;
 }
@@ -90,32 +90,32 @@ export class App extends EventBus {
     }
   }
 
-  public handleEvent(component: Component, event: TmpEvent, props: Record<string, any>): void {
-    if (event.actionType === 'component-control') {
-      this.controlComponent(component, event, props);
+  public handleEvent(component: Component, eventConfig: TmpEventConfig, props: Record<string, any>): void {
+    if (eventConfig.actionType === 'component-control') {
+      this.controlComponent(component, eventConfig, props);
     }
   }
 
-  private controlComponent(fromComponent: Component, event: TmpEvent, props: Record<string, any>): void {
+  private controlComponent(fromComponent: Component, eventConfig: TmpEventConfig, props: Record<string, any>): void {
     if (!this.curPage) {
       throw new Error('当前页面不存在');
     }
-    if (!event.target || !event.method) {
+    if (!eventConfig.target || !eventConfig.method) {
       return;
     }
-    const targetComponent = this.curPage.getComponent(event.target);
+    const targetComponent = this.curPage.getComponent(eventConfig.target);
     if (!targetComponent) {
-      console.error(`${event.target}组件不存在，无法响应${fromComponent.data.id}的${event.event}事件`);
+      console.error(`${eventConfig.target}组件不存在，无法响应${fromComponent.data.id}的${eventConfig.event}事件`);
       return;
     }
 
     if (!targetComponent.instance) {
-      this.pushEventCache({ event, fromComponent, props });
+      this.pushEventCache({ eventConfig: eventConfig, fromComponent, props });
     } else if (
       targetComponent.instance.methods &&
-      typeof targetComponent.instance.methods[event.method] === 'function'
+      typeof targetComponent.instance.methods[eventConfig.method] === 'function'
     ) {
-      const targetMethod = targetComponent.instance.methods[event.method] as TmpInstanceMethod;
+      const targetMethod = targetComponent.instance.methods[eventConfig.method] as TmpInstanceMethod;
       let targetMethodProps: Record<string, any> = { fromComponent, app: this };
       if (targetMethod.dependVariables) {
         targetMethodProps = targetMethod.dependVariables.reduce(
@@ -127,8 +127,8 @@ export class App extends EventBus {
     }
   }
 
-  private calComponentMethodProps(event: TmpEvent, eventArgs?: Record<string, any>): Record<string, any> {
-    const { propMappings } = event;
+  private calComponentMethodProps(eventConfig: TmpEventConfig, eventArgs?: Record<string, any>): Record<string, any> {
+    const { propMappings } = eventConfig;
     if (!propMappings) {
       return {};
     }
@@ -166,14 +166,14 @@ export class App extends EventBus {
   }
 
   private pushEventCache(cache: EventCache): void {
-    if (!cache.event.target) {
+    if (!cache.eventConfig.target) {
       return;
     }
-    const caches = this.eventCaches.get(cache.event.target);
+    const caches = this.eventCaches.get(cache.eventConfig.target);
     if (caches) {
       caches.push(cache);
     } else {
-      this.eventCaches.set(cache.event.target, [cache]);
+      this.eventCaches.set(cache.eventConfig.target, [cache]);
     }
   }
 }

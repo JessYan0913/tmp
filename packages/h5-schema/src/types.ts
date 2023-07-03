@@ -62,7 +62,7 @@ export interface TmpPropMapping {
   template?: string;
 }
 
-export interface TmpEvent {
+export interface TmpEventConfig {
   /** 事件 */
   event: string;
   /** 动作类型 */
@@ -83,7 +83,7 @@ export interface TmpElement {
   /** 元素类型 */
   type: string;
   /** 观察目标元素 */
-  events?: TmpEvent[];
+  events?: TmpEventConfig[];
   /** 样式 */
   style?: {
     [key: string]: any;

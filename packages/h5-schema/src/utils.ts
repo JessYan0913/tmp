@@ -3,7 +3,7 @@ import {
   TmpContainer,
   TmpElement,
   TmpElementInstance,
-  TmpEvent,
+  TmpEventConfig,
   TmpFormElement,
   TmpFormItemElement,
   TmpInstanceMethod,
@@ -34,7 +34,7 @@ export const isTmpPropMapping = (obj: any): obj is TmpPropMapping =>
   (obj.expression === undefined || typeof obj.expression === 'string') &&
   (obj.template === undefined || typeof obj.template === 'string');
 
-export const isTmpEvent = (obj: any): obj is TmpEvent =>
+export const isTmpEvent = (obj: any): obj is TmpEventConfig =>
   typeof obj === 'object' &&
   typeof obj.event === 'string' &&
   (obj.actionType === 'route-setting' || obj.actionType === 'component-control') &&
