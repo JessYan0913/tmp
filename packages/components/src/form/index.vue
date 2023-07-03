@@ -34,7 +34,7 @@ defineExpose({
     <TmpUiComponent
       v-for="itemElement in config.children"
       :key="itemElement.id"
-      v-model="value[itemElement.name ?? '']"
+      v-model="value[itemElement.id ?? '']"
       :config="itemElement"
       :model="value"
     >
