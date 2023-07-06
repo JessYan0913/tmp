@@ -68,7 +68,7 @@ const page: TmpPage = {
                 name: 'newText',
                 ignore: false,
                 sourceScope: 'expression',
-                expression: 'JSON.stringify(event.value)',
+                expression: 'JSON.stringify(event.value) + inputUserName.value',
               },
             ],
           },
