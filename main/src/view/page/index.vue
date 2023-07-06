@@ -7,13 +7,12 @@ import { ElButton } from 'element-plus';
 
 const page: TmpPage = {
   id: 'page1',
-  name: 'page1',
+  title: 'Page',
   type: 'page',
   path: '/index',
   children: [
     {
       id: 'input1',
-      name: 'userName',
       type: 'input',
       events: [
         {
@@ -50,12 +49,10 @@ const page: TmpPage = {
     },
     {
       id: 'card1',
-      name: 'card1',
       type: 'card',
       title: '标题',
       content: {
         id: 'form1',
-        name: 'userInfo',
         type: 'form',
         events: [
           {
@@ -76,7 +73,6 @@ const page: TmpPage = {
         children: [
           {
             id: 'inputUserName',
-            name: 'userName',
             type: 'input',
             label: '用户名',
             placeholder: '请输入用户名',
@@ -100,14 +96,12 @@ const page: TmpPage = {
           },
           {
             id: 'inputPassword',
-            name: 'password',
             type: 'input',
             label: '密码',
             clearable: true,
           },
           {
             id: 'selectSex',
-            name: 'sex',
             type: 'select',
             label: '性别',
             defaultValue: '1',
@@ -145,7 +139,6 @@ const page: TmpPage = {
       actions: [
         {
           id: 'button1',
-          name: 'submitButton',
           type: 'button',
           text: '提交',
           events: [
@@ -211,17 +204,14 @@ const page: TmpPage = {
     },
     {
       id: 'card2',
-      name: 'card2',
       type: 'card',
       title: '价格计算器',
       content: {
         id: 'form2',
-        name: 'userInfo',
         type: 'form',
         children: [
           {
             id: 'inputPrice',
-            name: 'price',
             type: 'input',
             label: '单价',
             placeholder: '请输入单价',
@@ -247,7 +237,6 @@ const page: TmpPage = {
           },
           {
             id: 'inputNum',
-            name: 'num',
             type: 'input',
             label: '数量',
             placeholder: '请输入数量',
@@ -273,7 +262,6 @@ const page: TmpPage = {
           },
           {
             id: 'inputTotalPrice',
-            name: 'totalPrice',
             type: 'input',
             label: '总价',
             placeholder: '请输入总价',

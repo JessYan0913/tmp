@@ -62,7 +62,7 @@ export interface TmpPropMapping {
   template?: string;
 }
 
-export interface TmpEvent {
+export interface TmpEventConfig {
   /** 事件 */
   event: string;
   /** 动作类型 */
@@ -82,10 +82,8 @@ export interface TmpElement {
   id: Id;
   /** 元素类型 */
   type: string;
-  /** 元素名称 */
-  name?: string;
   /** 观察目标元素 */
-  events?: TmpEvent[];
+  events?: TmpEventConfig[];
   /** 样式 */
   style?: {
     [key: string]: any;
@@ -121,12 +119,14 @@ export type TmpFormModel = Record<string, any>;
 
 export interface TmpPage extends TmpContainer {
   type: 'page';
+  title: string;
   /** 页面路径 */
   path?: string;
 }
 
 export interface TmpApplication extends TmpContainer {
   type: 'app';
+  name: string;
   curIndex?: Id;
   children: TmpPage[];
 }

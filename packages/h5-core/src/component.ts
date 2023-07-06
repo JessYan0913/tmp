@@ -1,4 +1,4 @@
-import { TmpContainer, TmpElement, TmpElementInstance, TmpEvent, TmpPage } from '@tmp/h5-schema';
+import { TmpContainer, TmpElement, TmpElementInstance, TmpEventConfig, TmpPage } from '@tmp/h5-schema';
 import { EventBus } from '@tmp/utils';
 
 import { App } from './app';
@@ -14,7 +14,7 @@ export interface ComponentConfig {
 
 export class Component extends EventBus<EventArgs.Component> {
   public data: TmpElement | TmpContainer | TmpPage;
-  public events?: Array<TmpEvent>;
+  public events?: Array<TmpEventConfig>;
 
   public instance: TmpElementInstance | null = null;
   public app: App;
@@ -56,7 +56,7 @@ export class Component extends EventBus<EventArgs.Component> {
       return;
     }
     for (let eventCache = eventCaches.shift(); eventCache; eventCache = eventCaches.shift()) {
-      this.app.handleEvent(eventCache.fromComponent, eventCache.event, eventCache.props);
+      this.app.handleEvent(eventCache.fromComponent, eventCache.eventConfig, eventCache.props);
     }
   }
 }
