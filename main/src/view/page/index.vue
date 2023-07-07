@@ -10,6 +10,7 @@ const page: TmpPage = {
   name: 'page1',
   type: 'page',
   path: '/index',
+  title: 'index',
   children: [
     {
       id: 'input1',
