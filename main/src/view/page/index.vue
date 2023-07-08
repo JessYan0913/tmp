@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { provide } from 'vue';
 import { useRouter } from 'vue-router';
-import { App } from '@tmp/h5-core';
+import { App } from '@tmp/core';
 import { TmpPage } from '@tmp/schema';
 import { ElButton } from 'element-plus';
 

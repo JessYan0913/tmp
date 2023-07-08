@@ -20,8 +20,8 @@ export default defineConfig({
     target: 'esnext',
     lib: {
       entry: 'src/index.ts',
-      name: 'TmpH5Core',
-      fileName: 'tmp-h5-core',
+      name: 'TmpCore',
+      fileName: 'tmp-core',
     },
     rollupOptions: {
       external(id: string) {

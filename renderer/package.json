@@ -10,13 +10,13 @@
   },
   "dependencies": {
     "@tmp/components": "workspace:^0.0.1",
-    "@tmp/h5-core": "workspace:^0.0.1",
+    "@tmp/core": "workspace:^0.0.1",
     "@tmp/schema": "workspace:^0.0.1",
     "vue": "^3.3.4"
   },
   "peerDependencies": {
     "@tmp/components": "workspace:^0.0.1",
-    "@tmp/h5-core": "workspace:^0.0.1",
+    "@tmp/core": "workspace:^0.0.1",
     "vue": "^3.3.4"
   },
   "devDependencies": {

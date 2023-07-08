@@ -11,7 +11,7 @@
   "dependencies": {
     "@tmp/3d-engine": "workspace:^0.0.1",
     "@tmp/components": "workspace:^0.0.1",
-    "@tmp/h5-core": "workspace:^0.0.1",
+    "@tmp/core": "workspace:^0.0.1",
     "@tmp/schema": "workspace:^0.0.1",
     "@tmp/utils": "workspace:^0.0.1",
     "crypto-js": "^4.1.1",

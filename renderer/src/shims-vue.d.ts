@@ -1,4 +1,4 @@
-import { App } from '@tmp/h5-core';
+import { App } from '@tmp/core';
 
 declare module '*.vue' {
   import { DefineComponent } from 'vue';

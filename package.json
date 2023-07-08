@@ -17,7 +17,7 @@
   },
   "workspaces": [
     "@tmp/utils",
-    "@tmp/h5-core",
+    "@tmp/core",
     "@tmp/schema",
     "@tmp/components",
     "@tmp/basic",

@@ -1,14 +1,14 @@
 {
-  "name": "@tmp/h5-core",
+  "name": "@tmp/core",
   "private": true,
   "version": "0.0.1",
-  "main": "dist/tmp-h5-core.umd.js",
-  "module": "dist/tmp-h5-core.mjs",
+  "main": "dist/tmp-core.umd.js",
+  "module": "dist/tmp-core.mjs",
   "types": "types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/tmp-h5-core.mjs",
-      "require": "./dist/tmp-h5-core.umd.js"
+      "import": "./dist/tmp-core.mjs",
+      "require": "./dist/tmp-core.umd.js"
     }
   },
   "scripts": {
