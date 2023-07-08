@@ -1,4 +1,4 @@
-import { TmpElementInstance } from '@tmp/h5-schema';
+import { TmpElementInstance } from '@tmp/schema';
 
 export namespace EventArgs {
   export interface Component {

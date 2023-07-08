@@ -1,4 +1,4 @@
-import { TmpContainer, TmpElement, TmpElementInstance, TmpEvent, TmpPage } from '@tmp/h5-schema';
+import { TmpContainer, TmpElement, TmpElementInstance, TmpEvent, TmpPage } from '@tmp/schema';
 import { EventBus } from '@tmp/utils';
 
 import { App } from './app';

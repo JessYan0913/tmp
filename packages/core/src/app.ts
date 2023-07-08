@@ -1,5 +1,5 @@
 import { unref } from 'vue';
-import { Id, TmpApplication, TmpEvent, TmpInstanceMethod, TmpPage, TmpPropMapping } from '@tmp/h5-schema';
+import { Id, TmpApplication, TmpEvent, TmpInstanceMethod, TmpPage, TmpPropMapping } from '@tmp/schema';
 import { EventBus } from '@tmp/utils';
 import dot from 'dot';
 

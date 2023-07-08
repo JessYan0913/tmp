@@ -9,7 +9,7 @@ const deps = Object.keys(pkg.dependencies);
 export default defineConfig({
   resolve: {
     alias: [
-      { find: /^@tmp\/h5-schema/, replacement: join(__dirname, '../packages/h5-schema/src/index.ts') },
+      { find: /^@tmp\/schema/, replacement: join(__dirname, '../packages/schema/src/index.ts') },
       { find: /^@tmp\/utils/, replacement: join(__dirname, '../packages/utils/src/index.ts') },
     ],
   },
@@ -20,8 +20,8 @@ export default defineConfig({
     target: 'esnext',
     lib: {
       entry: 'src/index.ts',
-      name: 'TmpH5Core',
-      fileName: 'tmp-h5-core',
+      name: 'TmpCore',
+      fileName: 'tmp-core',
     },
     rollupOptions: {
       external(id: string) {

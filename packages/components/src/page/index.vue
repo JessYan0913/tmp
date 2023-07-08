@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { TmpPage } from '@tmp/h5-schema';
+import { TmpPage } from '@tmp/schema';
 
 import TmpUiComponent from '../Component.vue';
 
