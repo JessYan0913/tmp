@@ -11,7 +11,7 @@ export default defineConfig({
   },
   resolve: {
     alias: [
-      { find: /^@tmp\/h5-schema/, replacement: join(__dirname, '../packages/h5-schema/src/index.ts') },
+      { find: /^@tmp\/schema/, replacement: join(__dirname, '../packages/schema/src/index.ts') },
       { find: /^@tmp\/h5-core/, replacement: join(__dirname, '../packages/h5-core/src/index.ts') },
       { find: /^@tmp\/components/, replacement: join(__dirname, '../packages/components/src/index.ts') },
       { find: 'vue', replacement: join(__dirname, './node_modules/vue/dist/vue.esm-bundler.js') },

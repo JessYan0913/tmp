@@ -1,4 +1,4 @@
-import { TmpContainer, TmpElement } from '@tmp/h5-schema';
+import { TmpContainer, TmpElement } from '@tmp/schema';
 
 export interface TmpCard extends TmpContainer {
   /** 标题 */

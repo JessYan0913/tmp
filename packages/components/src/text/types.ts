@@ -1,4 +1,4 @@
-import { TmpElement } from '@tmp/h5-schema';
+import { TmpElement } from '@tmp/schema';
 
 export interface TmpText extends TmpElement {
   text?: string;

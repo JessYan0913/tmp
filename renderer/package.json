@@ -11,7 +11,7 @@
   "dependencies": {
     "@tmp/components": "workspace:^0.0.1",
     "@tmp/h5-core": "workspace:^0.0.1",
-    "@tmp/h5-schema": "workspace:^0.0.1",
+    "@tmp/schema": "workspace:^0.0.1",
     "vue": "^3.3.4"
   },
   "peerDependencies": {

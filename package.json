@@ -18,7 +18,7 @@
   "workspaces": [
     "@tmp/utils",
     "@tmp/h5-core",
-    "@tmp/h5-schema",
+    "@tmp/schema",
     "@tmp/components",
     "@tmp/basic",
     "@tmp/3d-engine"

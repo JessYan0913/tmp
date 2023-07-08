@@ -1,6 +1,6 @@
 import { getCurrentInstance, inject, nextTick, onMounted, onUnmounted, onUpdated } from 'vue';
 import { App } from '@tmp/h5-core';
-import { TmpElementInstance, TmpInstanceMethod } from '@tmp/h5-schema';
+import { TmpElementInstance, TmpInstanceMethod } from '@tmp/schema';
 
 export const useApp = (props: Record<string, any>) => {
   const app = inject<App | undefined>('app');

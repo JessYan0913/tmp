@@ -84,7 +84,7 @@ importers:
       '@tmp/3d-engine': workspace:^0.0.1
       '@tmp/components': workspace:^0.0.1
       '@tmp/h5-core': workspace:^0.0.1
-      '@tmp/h5-schema': workspace:^0.0.1
+      '@tmp/schema': workspace:^0.0.1
       '@tmp/utils': workspace:^0.0.1
       '@types/crypto-js': ^4.1.1
       '@types/three': ^0.150.0
@@ -106,7 +106,7 @@ importers:
       '@tmp/3d-engine': link:../packages/3d-engine
       '@tmp/components': link:../packages/components
       '@tmp/h5-core': link:../packages/h5-core
-      '@tmp/h5-schema': link:../packages/h5-schema
+      '@tmp/schema': link:../packages/h5-schema
       '@tmp/utils': link:../packages/utils
       crypto-js: 4.1.1
       element-plus: 2.2.28_vue@3.3.4
@@ -166,7 +166,7 @@ importers:
       '@mdi/font': ^7.2.96
       '@tmp/basic': workspace:^0.0.1
       '@tmp/h5-core': workspace:^0.0.1
-      '@tmp/h5-schema': workspace:^0.0.1
+      '@tmp/schema': workspace:^0.0.1
       '@tmp/utils': workspace:^0.0.1
       '@types/node': ^18.11.18
       '@vitejs/plugin-vue': ^4.0.0
@@ -184,7 +184,7 @@ importers:
       '@mdi/font': 7.2.96
       '@tmp/basic': link:../basic
       '@tmp/h5-core': link:../h5-core
-      '@tmp/h5-schema': link:../h5-schema
+      '@tmp/schema': link:../h5-schema
       '@tmp/utils': link:../utils
       sass: 1.58.2
       vue: 3.3.4
@@ -202,7 +202,7 @@ importers:
 
   packages/h5-core:
     specifiers:
-      '@tmp/h5-schema': workspace:^0.0.1
+      '@tmp/schema': workspace:^0.0.1
       '@tmp/utils': workspace:^0.0.1
       dot: 2.0.0-beta.1
       rimraf: ^3.0.2
@@ -210,7 +210,7 @@ importers:
       vite: ^4.1.0
       vue: ^3.3.4
     dependencies:
-      '@tmp/h5-schema': link:../h5-schema
+      '@tmp/schema': link:../h5-schema
       '@tmp/utils': link:../utils
       dot: 2.0.0-beta.1
       rimraf: 3.0.2
@@ -254,7 +254,7 @@ importers:
     specifiers:
       '@tmp/components': workspace:^0.0.1
       '@tmp/h5-core': workspace:^0.0.1
-      '@tmp/h5-schema': workspace:^0.0.1
+      '@tmp/schema': workspace:^0.0.1
       '@types/node': ^18.11.18
       '@vitejs/plugin-vue': ^4.2.3
       '@vue/compiler-sfc': ^3.3.4
@@ -267,7 +267,7 @@ importers:
     dependencies:
       '@tmp/components': link:../packages/components
       '@tmp/h5-core': link:../packages/h5-core
-      '@tmp/h5-schema': link:../packages/h5-schema
+      '@tmp/schema': link:../packages/h5-schema
       vue: 3.3.4
     devDependencies:
       '@types/node': 18.11.18

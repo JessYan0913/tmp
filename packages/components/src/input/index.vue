@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
 import { VTextField } from 'vuetify/components/VTextField';
-import { TmpFormModel } from '@tmp/h5-schema';
+import { TmpFormModel } from '@tmp/schema';
 
 import { useApp } from '../hooks/useApp';
 

@@ -1,4 +1,4 @@
-import { TmpElement } from '@tmp/h5-schema';
+import { TmpElement } from '@tmp/schema';
 
 export interface TmpButton extends TmpElement {
   /** 文本 */
