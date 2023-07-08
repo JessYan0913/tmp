@@ -22,6 +22,6 @@
   },
   "dependencies": {
     "@tmp/utils": "workspace:^0.0.1",
-    "vue": "^3.2.45"
+    "vue": "^3.3.4"
   }
 }

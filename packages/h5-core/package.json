@@ -21,7 +21,10 @@
     "@tmp/utils": "workspace:^0.0.1",
     "dot": "2.0.0-beta.1",
     "rimraf": "^3.0.2",
-    "vue": "^3.2.45"
+    "vue": "^3.3.4"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "typescript": "^4.9.3",

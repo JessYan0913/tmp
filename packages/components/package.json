@@ -28,11 +28,11 @@
     "@tmp/h5-schema": "workspace:^0.0.1",
     "@tmp/utils": "workspace:^0.0.1",
     "sass": "^1.58.2",
-    "vue": "^3.2.45",
+    "vue": "^3.3.4",
     "vuetify": "^3.3.6"
   },
   "peerDependencies": {
-    "vue": "^3.2.45",
+    "vue": "^3.3.4",
     "vuetify": "^3.3.6"
   },
   "devDependencies": {
