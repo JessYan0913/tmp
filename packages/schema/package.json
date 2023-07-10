@@ -1,14 +1,14 @@
 {
-  "name": "@tmp/h5-schema",
+  "name": "@tmp/schema",
   "private": true,
   "version": "0.0.1",
-  "main": "dist/tmp-h5-schema.umd.js",
-  "module": "dist/tmp-h5-schema.mjs",
+  "main": "dist/tmp-schema.umd.js",
+  "module": "dist/tmp-schema.mjs",
   "types": "types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/tmp-h5-schema.mjs",
-      "require": "./dist/tmp-h5-schema.umd.js"
+      "import": "./dist/tmp-schema.mjs",
+      "require": "./dist/tmp-schema.umd.js"
     }
   },
   "scripts": {

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import { VSelect } from 'vuetify/components/VSelect';
-import { TmpFormModel } from '@tmp/h5-schema';
+import { TmpFormModel } from '@tmp/schema';
 
 import { useApp } from '../hooks/useApp';
 

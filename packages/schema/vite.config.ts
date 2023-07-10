@@ -6,8 +6,8 @@ export default defineConfig({
 
     lib: {
       entry: 'src/index.ts',
-      name: 'TmpH5Schema',
-      fileName: 'tmp-h5-schema',
+      name: 'TmpSchema',
+      fileName: 'tmp-schema',
     },
   },
 });

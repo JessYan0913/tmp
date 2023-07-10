@@ -1,0 +1,32 @@
+{
+  "name": "renderer",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tmp/components": "workspace:^0.0.1",
+    "@tmp/core": "workspace:^0.0.1",
+    "@tmp/schema": "workspace:^0.0.1",
+    "vue": "^3.3.4"
+  },
+  "peerDependencies": {
+    "@tmp/components": "workspace:^0.0.1",
+    "@tmp/core": "workspace:^0.0.1",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/compiler-sfc": "^3.3.4",
+    "sass": "^1.58.2",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.0",
+    "vite-plugin-html-config": "^1.0.11",
+    "vue-tsc": "^1.8.3"
+  }
+}

@@ -1,4 +1,4 @@
-import { Id, isTmpElement, TmpContainer, TmpElement, TmpPage } from '@tmp/h5-schema';
+import { Id, isTmpElement, TmpContainer, TmpElement, TmpPage } from '@tmp/schema';
 
 import { App } from './app';
 import { Component } from './component';

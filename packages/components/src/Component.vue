@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { TmpElement, TmpFormModel } from '@tmp/h5-schema';
+import { TmpElement, TmpFormModel } from '@tmp/schema';
 
 const props = withDefaults(
   defineProps<{

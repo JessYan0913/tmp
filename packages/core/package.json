@@ -1,14 +1,14 @@
 {
-  "name": "@tmp/h5-core",
+  "name": "@tmp/core",
   "private": true,
   "version": "0.0.1",
-  "main": "dist/tmp-h5-core.umd.js",
-  "module": "dist/tmp-h5-core.mjs",
+  "main": "dist/tmp-core.umd.js",
+  "module": "dist/tmp-core.mjs",
   "types": "types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/tmp-h5-core.mjs",
-      "require": "./dist/tmp-h5-core.umd.js"
+      "import": "./dist/tmp-core.mjs",
+      "require": "./dist/tmp-core.umd.js"
     }
   },
   "scripts": {
@@ -17,11 +17,14 @@
     "clear:type": "rimraf ./types"
   },
   "dependencies": {
-    "@tmp/h5-schema": "workspace:^0.0.1",
+    "@tmp/schema": "workspace:^0.0.1",
     "@tmp/utils": "workspace:^0.0.1",
     "dot": "2.0.0-beta.1",
     "rimraf": "^3.0.2",
-    "vue": "^3.2.45"
+    "vue": "^3.3.4"
+  },
+  "peerDependencies": {
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "typescript": "^4.9.3",

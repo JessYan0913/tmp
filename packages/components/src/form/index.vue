@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { VForm } from 'vuetify/components/VForm';
-import { TmpFormElement, TmpFormModel } from '@tmp/h5-schema';
+import { TmpFormElement, TmpFormModel } from '@tmp/schema';
 
 import TmpUiComponent from '../Component.vue';
 import { useApp } from '../hooks/useApp';

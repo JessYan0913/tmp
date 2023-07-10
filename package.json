@@ -17,8 +17,8 @@
   },
   "workspaces": [
     "@tmp/utils",
-    "@tmp/h5-core",
-    "@tmp/h5-schema",
+    "@tmp/core",
+    "@tmp/schema",
     "@tmp/components",
     "@tmp/basic",
     "@tmp/3d-engine"
@@ -59,7 +59,7 @@
     "typescript": "^4.9.3",
     "vite": "^4.0.0",
     "vitest": "^0.26.3",
-    "vue": "^3.2.45"
+    "vue": "^3.3.4"
   },
   "config": {
     "commitizen": {

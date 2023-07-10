@@ -1,4 +1,4 @@
-import { TmpFormItemElement } from '@tmp/h5-schema';
+import { TmpFormItemElement } from '@tmp/schema';
 
 export interface TmpItem {
   /** 字段 */

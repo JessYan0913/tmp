@@ -1,4 +1,4 @@
-import { TmpContainer } from '@tmp/h5-schema';
+import { TmpContainer } from '@tmp/schema';
 
 export interface TmpOverlay extends TmpContainer {
   /** 打开延迟 毫秒 */
