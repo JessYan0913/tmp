@@ -44,6 +44,10 @@ const initInstance = <T extends Component>(
 
 export const useCommandComponent = <T extends Component>(Component: T): CommandComponent => {
   const appContext = getCurrentInstance()?.appContext;
+  if (appContext) {
+    const currentProvides = (getCurrentInstance() as any)?.provides;
+    Reflect.set(appContext, 'provides', { ...appContext.provides, ...currentProvides });
+  }
 
   const container = document.createElement('div');
 
