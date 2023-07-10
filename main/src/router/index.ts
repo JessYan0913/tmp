@@ -26,6 +26,14 @@ export const routes: RouteRecordRaw[] = [
         },
       },
       {
+        path: '/example/command-dialog',
+        name: 'Dialog',
+        component: () => import('../view/command-dialog/index.vue'),
+        meta: {
+          menu: true,
+        },
+      },
+      {
         path: '/example/edit-table',
         name: 'EditTable',
         component: () => import('../view/edit-table/index.vue'),
