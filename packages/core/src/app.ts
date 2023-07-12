@@ -36,7 +36,7 @@ export class App extends EventBus {
     }
   }
 
-  public setData(data: TmpApplication, curPage?: Id): void {
+  public setData(data: TmpApplication, curPageId?: Id): void {
     this.data = data;
     this.pages.clear();
     this.eventCaches.clear();
@@ -45,18 +45,18 @@ export class App extends EventBus {
       this.pages.set(page.id, new Page({ data: page, app: this }));
     });
 
-    this.setPage(curPage);
+    this.setPage(curPageId);
   }
 
-  public setPage(curPage?: Id): void {
-    if (curPage === void 0) {
+  public setPage(curPageId?: Id): void {
+    if (curPageId === void 0) {
       if (this.data?.curIndex) {
-        curPage = this.data.curIndex;
+        curPageId = this.data.curIndex;
       } else {
-        curPage = this.pages.keys().next().value;
+        curPageId = this.pages.keys().next().value;
       }
     }
-    this.curPage = this.pages.get(curPage ?? '');
+    this.curPage = this.pages.get(curPageId ?? '');
     this.bindEvents();
   }
 

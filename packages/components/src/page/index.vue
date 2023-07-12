@@ -1,11 +1,19 @@
 <script lang="ts" setup>
+import { watch } from 'vue';
 import { TmpPage } from '@tmp/schema';
 
 import TmpUiComponent from '../Component.vue';
 
-defineProps<{
+const props = defineProps<{
   config: TmpPage;
 }>();
+
+watch(
+  () => props.config,
+  () => {
+    console.log('config');
+  }
+);
 </script>
 
 <template>

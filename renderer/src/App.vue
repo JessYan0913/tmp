@@ -310,9 +310,8 @@ watchEffect(() => {
 </script>
 
 <template>
-  <div>
-    <TmpUiPage :config="app.curPage"></TmpUiPage>
-  </div>
+  <!-- TODO： 由于app.curPage不是响应式的，因此这里直接app.curPage并不会引起TmpUiPage的props变化而重新渲染 -->
+  <TmpUiPage :config="app.curPage"></TmpUiPage>
 </template>
 
 <style lang="scss" scoped></style>
