@@ -17,4 +17,12 @@ export default defineConfig({
       { find: 'vue', replacement: join(__dirname, './node_modules/vue/dist/vue.esm-bundler.js') },
     ],
   },
+  server: {
+    fs: {
+      strict: false,
+    },
+    host: '0.0.0.0',
+    port: 8891,
+    strictPort: true,
+  },
 });

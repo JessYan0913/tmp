@@ -3,7 +3,7 @@ import H5Element from '@tmp/components';
 
 import App from './App.vue';
 
-import './style.css';
+import './assets/style/main.css';
 
 const app = createApp(App);
 app.use(H5Element);
