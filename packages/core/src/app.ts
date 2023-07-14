@@ -1,6 +1,6 @@
 import { unref } from 'vue';
 import { Id, TmpApplication, TmpEvent, TmpInstanceMethod, TmpPage, TmpPropMapping } from '@tmp/schema';
-import { EventBus } from '@tmp/utils';
+import { EventBus, isJavascriptIdentifier } from '@tmp/utils';
 import dot from 'dot';
 
 import { Component } from './component';
@@ -37,6 +37,9 @@ export class App extends EventBus {
   }
 
   public setData(data: TmpApplication, curPageId?: Id): void {
+    if (!isJavascriptIdentifier(data.id)) {
+      throw new Error('Id必须符合JS标识符规则');
+    }
     this.data = data;
     this.pages.clear();
     this.eventCaches.clear();

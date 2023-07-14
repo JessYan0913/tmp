@@ -9,15 +9,10 @@ export interface PageConfig {
 }
 
 export class Page extends Component {
-  public data: TmpPage;
-  public app: App;
-
   public components: Map<Id, Component> = new Map();
 
   constructor(config: PageConfig) {
     super(config);
-    this.data = config.data;
-    this.app = config.app;
 
     this.initComponent(config.data, this);
   }

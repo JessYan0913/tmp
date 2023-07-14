@@ -1,5 +1,5 @@
 import { TmpContainer, TmpElement, TmpElementInstance, TmpEvent, TmpPage } from '@tmp/schema';
-import { EventBus } from '@tmp/utils';
+import { EventBus, isJavascriptIdentifier } from '@tmp/utils';
 
 import { App } from './app';
 import { Page } from './page';
@@ -24,6 +24,9 @@ export class Component extends EventBus<EventArgs.Component> {
   constructor(config: ComponentConfig) {
     super();
     const { data, app, page, parent } = config;
+    if (!isJavascriptIdentifier(data.id)) {
+      throw new Error('Id必须符合JS标识符规则');
+    }
     this.data = data;
     this.events = data.events;
     this.app = app;

@@ -289,7 +289,7 @@ const page: TmpPage = {
 
 const app = new App({
   data: {
-    id: 'myApp-1',
+    id: 'myApp',
     name: 'myApp',
     type: 'app',
     layout: '',

@@ -290,7 +290,7 @@ const app = new App();
 
 setTimeout(() => {
   app.setData({
-    id: 'myApp-1',
+    id: 'myApp',
     name: 'myApp',
     type: 'app',
     layout: '',
