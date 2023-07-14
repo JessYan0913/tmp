@@ -286,15 +286,16 @@ const page: TmpPage = {
   ],
 };
 
-const app = new App({
-  curPage: 'page1',
-  data: {
+const app = new App();
+
+setTimeout(() => {
+  app.setData({
     id: 'myApp-1',
     name: 'myApp',
     type: 'app',
     layout: '',
     children: [page],
-  },
+  });
 });
 
 provide('app', app);

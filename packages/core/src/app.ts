@@ -29,9 +29,9 @@ export class App extends EventBus {
   public pages: Map<Id, Page> = new Map();
   public eventCaches: Map<Id, EventCache[]> = new Map();
 
-  constructor(config: AppConfig) {
+  constructor(config?: AppConfig) {
     super();
-    if (config.data) {
+    if (config?.data) {
       this.setData(config.data);
     }
   }
