@@ -103,7 +103,6 @@ setTimeout(() => {
     },
     'card2'
   );
-  console.log('====>', app);
 });
 
 provide('app', app);

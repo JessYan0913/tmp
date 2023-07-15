@@ -37,6 +37,21 @@ export class App extends EventBus {
     }
   }
 
+  public get namespace(): Record<string, any> {
+    const result: Record<string, any> = {};
+    if (this.curPage) {
+      for (const { data, instance } of this.curPage.components.values()) {
+        const exposed = instance?.exposed ?? {};
+        result[data.id] = new Proxy(exposed, {
+          get(target, p, receiver) {
+            return unref(Reflect.get(target, p, receiver));
+          },
+        });
+      }
+    }
+    return result;
+  }
+
   public setData(data: TmpApplication, curPageId?: Id): void {
     if (!isJavascriptIdentifier(data.id)) {
       logger.error(`"${data.id}" is not a valid JavaScript identifier.`, true);
@@ -62,21 +77,6 @@ export class App extends EventBus {
     }
     this.curPage = this.pages.get(curPageId ?? '');
     this.bindEvents();
-  }
-
-  public get namespace(): Record<string, any> {
-    const result: Record<string, any> = {};
-    if (this.curPage) {
-      for (const { data, instance } of this.curPage.components.values()) {
-        const exposed = instance?.exposed ?? {};
-        result[data.id] = new Proxy(exposed, {
-          get(target, p, receiver) {
-            return unref(Reflect.get(target, p, receiver));
-          },
-        });
-      }
-    }
-    return result;
   }
 
   public bindEvents(): void {

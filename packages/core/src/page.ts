@@ -2,6 +2,7 @@ import { Id, isTmpContainer, isTmpElement, TmpContainer, TmpElement, TmpPage } f
 
 import { App } from './app';
 import { Component } from './component';
+import { debugOnly } from './decorator';
 import { logger } from './logger';
 
 export interface PageConfig {
@@ -21,6 +22,7 @@ export class Page extends Component {
     this.initComponent(this.data, this);
   }
 
+  @(debugOnly<Page>)
   public initComponent(data: TmpElement | TmpContainer, parent?: Component, parentProperty?: string): void {
     const component = new Component({
       data,
