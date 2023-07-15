@@ -54,95 +54,97 @@ const page: TmpPage = {
       name: 'card1',
       type: 'card',
       title: '标题',
-      content: {
-        id: 'form1',
-        name: 'userInfo',
-        type: 'form',
-        events: [
-          {
-            event: 'submit',
-            actionType: 'component-control',
-            target: 'text1',
-            method: 'setText',
-            propMappings: [
-              {
-                name: 'newText',
-                ignore: false,
-                sourceScope: 'expression',
-                expression: 'JSON.stringify(event.value)',
-              },
-            ],
-          },
-        ],
-        children: [
-          {
-            id: 'inputUserName',
-            name: 'userName',
-            type: 'input',
-            label: '用户名',
-            placeholder: '请输入用户名',
-            events: [
-              {
-                event: 'change',
-                actionType: 'component-control',
-                target: 'inputPassword',
-                method: 'setValue',
-                propMappings: [
-                  {
-                    name: 'newValue',
-                    ignore: false,
-                    defaultValue: '1',
-                    sourceScope: 'expression',
-                    expression: 'event.value + "333333333"',
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            id: 'inputPassword',
-            name: 'password',
-            type: 'input',
-            label: '密码',
-            clearable: true,
-          },
-          {
-            id: 'selectSex',
-            name: 'sex',
-            type: 'select',
-            label: '性别',
-            defaultValue: '1',
-            clearable: true,
-            events: [
-              {
-                event: 'change',
-                actionType: 'component-control',
-                target: 'text1',
-                method: 'setText',
-                propMappings: [
-                  {
-                    name: 'newText',
-                    ignore: false,
-                    defaultValue: '1',
-                    sourceScope: 'expression',
-                    expression: '`用户名: ${inputUserName.value}`',
-                  },
-                ],
-              },
-            ],
-            items: [
-              {
-                title: '男',
-                value: '1',
-              },
-              {
-                title: '女',
-                value: '0',
-              },
-            ],
-          },
-        ],
-      },
+      children: [
+        {
+          id: 'form1',
+          name: 'userInfo',
+          type: 'form',
+          events: [
+            {
+              event: 'submit',
+              actionType: 'component-control',
+              target: 'text1',
+              method: 'setText',
+              propMappings: [
+                {
+                  name: 'newText',
+                  ignore: false,
+                  sourceScope: 'expression',
+                  expression: 'JSON.stringify(event.value)',
+                },
+              ],
+            },
+          ],
+          children: [
+            {
+              id: 'inputUserName',
+              name: 'userName',
+              type: 'input',
+              label: '用户名',
+              placeholder: '请输入用户名',
+              events: [
+                {
+                  event: 'change',
+                  actionType: 'component-control',
+                  target: 'inputPassword',
+                  method: 'setValue',
+                  propMappings: [
+                    {
+                      name: 'newValue',
+                      ignore: false,
+                      defaultValue: '1',
+                      sourceScope: 'expression',
+                      expression: 'event.value + "333333333"',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: 'inputPassword',
+              name: 'password',
+              type: 'input',
+              label: '密码',
+              clearable: true,
+            },
+            {
+              id: 'selectSex',
+              name: 'sex',
+              type: 'select',
+              label: '性别',
+              defaultValue: '1',
+              clearable: true,
+              events: [
+                {
+                  event: 'change',
+                  actionType: 'component-control',
+                  target: 'text1',
+                  method: 'setText',
+                  propMappings: [
+                    {
+                      name: 'newText',
+                      ignore: false,
+                      defaultValue: '1',
+                      sourceScope: 'expression',
+                      expression: '`用户名: ${inputUserName.value}`',
+                    },
+                  ],
+                },
+              ],
+              items: [
+                {
+                  title: '男',
+                  value: '1',
+                },
+                {
+                  title: '女',
+                  value: '0',
+                },
+              ],
+            },
+          ],
+        },
+      ],
       actions: [
         {
           id: 'button1',
@@ -215,74 +217,76 @@ const page: TmpPage = {
       name: 'card2',
       type: 'card',
       title: '价格计算器',
-      content: {
-        id: 'form2',
-        name: 'userInfo',
-        type: 'form',
-        children: [
-          {
-            id: 'inputPrice',
-            name: 'price',
-            type: 'input',
-            label: '单价',
-            placeholder: '请输入单价',
-            clearable: true,
-            inputType: 'number',
-            events: [
-              {
-                event: 'change',
-                actionType: 'component-control',
-                target: 'inputTotalPrice',
-                method: 'setValue',
-                propMappings: [
-                  {
-                    name: 'newValue',
-                    ignore: false,
-                    defaultValue: '1',
-                    sourceScope: 'expression',
-                    expression: 'inputPrice.value * inputNum.value',
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            id: 'inputNum',
-            name: 'num',
-            type: 'input',
-            label: '数量',
-            placeholder: '请输入数量',
-            clearable: true,
-            inputType: 'number',
-            events: [
-              {
-                event: 'change',
-                actionType: 'component-control',
-                target: 'inputTotalPrice',
-                method: 'setValue',
-                propMappings: [
-                  {
-                    name: 'newValue',
-                    ignore: false,
-                    defaultValue: '1',
-                    sourceScope: 'expression',
-                    expression: 'inputPrice.value * inputNum.value',
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            id: 'inputTotalPrice',
-            name: 'totalPrice',
-            type: 'input',
-            label: '总价',
-            placeholder: '请输入总价',
-            clearable: true,
-            inputType: 'number',
-          },
-        ],
-      },
+      children: [
+        {
+          id: 'form2',
+          name: 'userInfo',
+          type: 'form',
+          children: [
+            {
+              id: 'inputPrice',
+              name: 'price',
+              type: 'input',
+              label: '单价',
+              placeholder: '请输入单价',
+              clearable: true,
+              inputType: 'number',
+              events: [
+                {
+                  event: 'change',
+                  actionType: 'component-control',
+                  target: 'inputTotalPrice',
+                  method: 'setValue',
+                  propMappings: [
+                    {
+                      name: 'newValue',
+                      ignore: false,
+                      defaultValue: '1',
+                      sourceScope: 'expression',
+                      expression: 'inputPrice.value * inputNum.value',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: 'inputNum',
+              name: 'num',
+              type: 'input',
+              label: '数量',
+              placeholder: '请输入数量',
+              clearable: true,
+              inputType: 'number',
+              events: [
+                {
+                  event: 'change',
+                  actionType: 'component-control',
+                  target: 'inputTotalPrice',
+                  method: 'setValue',
+                  propMappings: [
+                    {
+                      name: 'newValue',
+                      ignore: false,
+                      defaultValue: '1',
+                      sourceScope: 'expression',
+                      expression: 'inputPrice.value * inputNum.value',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: 'inputTotalPrice',
+              name: 'totalPrice',
+              type: 'input',
+              label: '总价',
+              placeholder: '请输入总价',
+              clearable: true,
+              inputType: 'number',
+            },
+          ],
+        },
+      ],
     },
   ],
 };

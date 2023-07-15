@@ -5,8 +5,6 @@ export interface TmpCard extends TmpContainer {
   title?: string | TmpElement;
   /** 副标题 */
   subtitle?: string | TmpElement;
-  /** 内容 */
-  content?: string | TmpElement;
   /** 操作区内容 */
   actions?: TmpElement[];
 }

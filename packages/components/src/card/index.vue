@@ -21,8 +21,7 @@ defineProps<{
       <TmpUiComponent v-else-if="config.subtitle !== void 0" :config="config.subtitle"></TmpUiComponent>
     </template>
     <template #text>
-      <span v-if="typeof config.content === 'string'">{{ config.content }}</span>
-      <TmpUiComponent v-else-if="config.content !== void 0" :config="config.content"></TmpUiComponent>
+      <TmpUiComponent v-for="(child, index) in config.children" :key="index" :config="child"></TmpUiComponent>
     </template>
     <template #actions>
       <TmpUiComponent v-for="actionElement in config.actions" :key="actionElement.id" :config="actionElement">

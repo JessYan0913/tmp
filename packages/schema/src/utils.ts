@@ -52,10 +52,7 @@ export const isTmpElement = (obj: any): obj is TmpElement =>
   (obj.style === undefined || typeof obj.style === 'object');
 
 export const isTmpContainer = (obj: any): obj is TmpContainer =>
-  isTmpElement(obj) &&
-  typeof obj.layout === 'string' &&
-  Array.isArray(obj.children) &&
-  obj.children.every(isTmpElement);
+  isTmpElement(obj) && Array.isArray(obj.children) && obj.children.every(isTmpElement);
 
 export const isTmpFormItemElement = (obj: any): obj is TmpFormItemElement =>
   isTmpElement(obj) && typeof obj.label === 'string' && Array.isArray(obj.rules);
