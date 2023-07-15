@@ -14,7 +14,7 @@ export class Page extends Component {
   constructor(config: PageConfig) {
     super(config);
 
-    this.initComponent(config.data, this);
+    this.initComponent(this.data, this);
   }
 
   public initComponent(data: TmpElement | TmpContainer, parent: Component): void {
