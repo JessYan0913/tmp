@@ -6,25 +6,21 @@ import { TmpApplication } from '@tmp/schema';
 
 const page: TmpPage = {
   id: 'page1',
-  name: 'page1',
   type: 'page',
   path: '/index',
   title: 'index',
   children: [
     {
       id: 'card2',
-      name: 'card2',
       type: 'card',
       title: '价格计算器',
       children: [
         {
           id: 'form2',
-          name: 'userInfo',
           type: 'form',
           children: [
             {
               id: 'inputPrice',
-              name: 'price',
               type: 'input',
               label: '单价',
               placeholder: '请输入单价',
@@ -50,7 +46,6 @@ const page: TmpPage = {
             },
             {
               id: 'inputNum',
-              name: 'num',
               type: 'input',
               label: '数量',
               placeholder: '请输入数量',
@@ -76,7 +71,6 @@ const page: TmpPage = {
             },
             {
               id: 'inputTotalPrice',
-              name: 'totalPrice',
               type: 'input',
               label: '总价',
               placeholder: '请输入总价',
@@ -101,11 +95,14 @@ app.setData({
 });
 
 setTimeout(() => {
-  app.curPage?.addComponent({
-    id: 'input1',
-    type: 'input',
-    placeholder: '请输入',
-  });
+  app.curPage?.addComponent(
+    {
+      id: 'input1',
+      type: 'input',
+      placeholder: '请输入',
+    },
+    'card2'
+  );
   console.log('====>', app);
 });
 

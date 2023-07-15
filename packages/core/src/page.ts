@@ -59,8 +59,10 @@ export class Page extends Component {
     let slotProperty = Reflect.get(parent.data, slot);
     if (Array.isArray(slotProperty)) {
       slotProperty.push(data);
+      this.initComponent(data, parent);
     } else if (isTmpElement(slotProperty)) {
       Reflect.set(parent.data, slot, data);
+      this.initComponent(data, parent);
     }
   }
 
