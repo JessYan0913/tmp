@@ -26,22 +26,14 @@ export class Page extends Component {
       app: this.app,
     });
     this.components.set(data.id, component);
-    if (data.type === 'card') {
-      if (isTmpElement(data.title)) {
-        this.initComponent(data.title, component);
+
+    Object.values(data).forEach((item) => {
+      if (isTmpElement(item)) {
+        this.initComponent(item, component);
+      } else if (Array.isArray(item) && item.every(isTmpElement)) {
+        item.forEach((child) => this.initComponent(child, component));
       }
-      if (isTmpElement(data.subtitle)) {
-        this.initComponent(data.subtitle, component);
-      }
-      if (Array.isArray(data.actions)) {
-        data.actions.forEach((action) => {
-          if (isTmpElement(action)) {
-            this.initComponent(action, component);
-          }
-        });
-      }
-    }
-    data.children?.forEach((child: TmpElement) => this.initComponent(child, component));
+    });
   }
 
   public getComponent(id: Id): Component | undefined {
@@ -60,7 +52,6 @@ export class Page extends Component {
       logger.error(`The parent component is not a container component.`, true);
       return;
     }
-    // 判断parent是否存在slot属性，如果不存在则抛出警告并返回
     if (!Reflect.has(parent.data, slot)) {
       logger.error(`The parent component do not has "${slot}" property.`, true);
       return;
