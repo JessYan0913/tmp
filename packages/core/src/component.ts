@@ -11,6 +11,7 @@ export interface ComponentConfig {
   app: App;
   page?: Page;
   parent?: Component;
+  parentProperty?: string;
 }
 
 export class Component extends EventBus<EventArgs.Component> {
@@ -21,10 +22,11 @@ export class Component extends EventBus<EventArgs.Component> {
   public app: App;
   public page?: Page;
   public parent?: Component;
+  public parentProperty?: string;
 
   constructor(config: ComponentConfig) {
     super();
-    const { data, app, page, parent } = config;
+    const { data, app, page, parent, parentProperty } = config;
     if (!isJavascriptIdentifier(data.id)) {
       logger.error(`"${data.id}" is not a valid JavaScript identifier.`, true);
     }
@@ -33,6 +35,7 @@ export class Component extends EventBus<EventArgs.Component> {
     this.app = app;
     this.page = page;
     this.parent = parent;
+    this.parentProperty = parentProperty;
 
     this.on('mounted', ({ instance }) => {
       this.instance = instance;

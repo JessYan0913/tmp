@@ -9,6 +9,9 @@ export interface PageConfig {
   app: App;
 }
 
+const isPropertyMountable = (property: string): boolean =>
+  !['id', 'type', 'events', 'styles', 'rules', 'disabled', 'method', 'path', 'curIndex'].includes(property);
+
 export class Page extends Component {
   public components: Map<Id, Component> = new Map();
 
@@ -18,20 +21,25 @@ export class Page extends Component {
     this.initComponent(this.data, this);
   }
 
-  public initComponent(data: TmpElement | TmpContainer, parent: Component): void {
+  public initComponent(data: TmpElement | TmpContainer, parent?: Component, parentProperty?: string): void {
     const component = new Component({
       data,
       parent,
+      parentProperty,
       page: this,
       app: this.app,
     });
     this.components.set(data.id, component);
 
-    Object.values(data).forEach((item) => {
+    /** 处理data中的子组件 */
+    Object.entries(data).forEach(([property, item]) => {
+      if (!isPropertyMountable(property)) {
+        return;
+      }
       if (isTmpElement(item)) {
-        this.initComponent(item, component);
+        this.initComponent(item, component, property);
       } else if (Array.isArray(item) && item.every(isTmpElement)) {
-        item.forEach((child) => this.initComponent(child, component));
+        item.forEach((child) => this.initComponent(child, component, property));
       }
     });
   }
@@ -40,7 +48,11 @@ export class Page extends Component {
     return this.components.get(id);
   }
 
-  public addComponent(data: TmpElement | TmpContainer, parent?: Id | Component, slot: string = 'children'): void {
+  public addComponent(data: TmpElement | TmpContainer, parent?: Id | Component, property: string = 'children'): void {
+    if (!isPropertyMountable(property)) {
+      logger.error(`"${property}" prohibits mounting components.`);
+      return;
+    }
     if (typeof parent === 'string') {
       parent = this.getComponent(parent);
     }
@@ -52,17 +64,18 @@ export class Page extends Component {
       logger.error(`The parent component is not a container component.`, true);
       return;
     }
-    if (!Reflect.has(parent.data, slot)) {
-      logger.error(`The parent component do not has "${slot}" property.`, true);
+    if (!Reflect.has(parent.data, property)) {
+      logger.error(`The parent component do not has "${property}" property.`, true);
       return;
     }
-    let slotProperty = Reflect.get(parent.data, slot);
-    if (Array.isArray(slotProperty)) {
-      slotProperty.push(data);
-      this.initComponent(data, parent);
-    } else if (isTmpElement(slotProperty)) {
-      Reflect.set(parent.data, slot, data);
-      this.initComponent(data, parent);
+    /** 处理添加组件到父组件的指定属性逻辑，指定属性例如：children、title、action */
+    let parentProperty = Reflect.get(parent.data, property);
+    if (Array.isArray(parentProperty)) {
+      parentProperty.push(data);
+      this.initComponent(data, parent, property);
+    } else {
+      Reflect.set(parent.data, property, data);
+      this.initComponent(data, parent, property);
     }
   }
 
@@ -77,6 +90,17 @@ export class Page extends Component {
     if (component === this) {
       logger.error(`"${id}" is current page so it can not delete.`);
       return;
+    }
+    if (component.parent && component.parentProperty) {
+      const parentProperty = Reflect.get(component.parent.data, component.parentProperty);
+      if (Array.isArray(parentProperty)) {
+        parentProperty.splice(
+          parentProperty.findIndex((item) => item.id === component.data.id),
+          1
+        );
+      } else {
+        Reflect.set(component.parent.data, component.parentProperty, undefined);
+      }
     }
     this.components.delete(id);
   }
