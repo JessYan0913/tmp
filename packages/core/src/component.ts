@@ -2,6 +2,7 @@ import { TmpContainer, TmpElement, TmpElementInstance, TmpEvent, TmpPage } from 
 import { EventBus, isJavascriptIdentifier } from '@tmp/utils';
 
 import { App } from './app';
+import { logger } from './logger';
 import { Page } from './page';
 import { EventArgs } from './types';
 
@@ -25,7 +26,7 @@ export class Component extends EventBus<EventArgs.Component> {
     super();
     const { data, app, page, parent } = config;
     if (!isJavascriptIdentifier(data.id)) {
-      throw new Error('Id必须符合JS标识符规则');
+      logger.error(`"${data.id}" is not a valid JavaScript identifier.`, true);
     }
     this.data = data;
     this.events = data.events;

@@ -4,6 +4,7 @@ import { EventBus, isJavascriptIdentifier } from '@tmp/utils';
 import dot from 'dot';
 
 import { Component } from './component';
+import { logger } from './logger';
 import { Page } from './page';
 
 export interface AppConfig {
@@ -38,7 +39,7 @@ export class App extends EventBus {
 
   public setData(data: TmpApplication, curPageId?: Id): void {
     if (!isJavascriptIdentifier(data.id)) {
-      throw new Error('Id必须符合JS标识符规则');
+      logger.error(`"${data.id}" is not a valid JavaScript identifier.`, true);
     }
     this.data = data;
     this.pages.clear();
@@ -101,14 +102,17 @@ export class App extends EventBus {
 
   private controlComponent(fromComponent: Component, event: TmpEvent, props: Record<string, any>): void {
     if (!this.curPage) {
-      throw new Error('当前页面不存在');
+      logger.error('The application do not has a current page', true);
+      return;
     }
     if (!event.target || !event.method) {
       return;
     }
     const targetComponent = this.curPage.getComponent(event.target);
     if (!targetComponent) {
-      console.error(`${event.target}组件不存在，无法响应${fromComponent.data.id}的${event.event}事件`);
+      logger.error(
+        `${event.target} component does not exist, unable to respond to ${event.event} event from ${fromComponent.data.id}`
+      );
       return;
     }
 
