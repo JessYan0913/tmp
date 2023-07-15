@@ -75,7 +75,8 @@ export class Page extends Component {
       return;
     }
     if (component === this) {
-      throw new Error(`${id} 是当前页面无法删除`);
+      logger.error(`"${id}" is current page so it can not delete.`);
+      return;
     }
     this.components.delete(id);
   }
