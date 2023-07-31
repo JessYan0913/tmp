@@ -1,8 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType, ref, watch } from 'vue';
 
-import { SideBarData } from '@editor/type';
-
+// import { SideBarData } from '@editor/type';
 import TabPane from './TabPane.vue';
 
 export default defineComponent({
@@ -13,7 +12,7 @@ export default defineComponent({
     // 左侧展示侧边栏标题
     // 默认组件列表、当前 page 所有 component 层级
     data: {
-      type: Object as PropType<SideBarData>,
+      type: Object as PropType<any>,
       default: () => ({ type: 'tabs', status: '组件', items: ['component-list', 'layer'] }),
     },
   },
