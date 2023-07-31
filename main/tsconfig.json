@@ -5,7 +5,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@tmp/*": ["../packages/*/src"]
-    }
+    },
+    "skipLibCheck": true
   },
   "include": ["env.d.ts", "src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
   "exclude": ["**/dist/**/*"]
