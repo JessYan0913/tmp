@@ -312,6 +312,7 @@ const handleToEditor = () => {
 <template>
   <div>
     <ElButton @click="handleToEditor">编辑器</ElButton>
-    <TmpUiPage :config="page"></TmpUiPage>
+    <!-- <TmpUiPage :config="page"></TmpUiPage> -->
+    <TmpUiPage :config="app.curPage.data"></TmpUiPage>
   </div>
 </template>
