@@ -48,6 +48,13 @@ export default defineConfig(({ mode }) => {
             return path.replace(/\/api/, '');
           },
         },
+        '^/tmp/playground': {
+          target: 'http://127.0.0.1:8080',
+          changeOrigin: true,
+          rewrite(path: string): string {
+            return path.replace(/\/tmp\/playground/, '');
+          },
+        },
       },
     },
   };

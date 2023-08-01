@@ -72,5 +72,6 @@ export default defineComponent({
   height: 100%;
   width: 100%;
   user-select: none;
+  outline: none;
 }
 </style>

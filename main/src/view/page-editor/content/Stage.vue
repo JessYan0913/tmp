@@ -1,16 +1,8 @@
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
-
+import { defineComponent, reactive, ref, watchEffect } from 'vue';
 // import { cloneDeep } from 'lodash-es';
 // import type { MApp, MContainer, MNode, MPage } from '@tmagic/schema';
-// import StageCore, {
-//   calcValueByFontsize,
-//   getOffset,
-//   GuidesType,
-//   Runtime,
-//   SortEventData,
-//   UpdateEventData,
-// } from '@tmagic/stage';
+import StageCore, { Runtime } from '@tmp/stage';
 // import ScrollViewer from '@editor/components/ScrollViewer.vue';
 
 // import {
@@ -59,9 +51,29 @@ export default defineComponent({
     // const zoom = computed(() => services?.uiService.get<number>('zoom') || 1);
     const zoom = ref(1);
     // const node = computed(() => services?.editorService.get<MNode>('node'));
+    let stage: StageCore | null = null;
+    let runtime: Runtime | null = null;
+    watchEffect(() => {
+      if (stage) return;
 
-    // let stage: StageCore | null = null;
-    // let runtime: Runtime | null = null;
+      if (!stageContainer.value) return;
+
+      stage = new StageCore({
+        runtimeUrl: '/tmp/playground/runtime/html/index.html',
+      });
+      console.log('stage===', stage);
+      stage?.mount(stageContainer.value);
+      stage?.on('runtime-ready', (rt) => {
+        runtime = rt;
+        // // toRaw返回的值是一个引用而非快照，需要cloneDeep
+        // root.value && runtime?.updateRootConfig?.(cloneDeep(toRaw(root.value)));
+        // page.value?.id && runtime?.updatePageId?.(page.value.id);
+        runtime?.updatePageId?.('1');
+        // setTimeout(() => {
+        //   node.value && stage?.select(toRaw(node.value.id));
+        // });
+      });
+    });
 
     // const getGuideLineKey = (key: string) => `${key}_${root.value?.id}_${page.value?.id}`;
 

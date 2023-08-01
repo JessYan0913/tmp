@@ -14,6 +14,10 @@ export * from './date';
 
 export * from './async-queue';
 
+export * from './dom';
+
+export * from './url';
+
 export const toLine = (name: string = '') => name.replace(/\B([A-Z])/g, '-$1').toLowerCase();
 
 export function replacePropertyWithValue(obj: Record<string | number | symbol, any>, value: any, newValue: any) {
