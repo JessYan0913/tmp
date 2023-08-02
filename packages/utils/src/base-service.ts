@@ -17,30 +17,30 @@ export class BaseService<T extends EventArgs = EventArgs> extends EventBus<T> {
 
   constructor() {
     super();
-    return new Proxy(this, {
-      get: (target: BaseService<T>, prop: string) => {
-        const originMethod = Reflect.get(target, prop);
-        if (typeof originMethod !== 'function' || ['usePlugin', 'useMiddleware'].includes(prop)) {
-          return originMethod;
-        }
-        const middlewareList = this.middlewareMap.get(prop) ?? [];
-        const plugin = this.pluginMap.get(prop);
+    // return new Proxy(this, {
+    //   get: (target: BaseService<T>, prop: string) => {
+    //     const originMethod = Reflect.get(target, prop);
+    //     if (typeof originMethod !== 'function' || ['usePlugin', 'useMiddleware'].includes(prop)) {
+    //       return originMethod;
+    //     }
+    //     const middlewareList = this.middlewareMap.get(prop) ?? [];
+    //     const plugin = this.pluginMap.get(prop);
 
-        return (...args: any[]) => {
-          return this.applyMiddleware(middlewareList, args, async () => {
-            let result: any;
+    //     return (...args: any[]) => {
+    //       return this.applyMiddleware(middlewareList, args, async () => {
+    //         let result: any;
 
-            if (plugin) {
-              result = await this.applyPlugins(originMethod, plugin, args, result);
-            } else {
-              result = await originMethod.call(this, ...args);
-            }
+    //         if (plugin) {
+    //           result = await this.applyPlugins(originMethod, plugin, args, result);
+    //         } else {
+    //           result = await originMethod.call(this, ...args);
+    //         }
 
-            return result;
-          });
-        };
-      },
-    });
+    //         return result;
+    //       });
+    //     };
+    //   },
+    // });
   }
 
   public usePlugin(method: string, plugin: Plugin) {

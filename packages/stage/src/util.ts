@@ -1,5 +1,3 @@
-import { Mode } from './const';
-
 export const isAbsolute = (style: CSSStyleDeclaration): boolean => style.position === 'absolute';
 
 export const isRelative = (style: CSSStyleDeclaration): boolean => style.position === 'relative';
@@ -23,13 +21,6 @@ export const isFixedParent = (el: HTMLElement) => {
     dom = parentElement;
   }
   return fixed;
-};
-
-export const getMode = (el: HTMLElement): Mode => {
-  if (isFixedParent(el)) return Mode.FIXED;
-  const style = getComputedStyle(el);
-  if (isStatic(style) || isRelative(style)) return Mode.SORTABLE;
-  return Mode.ABSOLUTE;
 };
 
 export const getScrollParent = (element: HTMLElement, includeHidden = false): HTMLElement | null => {

@@ -1,13 +1,9 @@
-import { EventEmitter } from 'events';
+import { BaseService, getHost, isSameDomain } from '@tmp/utils';
 
-import { getHost, isSameDomain } from '@tmp/utils';
-
-// import { getHost, injectStyle, isSameDomain } from '@tmp/utils';
 import StageCore from './StageCore';
-// import style from './style.css?raw';
 import type { Runtime, RuntimeWindow, StageRenderConfig } from './types';
 
-export default class StageRender extends EventEmitter {
+export default class StageRender extends BaseService {
   /** 组件的js、css执行的环境，直接渲染为当前window，iframe渲染则为iframe.contentWindow */
   public contentWindow: RuntimeWindow | null = null;
 
@@ -72,18 +68,6 @@ export default class StageRender extends EventEmitter {
       throw Error('mount 失败');
     }
   }
-
-  // public getRuntime = (): Promise<Runtime> => {
-  //   if (this.runtime) return Promise.resolve(this.runtime);
-  //   return new Promise((resolve) => {
-  //     const listener = (runtime: Runtime) => {
-  //       this.off('runtime-ready', listener);
-  //       resolve(runtime);
-  //     };
-  //     this.on('runtime-ready', listener);
-  //   });
-  // };
-
   /**
    * 销毁实例
    */
@@ -98,7 +82,7 @@ export default class StageRender extends EventEmitter {
   private loadHandler = async () => {
     this.contentWindow = this.iframe?.contentWindow as RuntimeWindow;
 
-    this.contentWindow.magic = this.getMagicApi();
+    this.contentWindow.tmp = this.getMagicApi();
 
     if (this.render) {
       const el = await this.render(this.core);
@@ -107,15 +91,6 @@ export default class StageRender extends EventEmitter {
       }
     }
 
-    this.emit('onload');
-
-    // this.contentWindow.postMessage(
-    //   {
-    //     tmagicRuntimeReady: true,
-    //   },
-    //   '*'
-    // );
-
-    // injectStyle(this.contentWindow.document, style);
+    this.emit('onload', {});
   };
 }

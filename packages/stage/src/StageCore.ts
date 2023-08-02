@@ -1,9 +1,9 @@
-import EventEmitter from 'events';
+import { BaseService } from '@tmp/utils';
 
 import StageMask from './StageMask';
 import StageRender from './StageRender';
 import { Runtime, StageCoreConfig } from './types';
-export default class StageCore extends EventEmitter {
+export default class StageCore extends BaseService {
   public container?: HTMLDivElement;
   public config: StageCoreConfig;
   public renderer: any;
@@ -33,6 +33,6 @@ export default class StageCore extends EventEmitter {
     await renderer.mount(el);
     mask.mount(el);
 
-    this.emit('mounted');
+    this.emit('mounted', this);
   }
 }

@@ -22,14 +22,14 @@ export interface Runtime {
   sortNode?: (data: any) => void;
   remove?: (data: any) => void;
 }
-export interface Magic {
+export interface Tmp {
   /** 当前页面的根节点变化时调用该方法，编辑器会同步该el和stage的大小，该方法由stage注入到iframe.contentWindow中 */
   onPageElUpdate: (el: HTMLElement) => void;
 
   onRuntimeReady: (runtime: Runtime) => void;
 }
 export interface RuntimeWindow extends Window {
-  magic: Magic;
+  tmp: Tmp;
 }
 
 export interface StageRenderConfig {
