@@ -6,6 +6,8 @@ import componentGroupList from './configs/componentGroupList';
 import Workspace from './content/Workspace.vue';
 import leftSideBar from './left-sidebar/index.vue';
 
+import './theme/index.scss';
+
 provide('componentGroupList', componentGroupList);
 </script>
 

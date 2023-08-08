@@ -17,3 +17,13 @@ export enum MouseButton {
   /** 右键 */
   RIGHT = 2,
 }
+
+/** 布局方式 */
+export enum Mode {
+  /** 绝对定位布局 */
+  ABSOLUTE = 'absolute',
+  /** 固定定位布局 */
+  FIXED = 'fixed',
+  /** 流式布局 */
+  SORTABLE = 'sortable',
+}

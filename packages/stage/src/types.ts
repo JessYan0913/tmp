@@ -3,12 +3,24 @@ import { Id, TmpApplication } from '@tmp/schema';
 
 import StageCore from './StageCore';
 
+export type CanSelect = (el: HTMLElement, event: MouseEvent, stop: () => boolean) => boolean | Promise<boolean>;
+export type StageWrapStyle = { width: Number; height: Number };
 export type StageCoreConfig = {
   /** runtime 的HTML地址，可以是一个HTTP地址，如果和编辑器不同域，需要设置跨域，也可以是一个相对或绝对路径 */
   runtimeUrl?: string;
   render?: (renderer: StageCore) => Promise<HTMLElement> | HTMLElement;
+  canSelect?: CanSelect;
+  stageWrapStyle?: StageWrapStyle;
+  zoom?: number;
   autoScrollIntoView?: boolean;
 };
+
+export interface ScrollBarConfig {
+  isHorizontal: boolean;
+  size: number;
+  scrollSize: number;
+  pos: number;
+}
 
 export interface Runtime {
   getApp?: () => App;
@@ -38,4 +50,13 @@ export interface StageRenderConfig {
 
 export interface StageMaskConfig {
   core: StageCore;
+}
+export interface Point {
+  clientX: number;
+  clientY: number;
+}
+export interface DomOfPoint {
+  domList: HTMLElement[];
+  x: number;
+  y: number;
 }

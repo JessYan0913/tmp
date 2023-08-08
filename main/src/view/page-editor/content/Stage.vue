@@ -41,6 +41,7 @@ export default defineComponent({
 
     const stageWrap = ref<any>();
     const stageContainer = ref<HTMLDivElement>();
+    const stageArea = ref<HTMLDivElement>();
     // const menu = ref<InstanceType<typeof ViewerMenu>>();
 
     // const stageRect = computed(() => services?.uiService.get<StageRect>('stageRect'));
@@ -56,13 +57,14 @@ export default defineComponent({
     watchEffect(() => {
       if (stage) return;
 
-      if (!stageContainer.value) return;
+      if (!stageArea.value) return;
 
       stage = new StageCore({
         runtimeUrl: '/tmp/playground/runtime/html/index.html',
+        zoom: zoom.value,
       });
       console.log('stage===', stage);
-      stage?.mount(stageContainer.value);
+      stage?.mount(stageArea.value);
       stage?.on('runtime-ready', (rt) => {
         runtime = rt;
         // // toRaw返回的值是一个引用而非快照，需要cloneDeep
@@ -74,7 +76,17 @@ export default defineComponent({
         // });
       });
     });
-
+    const addZoom = () => {
+      zoom.value = zoom.value + 0.1;
+      stage?.setZoom(zoom.value);
+    };
+    const splZoom = () => {
+      zoom.value = zoom.value - 0.1;
+      stage?.setZoom(zoom.value);
+    };
+    const select = () => {
+      stage?.select('warningId');
+    };
     // const getGuideLineKey = (key: string) => `${key}_${root.value?.id}_${page.value?.id}`;
 
     // watchEffect(() => {
@@ -198,9 +210,14 @@ export default defineComponent({
     return {
       stageWrap,
       stageContainer,
+      stageArea,
       // menu,
       stageRect,
       zoom,
+      select,
+      addZoom,
+      splZoom,
+
       // 右键操作，展示UI
       contextmenuHandler(e: MouseEvent) {
         e.preventDefault();
@@ -275,32 +292,44 @@ export default defineComponent({
 </script>
 
 <template>
-  <!-- 负责舞台视图缩放 -->
-  <!-- <ScrollViewer
-    ref="stageWrap"
-    class="m-editor-stage"
-    :width="stageRect?.width"
-    :height="stageRect?.height"
-    :zoom="zoom"
-  > -->
+  <div class="operate-wrap">
+    <el-button @click="addZoom">+</el-button>
+    <el-button @click="splZoom">-</el-button>
+    <el-button @click="select">select</el-button>
+  </div>
   <div
     ref="stageContainer"
-    class="m-editor-stage-container"
-    :style="`transform: scale(${zoom})`"
+    class="m-editor-stage"
     @contextmenu="contextmenuHandler"
     @drop="dropHandler"
     @dragover="dragoverHandler"
-  ></div>
-  <!-- <teleport to="body">
-      <ViewerMenu ref="menu"></ViewerMenu>
-    </teleport> -->
-  <!-- </ScrollViewer> -->
+  >
+    <div
+      ref="stageArea"
+      style="
+         {
+          width: 375px;
+          height: 817px;
+          position: absolute;
+          margin-top: 30px;
+        }
+      "
+    ></div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-.m-editor-stage-container {
+.operate-wrap {
+  position: absolute;
+  z-index: 99;
+}
+.m-editor-stage {
   height: 100%;
   width: 100%;
   user-select: none;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 </style>

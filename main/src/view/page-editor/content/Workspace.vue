@@ -73,5 +73,6 @@ export default defineComponent({
   width: 100%;
   user-select: none;
   outline: none;
+  position: relative;
 }
 </style>

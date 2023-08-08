@@ -1,7 +1,8 @@
+import { Id } from '@tmp/schema';
 import { BaseService, getHost, isSameDomain } from '@tmp/utils';
 
 import StageCore from './StageCore';
-import type { Runtime, RuntimeWindow, StageRenderConfig } from './types';
+import type { DomOfPoint, Point, Runtime, RuntimeWindow, StageRenderConfig } from './types';
 
 export default class StageRender extends BaseService {
   /** 组件的js、css执行的环境，直接渲染为当前window，iframe渲染则为iframe.contentWindow */
@@ -23,7 +24,6 @@ export default class StageRender extends BaseService {
     this.core = core;
     this.runtimeUrl = core.config.runtimeUrl || '';
     this.render = core.config.render;
-
     this.iframe = globalThis.document.createElement('iframe');
     // 同源，直接加载
     this.iframe.src = isSameDomain(this.runtimeUrl) ? this.runtimeUrl : '';
@@ -34,6 +34,77 @@ export default class StageRender extends BaseService {
     `;
 
     this.iframe.addEventListener('load', this.loadHandler);
+  }
+
+  public getDocument(): Document | undefined {
+    return this.contentWindow?.document;
+  }
+
+  public async add(data: any): Promise<void> {
+    const runtime = await this.getRuntime();
+    return runtime?.add?.(data);
+  }
+
+  public async remove(data: any): Promise<void> {
+    const runtime = await this.getRuntime();
+    return runtime?.remove?.(data);
+  }
+
+  public async update(data: any): Promise<void> {
+    const runtime = await this.getRuntime();
+    // 更新画布中的组件
+    runtime?.update?.(data);
+  }
+
+  public async select(els: HTMLElement[]): Promise<void> {
+    const runtime = await this.getRuntime();
+
+    for (const el of els) {
+      await runtime?.select?.(el.id);
+    }
+  }
+
+  public getRuntime = (): Promise<Runtime> => {
+    if (this.runtime) return Promise.resolve(this.runtime);
+    return new Promise((resolve) => {
+      const listener = (runtime: Runtime) => {
+        this.off('runtime-ready', listener);
+        resolve(runtime);
+      };
+      this.on('runtime-ready', listener);
+    });
+  };
+
+  /**
+   * 通过坐标获得坐标下所有HTML元素数组
+   * @param point 坐标
+   * @returns 坐标下方所有HTML元素数组，会包含父元素直至html，元素层叠时返回顺序是从上到下
+   */
+  public getElementsInfoFromPoint(point: Point): DomOfPoint {
+    let x = point.clientX;
+    let y = point.clientY;
+
+    if (this.iframe) {
+      const rect = this.iframe.getClientRects()[0];
+      if (rect) {
+        x = x - rect.left;
+        y = y - rect.top;
+      }
+    }
+    return {
+      domList: this.getDocument()?.elementsFromPoint(x / this.core.zoom, y / this.core.zoom) as HTMLElement[],
+      x: x,
+      y: y,
+    };
+  }
+
+  public getTargetElement(idOrEl: Id | HTMLElement): HTMLElement {
+    if (typeof idOrEl === 'string' || typeof idOrEl === 'number') {
+      const el = this.getDocument()?.getElementById(`${idOrEl}`);
+      if (!el) throw new Error(`不存在ID为${idOrEl}的元素`);
+      return el;
+    }
+    return idOrEl;
   }
 
   public getMagicApi = () => ({
