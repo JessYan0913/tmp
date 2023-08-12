@@ -24,7 +24,8 @@
     "serialize-javascript": "^6.0.1",
     "three": "^0.151.0",
     "vue": "^3.3.4",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "gesto": "^1.19.1"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.0.0",

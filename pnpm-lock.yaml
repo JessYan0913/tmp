@@ -142,6 +142,9 @@ importers:
       element-plus:
         specifier: ^2.2.28
         version: 2.2.28(vue@3.3.4)
+      gesto:
+        specifier: ^1.19.1
+        version: registry.npmmirror.com/gesto@1.19.1
       hls.js:
         specifier: ^1.4.4
         version: 1.4.4
@@ -5924,6 +5927,12 @@ packages:
     dev: true
     optional: true
 
+  registry.npmmirror.com/@daybrush/utils@1.13.0:
+    resolution: {integrity: sha512-ALK12C6SQNNHw1enXK+UO8bdyQ+jaWNQ1Af7Z3FNxeAwjYhQT7do+TRE4RASAJ3ObaS2+TJ7TXR3oz2Gzbw0PQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@daybrush/utils/-/utils-1.13.0.tgz}
+    name: '@daybrush/utils'
+    version: 1.13.0
+    dev: false
+
   registry.npmmirror.com/@element-plus/icons-vue@2.1.0(vue@3.3.4):
     resolution: {integrity: sha512-PSBn3elNoanENc1vnCfh+3WA9fimRC7n+fWkf3rE5jvv+aBohNHABC/KAR5KWPecxWxDTVT1ERpRbOMRcOV/vA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@element-plus/icons-vue/-/icons-vue-2.1.0.tgz}
     id: registry.npmmirror.com/@element-plus/icons-vue/2.1.0
@@ -6408,6 +6417,14 @@ packages:
     name: '@jridgewell/sourcemap-codec'
     version: 1.4.15
 
+  registry.npmmirror.com/@scena/event-emitter@1.0.5:
+    resolution: {integrity: sha512-AzY4OTb0+7ynefmWFQ6hxDdk0CySAq/D4efljfhtRHCOP7MBF9zUfhKG3TJiroVjASqVgkRJFdenS8ArZo6Olg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@scena/event-emitter/-/event-emitter-1.0.5.tgz}
+    name: '@scena/event-emitter'
+    version: 1.0.5
+    dependencies:
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils@1.13.0
+    dev: false
+
   registry.npmmirror.com/@sxzz/popperjs-es@2.11.7:
     resolution: {integrity: sha512-Ccy0NlLkzr0Ex2FKvh2X+OyERHXJ88XJ1MXtsI9y9fGexlaXaVTPzBCRBwIxFkORuOb+uBqeu+RqnpgYTEZRUQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@sxzz/popperjs-es/-/popperjs-es-2.11.7.tgz}
     name: '@sxzz/popperjs-es'
@@ -6870,6 +6887,15 @@ packages:
     name: function-bind
     version: 1.1.1
     dev: true
+
+  registry.npmmirror.com/gesto@1.19.1:
+    resolution: {integrity: sha512-ofWVEdqmnpFm3AFf7aoclhoayseb3OkwSiXbXusKYu/99iN5HgeWP+SWqdghQ5TFlOgP5Zlz+6SY8mP2V0kFaQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/gesto/-/gesto-1.19.1.tgz}
+    name: gesto
+    version: 1.19.1
+    dependencies:
+      '@daybrush/utils': registry.npmmirror.com/@daybrush/utils@1.13.0
+      '@scena/event-emitter': registry.npmmirror.com/@scena/event-emitter@1.0.5
+    dev: false
 
   registry.npmmirror.com/glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/glob-parent/-/glob-parent-5.1.2.tgz}

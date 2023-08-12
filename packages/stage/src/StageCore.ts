@@ -92,7 +92,6 @@ export default class StageCore extends BaseService {
   public setZoom(zoom: number) {
     this.zoom = zoom;
     this.stageZoomWrap.style.transform = `scale(${zoom})`;
-    this.renderer.setZoom(zoom);
   }
 
   // 通过 mouse 事件对象 获取 runtime dom
